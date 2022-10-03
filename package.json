@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@bprcode/handy": "^0.3.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "name": "laudable-library",
+  "version": "1.0.0",
+  "description": "Follow-along tutorial project for MDN Local Library with a different stack.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "hi": "nodemon app.js"
+  },
+  "author": "bprcode <bprcode@gmail.com>",
+  "license": "MIT"
+}
