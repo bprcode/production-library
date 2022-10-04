@@ -1,0 +1,27 @@
+header{
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  display: block;
+  box-shadow: 0px 0px 5px 5px #4484;
+  background-color: #d9d6ff;
+}
+
+footer{
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background-color: #afabe3;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+a{
+  color: #448;
+}
+
+.page-container{
+  /*border: 1px red dashed;*/
+  position: relative;
+  min-height: 100vh;
+}

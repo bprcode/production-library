@@ -17,6 +17,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "hi": "nodemon app.js"
   },
+  "nodemonConfig": {
+    "ext": "js,hbs,html"
+  },
   "author": "bprcode <bprcode@gmail.com>",
   "license": "MIT"
 }
