@@ -9,7 +9,7 @@ const app = express()
 const hbs = require('hbs')
 hbs.registerPartials(path.join(__dirname, '/views/partials'))
 
-const homeRouter = require('./routes/home.js')
+const layoutExampleRouter = require('./routes/layout-examples.js')
 
 
 app
@@ -18,7 +18,7 @@ app
         next()
     })
 
-    .use('/', homeRouter)
+    .use('/', layoutExampleRouter)
 
     .use(express.static(path.join(__dirname, 'public')))
 

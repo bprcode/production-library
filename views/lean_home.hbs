@@ -1,0 +1,14 @@
+{{! This template populates lean_layout.hbs }}
+{{#> lean_layout mod_title="Layout by Passing Inline Templates"}}
+    This message is the failover for a missing lean_layout.
+    {{! Inline templates are basically passed into lean_layout: }}
+    {{#*inline 'mod_content'~}}
+        This will appear as the main content of the page.
+    {{~/inline}}
+    {{#*inline 'mod_head'~}}
+        Here is the partial for the header.
+    {{~/inline}}
+    {{#*inline 'mod_foot'~}}
+        <a href="/">Return</a>
+    {{~/inline}}
+{{/lean_layout}}
