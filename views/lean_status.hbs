@@ -1,0 +1,25 @@
+{{#> lean_layout mod_title='DB Server Connection Status'}}
+  {{#*inline 'mod_preload'}}
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen+Mono&display=swap" rel="stylesheet"> 
+  {{/inline}}
+  {{#*inline 'mod_content'}}
+    <table>
+    <tr>
+      {{#each result.fields}}
+      <th scope="col">{{name}}</th>
+      {{/each}}
+    </tr>
+    <tbody>
+    {{#each result.rows}}
+    <tr>
+      <td>{{pid}}</td>
+      <td>{{usename}}</td>
+      <td>{{application_name}}</td>
+      <td>{{query}}</td>
+      <td>{{backend_type}}</td>
+    </tr>
+    {{/each}}
+    </tbody>
+    </table>
+  {{/inline}}
+{{/lean_layout}}

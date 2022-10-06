@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config()
-}
 const path = require('node:path')
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config({
+        path: path.join(__dirname, '../shared/.env') })
+}
 require('@bprcode/handy')
 const express = require('express')
 const app = express()
@@ -10,7 +11,7 @@ const hbs = require('hbs')
 hbs.registerPartials(path.join(__dirname, '/views/partials'))
 
 const layoutExampleRouter = require('./routes/layout-examples.js')
-
+const dbRouter = require('./routes/db-route.js')
 
 app
     .use((req, res, next) => {
@@ -19,6 +20,7 @@ app
     })
 
     .use('/', layoutExampleRouter)
+    .use('/db', dbRouter)
 
     .use(express.static(path.join(__dirname, 'public')))
 

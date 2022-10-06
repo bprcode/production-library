@@ -12,6 +12,9 @@
 
   <link rel="stylesheet" href="/clean-pastel.css">
 
+  {{#> mod_preload }}
+  {{/mod_preload}}
+
   <title>{{title}}</title>
 </head>
 
@@ -34,7 +37,7 @@
     </div>
     <footer>
         {{~#> mod_foot }}
-            Failover footer
+            <a href="/">Back</a>
         {{/mod_foot~}}
     </footer>
   </div>
