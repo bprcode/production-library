@@ -112,8 +112,8 @@ th {
   padding: 0.2rem;
 }
 
-th:nth-child(even) {
-  filter: hue-rotate(110deg);
+th:nth-child(odd), td:nth-child(odd) {
+  filter: brightness(105%) saturate(90%) hue-rotate(30deg);
 }
 
 td {
@@ -129,8 +129,7 @@ tr:nth-child(even) {
   background-color: #c5c2f0;
 }
 
-td:nth-child(even) {
-  filter: hue-rotate(110deg);
+td:nth-child(odd) {
   background-color: inherit;
 }
 
