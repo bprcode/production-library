@@ -1,33 +1,33 @@
-*{
+* {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
   scrollbar-color: #4e518f #888abb;
 }
 
-:root{
+:root {
   --light-back: #d9d6ff;
   --dark-back: #afabe3;
   --intense-light: rgb(251, 251, 255);
   --accent: rgb(144, 0, 255);
 }
 
-html{
+html {
   color: #222;
   font-family: 'Voltaire', sans-serif;
   font-size: 18px;
   text-shadow: 2px 1px 2px #fff2;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   background-color: #888abb;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: #4e518f;
 }
 
-::-webkit-resizer{
+::-webkit-resizer {
   border: 9px solid #0002;
   border-bottom-color: #0008;
   border-right-color: #0008;
@@ -35,18 +35,18 @@ html{
   box-shadow: 0 0 5px 0px #0002;
 }
 
-.page-container{
+.page-container {
   position: relative;
   min-height: 100vh;
 }
 
-.center-content{
+.center-content {
   max-width: 800px;
   margin: 0px auto;
   padding: 2.2rem 0px;
 }
 
-.ambient-bg{
+.ambient-bg {
   will-change: transform;
   transform: translateZ(0);
   position: fixed;
@@ -59,29 +59,29 @@ html{
   animation:endless 18s infinite linear;
 }
 
-@keyframes endless{
-  from{transform:translateY(100vmax)}
-  to{transform:translateY(-100vmax)}
+@keyframes endless {
+  from {transform:translateY(100vmax)}
+  to {transform:translateY(-100vmax)}
 }
 
-body{
+body {
   background-image: radial-gradient(1400px 700px at 400px 120px,
     #dde4fc, #6f72a3);
   background-attachment: fixed;
 }
 
-a{
+a {
   color: rgb(47, 0, 156);
   text-decoration: none;
 }
-a:hover{
+a:hover {
   color: var(--intense-light);
   background: var(--accent);
   outline: 3px solid var(--accent);
   border-radius: 4px;
 }
 
-header{
+header {
   position: fixed;
   top: 0px;
   width: 100%;
@@ -89,7 +89,7 @@ header{
   background-color: var(--light-back);
 }
 
-footer{
+footer {
   position: absolute;
   bottom: 0px;
   width: 100%;
@@ -97,6 +97,15 @@ footer{
   display: flex;
   justify-content: space-evenly;
   padding: 3px;
+}
+
+pre {
+  margin: 1rem;
+  padding: 0.3rem;
+  overflow: auto;
+  font-size: 14px;
+  background-color: rgb(254, 238, 255);
+  box-shadow: 5px 5px 2px #4484;
 }
 
 table {
@@ -113,7 +122,7 @@ th {
 }
 
 th:nth-child(odd), td:nth-child(odd) {
-  filter: brightness(105%) saturate(90%) hue-rotate(30deg);
+  filter: brightness(105%) saturate(90%) hue-rotate(90deg);
 }
 
 td {

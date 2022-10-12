@@ -1,25 +1,25 @@
 const express = require('express')
 require('express-async-errors')
-const { Pool } = require('pg')
-require('@bprcode/handy')
+const { query, members, getStatus } = require('../database.js')
 
 const router = express.Router()
-const pool = new Pool()
 
 router
     .get('/user/:idx', async (req, res) => {
-        const result = await pool.query(
-            'SELECT * FROM cd.members WHERE memid = $1',
-            [parseInt(req.params.idx)])
-        if (result.rows[0])
-            res.send(result.rows[0])
-        else
-            throw new Error('Could not find record.')
+        const result = await members.find(req.params.idx)
+        res.render( 'lean_status.hbs',
+            { result, mod_title: 'User Record' })
+    })
+    .get('/foo', async(req, res) => {
+        const result = await query(
+            'SELECT * FROM lib.foo')
+        res.render('lean_status.hbs',
+            { result, mod_title: 'Foo.' })
     })
     .get('/status', async (req, res) => {
-        const result = await pool.query(
-            'SELECT * FROM get_status()')
-        res.render('lean_status.hbs', { result })
+        const result = await getStatus()
+        res.render('lean_status.hbs',
+            { result, mod_title: 'DB Connection Status' })
     })
     .get('/cat', (req, res) => {
         res.send('db->cat')

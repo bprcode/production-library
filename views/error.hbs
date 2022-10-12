@@ -1,6 +1,7 @@
 {{#> lean_layout mod_title='Error'}}
   {{#*inline 'mod_content'}}
     <p>An error has occurred ({{status_code}}): {{error_message}}</p>
+    {{#if error_stack}}<pre>{{error_stack}}</pre>{{/if}}
   {{/inline}}
   
 {{/lean_layout}}
