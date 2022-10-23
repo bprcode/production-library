@@ -20,9 +20,15 @@
   <div class="center-content">
   <h1>{{title}}</h1>
   <p>Welcome to the {{page}} webpage.</p>
-  <a href="/lean">Check out a lean layout</a><br>
-  <a href="/moo/15">Or try a dynamic-lookup layout</a><br>
-  <a href="/db/status">Check the SQL server status</a> 
+  <div style="display: inline-flex; flex-flow: column; margin: 1rem; line-height: 1.8rem;">
+    <a href="/lean">Check out a lean layout</a>
+    <a href="/moo/15">Or try a dynamic-lookup layout</a>
+    <a href="/db/status">Check the SQL server status</a>
+    <a href="/catalog">Visit the library catalog</a>
+    <form method="post" action="/lib/autoload">
+      <input type="submit" value="autoload data">
+    </form>
+  </div>
   </div>
 
 </body>

@@ -30,8 +30,9 @@ const library = {
         const result = await query({
             text:
             'select full_name, title, summary, isbn, author_url, book_url, lifespan::text '
-            + 'from lib.books b join lib.authors a '
-            + 'on a.author_id = b.author_id',
+            + ' from lib.books b join lib.authors a'
+            + ' on a.author_id = b.author_id'
+            + ' order by title',
             rowMode: 'array'
         })
         if (!result.rows[0])
@@ -46,6 +47,29 @@ const library = {
         }
 
         return result
+    },
+
+    async createAuthor (...fields) {
+        if (fields.length < 1)
+            throw new Error('New authors require a first name.')
+
+        fields = {
+            1: '',
+            ...fields
+        }
+
+        for (const k in fields) {
+            let m = fields[k].match(/'(.*)'/)
+            fields[k] = m?.[1]
+        }
+        log(`Creating author:`, blue)
+        log(fields)
+
+        return query(
+            'INSERT INTO lib.authors(first_name, last_name, dob, dod) '
+            +'VALUES ($1, $2, $3, $4)',
+            [fields[0], fields[1], fields[2], fields[3]]
+        )
     }
 }
 

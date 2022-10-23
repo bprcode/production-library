@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" href="/book-open-reader-solid.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;600&display=swap" rel="stylesheet"> 
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <script src="bootstrap/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/catalog.css">
+  <!-- <link rel="stylesheet" href="public/catalog.css"> -->
+
+  <title>{{title}}</title>
+</head>
+
+<body class="body-bg d-flex flex-column min-vh-100">
+  
+  <!-- Top banner -->
+  <header class="shelf container-fluid text-bg-dark mb-3">
+    <div class="container mb-1 pt-2 pb-2 d-flex align-items-center">
+      <a class="serif fs-4 fw-bold me-auto nav-link" href="/catalog/">
+        <img class="me-2" width=25 src="/book-open-reader-solid.svg" style="filter:invert();">
+        Local Library
+      </a>
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Navigation would be better as an offcanvas, but this works for now -->
+  <div class="d-flex flex-column flex-sm-row">
+    <nav class="flex-shrink-0 ps-3 pt-0 pt-sm-5" style="width: 200px;">
+
+      <!-- Reference sidebar - doesn't have close-others behavior -->
+      <div id="nav-group">
+      <ul class="list-unstyled ps-0">
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#books-collapse" aria-expanded="false">
+            Books
+          </button>
+          <div class="collapse" id="books-collapse" data-bs-parent="#nav-group">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="#" class="link-dark rounded">Browse</a></li>
+              <li><a href="#" class="link-dark rounded">Create</a></li>
+              <li><a href="#" class="link-dark rounded">Delete</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#authors-collapse" aria-expanded="false">
+            Authors
+          </button>
+          <div class="collapse" id="authors-collapse" data-bs-parent="#nav-group">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="#" class="link-dark rounded">Browse</a></li>
+              <li><a href="#" class="link-dark rounded">Create</a></li>
+              <li><a href="#" class="link-dark rounded">Delete</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#genres-collapse" aria-expanded="false">
+            Genres
+          </button>
+          <div class="collapse" id="genres-collapse" data-bs-parent="#nav-group">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="#" class="link-dark rounded">Browse</a></li>
+              <li><a href="#" class="link-dark rounded">Create</a></li>
+              <li><a href="#" class="link-dark rounded">Delete</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#inventory-collapse" aria-expanded="false">
+            Inventory
+          </button>
+          <div class="collapse" id="inventory-collapse" data-bs-parent="#nav-group">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="#" class="link-dark rounded">Browse</a></li>
+              <li><a href="#" class="link-dark rounded">Create</a></li>
+              <li><a href="#" class="link-dark rounded">Delete</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      </div>
+
+    </nav>
+
+    <!-- Central content -->
+    <div class="container ms-0 me-sm-5 mb-5 reasonable-width">
+      <h1 class="mb-3">{{title}}</h1>
+      <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vehicula
+      aliquet ipsum non condimentum. Morbi ut dolor posuere, consectetur lorem eget,
+      vestibulum massa. In sem nulla, faucibus non finibus at, posuere eu turpis.
+      Aliquam eget ante ut ante finibus vulputate. Morbi maximus orci a fringilla
+      eleifend. Pellentesque leo metus, facilisis sit amet velit vitae, scelerisque
+      vulputate tortor. Vestibulum commodo commodo placerat. Phasellus ut velit nec
+      mauris accumsan tempus et dictum quam. Nam elementum vitae odio sit amet
+      facilisis.
+      </p>
+    </div>
+
+  </div>
+
+  <footer class="container-fluid pt-2 pb-1 mt-auto bg-opacity-25 bg-dark text-center">
+    <small>&copy; 2022 Local Library</small>
+  </footer>
+    
+</body>
+</html>
+
+<style>
+  .d {  /* Debug class */
+    border: 3px red dashed;
+  }
+</style>

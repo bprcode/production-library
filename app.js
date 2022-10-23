@@ -13,16 +13,18 @@ hbs.registerPartials(path.join(__dirname, '/views/partials'))
 const layoutExampleRouter = require('./routes/layout-examples.js')
 const dbRouter = require('./routes/db-route.js')
 const libRouter = require('./routes/library-route.js')
-
-log.err('Next step: Convert downloaded data to SQL, test genres/book_genres table.')
+const catalogRouter = require('./routes/catalog-route.js')
 
 app
+    .disable('x-powered-by')
     .use((req, res, next) => {
         log(req.method + ': ' + req.originalUrl, dim)
         next()
     })
 
     .use('/', layoutExampleRouter)
+    .get('/', (req, res) => { res.redirect('/catalog') })
+    .use('/catalog', catalogRouter)
     .use('/db', dbRouter)
     .use('/lib', libRouter)
 

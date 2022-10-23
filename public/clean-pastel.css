@@ -74,11 +74,29 @@ a {
   color: rgb(47, 0, 156);
   text-decoration: none;
 }
+
 a:hover {
   color: var(--intense-light);
   background: var(--accent);
   outline: 3px solid var(--accent);
   border-radius: 4px;
+}
+
+input[type='submit'] {
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: 4px;
+  padding: 2px;
+  border: none;
+  box-shadow: 2px 2px 5px #4488;
+  background-color: var(--accent);
+  color: var(--intense-light);
+  cursor: pointer;
+}
+
+input[type='submit']:hover {
+  color: var(--accent);
+  background-color: var(--intense-light);
 }
 
 header {
