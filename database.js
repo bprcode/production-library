@@ -1,10 +1,141 @@
 const { Pool } = require('pg')
 const pool = new Pool()
+const format = require('pg-format')
 
 // Expose general query method
 function query (...etc)  {
     return pool.query(...etc)
 }
+
+// General model for tables
+// Note: Constructor values are an injection risk and should not
+// be based on user input.
+class Model {
+    constructor (properties) {
+        Object.assign(this, {
+            schema: undefined,
+            table: 'default_table',
+            ...properties
+        })
+    }
+
+    get relation () {
+        if (this.junction) { return this.junction }
+        if (this.schema) { return this.schema + '.' + this.table }
+        return this.table
+    }
+
+    async count (conditions) {
+        let clean
+        let dirty = `SELECT count(*) FROM ${this.relation}`
+        if ( !conditions ) {
+            clean = format(dirty)
+            log(clean, blue)
+            return (await query(clean)).rows[0].count
+        }
+        // Otherwise...
+        dirty += ` WHERE `
+                    +Array(Object.keys(conditions).length)
+                    .fill(`%I = %L`) // Escapes for format()
+                    .join(` AND `)
+
+        log(dirty, yellow)
+        clean = format(dirty,
+                        ...[...Object.entries(conditions)].flat())
+        log(clean,blue)
+        return (await query(clean)).rows[0].count
+    }
+
+    /**
+     * Columns to retrieve, followed by where-clause object
+     * Ex: find('name', 'age', 'height', {state: 'NY', year: 1999})
+     * @returns promise for query
+     */
+    async find (...etc) {
+        let dirty = `SELECT * FROM ${this.relation}`
+        let clean = ``
+
+        if (etc.length === 0) {
+            dirty += this.orderClause
+            log(dirty, yellow)
+            return query(dirty) // Nothing to sanitize
+        }
+        // Otherwise...
+        let where = null
+        if (typeof etc.at(-1) === 'object') {
+            where = etc.at(-1)
+            etc = etc.slice(0, -1)
+        }
+
+        if (etc.length > 0) {
+            dirty = `SELECT `
+                    +Array(etc.length)
+                    .fill(`%I`)
+                    .join(`, `)
+                    + ` FROM ${this.relation}`
+        }
+
+        if (where) {
+            dirty += ` WHERE `
+                        +Array(Object.keys(where).length)
+                        .fill(`%I = %L`)
+                        .join(` AND `)
+        } else {
+            where = {} // Use blank object for easier formatting
+        }
+
+        dirty += this.orderClause
+
+        log(dirty, yellow)
+        clean = format(dirty, ...etc,
+                            ...[...Object.entries(where)].flat(),
+                            this.order)
+        log(clean, blue)
+
+        return query(clean)
+    }
+
+    join (other, key) {
+        let newOrder = ''
+        if (this.order) {
+            newOrder = this.order +
+                            (other.order
+                            ? ', '
+                            : '')
+        }
+        if (other.order) { newOrder += other.order }
+
+        return new Model({
+            junction: `${this.relation} JOIN ${other.relation}`
+                        + ` USING(${key})`,
+            order: newOrder
+        })
+    }
+
+    get orderClause () {
+        if ( !this.order )
+            return ''
+        let dirty = ` ORDER BY `
+                        + Array(this.order.split(', ').length)
+                        .fill('%I')
+                        .join(', ')
+        let clean = format(dirty, ...this.order.split(', '))
+        return clean
+    }
+}
+
+// Instantiate table models
+const authors = new Model({
+    schema: 'lib', table: 'authors', order: 'full_name' })
+// Create books as a junction table (lib.books + lib.authors)
+const books = new Model({
+    schema: 'lib', table: 'books', order: 'title' })
+    .join(authors, 'author_id')
+
+    const genres = new Model({ schema: 'lib', table: 'genres' })
+const bookInstances = new Model({
+    schema: 'lib', table: 'book_instance', order: 'instance_id' })
+const inventory = books.join(bookInstances, 'book_id')
 
 // Data model for cd.members
 const members = {
@@ -78,4 +209,7 @@ function getStatus () {
     return query('SELECT * FROM get_status()')
 }
 
-module.exports = { query, members, getStatus, library }
+module.exports = {
+    query, members, getStatus, library, books, authors, genres, bookInstances,
+    inventory,
+}

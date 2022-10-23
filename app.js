@@ -9,6 +9,7 @@ const express = require('express')
 const app = express()
 const hbs = require('hbs')
 hbs.registerPartials(path.join(__dirname, '/views/partials'))
+hbs.registerHelper('match', (a,b) => a === b)
 
 const layoutExampleRouter = require('./routes/layout-examples.js')
 const dbRouter = require('./routes/db-route.js')

@@ -1,0 +1,9 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout }}{{#*inline 'content'~}}
+
+<p>This mock catalog represents the web interface to a library catalog allowing users to browse, update, add and delete records describing books and their authors, along with the current status of this library's collection.</p>
+<p>For a reach goal, it would be nice to implement the ability to import data on books and authors from a service like OpenLibrary. Coming soon, perhaps!</p>
+<p>Indexing <strong>{{book_count}}</strong> books by <strong>{{author_count}}</strong> authors across <strong>{{genre_count}}</strong> genres.</p>
+<p class="text-muted"><i>{{available_count}} of {{total_count}} volumes available.</i></p>
+
+{{~/inline}}{{/catalog_layout}}

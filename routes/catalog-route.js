@@ -49,7 +49,7 @@ router
         bookinstanceController.bookinstance_update_post)
     .get('/bookinstance/:id',
         bookinstanceController.bookinstance_detail)
-    .get('/bookinstances',
+    .get(['/bookinstances', '/inventory'],
         bookinstanceController.bookinstance_list)
 
 module.exports = router

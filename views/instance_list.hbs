@@ -1,0 +1,23 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout title='Browse inventory'}}{{#*inline 'content'~}}
+
+<ul class="list-group">
+{{#each this.rows}}
+<li class="list-group-item">
+<div class="d-flex justify-content-between align-items-baseline">
+    <a class="text-decoration-none" href="{{bookinstance_url}}">ID #{{instance_id}}
+        {{title}}, {{full_name}}. {{imprint}}</a>
+    <span class="
+        {{~#if (match status 'Available')}}text-success{{/if~}}
+        {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
+        ">{{status}}</span>
+</div>
+{{~#unless (match status 'Available')}}
+<div class="fst-italic text-muted">Due back: {{due_back}}</div>
+{{/unless}}
+
+</li>
+{{/each}}
+</ul>
+
+{{~/inline}}{{/catalog_layout}}

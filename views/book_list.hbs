@@ -1,0 +1,16 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout title='Browse books'}}{{#*inline 'content'~}}
+
+<ul class="list-group">
+{{#each this.rows}}
+<li class="list-group-item">
+<div class="d-flex justify-content-between align-items-baseline">
+    <a class="text-decoration-none serif" href="{{book_url}}"><h2 class="fs-5">{{title}}</h2></a>
+    <a class="text-decoration-none fst-italic" href="{{author_url}}">{{full_name}}</a>
+</div>
+<p>{{summary}}</p>
+</li>
+{{/each}}
+</ul>
+
+{{~/inline}}{{/catalog_layout}}
