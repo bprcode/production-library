@@ -7,10 +7,18 @@ if (process.env.NODE_ENV !== 'production') {
 require('@bprcode/handy')
 const express = require('express')
 const app = express()
+
+// Initialize templating
+const { DateTime } = require('luxon')
 const hbs = require('hbs')
 hbs.registerPartials(path.join(__dirname, '/views/partials'))
 hbs.registerHelper('match', (a,b) => a === b)
+hbs.registerHelper('pretty-date', date => {
+    if ( !date ) { return '' }
+    return DateTime.fromJSDate(date).toLocaleString(DateTime.DATE_MED)
+})
 
+// Load routers
 const layoutExampleRouter = require('./routes/layout-examples.js')
 const dbRouter = require('./routes/db-route.js')
 const libRouter = require('./routes/library-route.js')

@@ -1,0 +1,14 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout title='Browse authors'}}{{#*inline 'content'~}}
+
+<ul class="list-group">
+{{#each this.rows}}
+<li class="list-group-item">
+    <a href="{{author_url}}" class="serif text-decoration-none fs-5">{{full_name}}</a>
+    {{~#if dob}}<div>{{pretty-date dob}} &mdash; {{pretty-date dod}}</div>{{/if~}}
+
+</li>
+{{/each}}
+</ul>
+
+{{~/inline}}{{/catalog_layout}}

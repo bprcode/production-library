@@ -1,7 +1,8 @@
-require('../database.js')
+const { genres } = require('../database.js')
 
-exports.genre_list = (req, res) => {
-    res.send(`<❕ placeholder>: Genre list`)
+exports.genre_list = async (req, res) => {
+    const result = await genres.find()
+    res.render(`genre_list.hbs`, result)
 }
 exports.genre_detail = (req, res) => {
     res.send(`<❕ placeholder>: Genre detail ${req.params.id}`)

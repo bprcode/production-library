@@ -1,7 +1,8 @@
-require('../database.js')
+const { authors } = require('../database.js')
 
-exports.author_list = (req, res) => {
-    res.send(`<❕ placeholder>: Author list`)
+exports.author_list = async (req, res) => {
+    const result = await authors.find()
+    res.render(`author_list.hbs`, result)
 }
 exports.author_detail = (req, res) => {
     res.send(`<❕ placeholder>: Author detail ${req.params.id}`)

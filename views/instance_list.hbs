@@ -13,7 +13,7 @@
         ">{{status}}</span>
 </div>
 {{~#unless (match status 'Available')}}
-<div class="fst-italic text-muted">Due back: {{due_back}}</div>
+<div class="fst-italic text-muted">Due back: {{pretty-date due_back}}</div>
 {{/unless}}
 
 </li>

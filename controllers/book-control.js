@@ -22,7 +22,7 @@ exports.index = async (req, res) => {
     })
 }
 exports.book_list = async (req, res) => {
-    const result = await books.find({ author_id: 13 })
+    const result = await books.find()
     // log(result.rows)
     res.render('book_list.hbs', result)
 }

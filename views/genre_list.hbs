@@ -1,0 +1,12 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout title='Browse genres'}}{{#*inline 'content'~}}
+
+<ul class="list-group">
+{{#each this.rows}}
+<li class="list-group-item">
+    <a href="{{genre_url}}" class="serif text-decoration-none fs-5">{{name}}</a>
+</li>
+{{/each}}
+</ul>
+
+{{~/inline}}{{/catalog_layout}}

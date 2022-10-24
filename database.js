@@ -126,13 +126,13 @@ class Model {
 
 // Instantiate table models
 const authors = new Model({
-    schema: 'lib', table: 'authors', order: 'full_name' })
+    schema: 'lib', table: 'authors', order: 'last_name' })
 // Create books as a junction table (lib.books + lib.authors)
 const books = new Model({
     schema: 'lib', table: 'books', order: 'title' })
     .join(authors, 'author_id')
 
-    const genres = new Model({ schema: 'lib', table: 'genres' })
+const genres = new Model({ schema: 'lib', table: 'genres', order: 'name' })
 const bookInstances = new Model({
     schema: 'lib', table: 'book_instance', order: 'instance_id' })
 const inventory = books.join(bookInstances, 'book_id')

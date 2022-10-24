@@ -3,9 +3,7 @@ const { DateTime } = require('luxon')
 
 exports.bookinstance_list = async (req, res) => {
     const result = await inventory.find()
-    res.render('instance_list.hbs', {
-        ...result
-    })
+    res.render('instance_list.hbs', result)
 }
 exports.bookinstance_detail = (req, res) => {
     res.send(`<❕ placeholder>: Bookinstance detail ${req.params.id}`)
