@@ -1,9 +1,7 @@
-const { library, books, authors, genres, bookInstances }
+const { books, authors, genres, bookInstances, genresByBook }
     = require('../database.js')
 
 exports.index = async (req, res) => {
-    // retrieve counts
-    // A better site might render the basics and then ajax back the DB info?
     const result = await Promise.all([
         books.count(),
         authors.count(),
@@ -23,11 +21,24 @@ exports.index = async (req, res) => {
 }
 exports.book_list = async (req, res) => {
     const result = await books.find()
-    // log(result.rows)
     res.render('book_list.hbs', result)
 }
-exports.book_detail = (req, res) => {
-    res.send(`<❕ placeholder>: Book detail ${req.params.id}`)
+exports.book_detail = async (req, res) => {
+    const result = await Promise.all([
+        books.find({ book_id: req.params.id }),
+        bookInstances.find({ book_id: req.params.id }),
+        genresByBook.find({ book_id: req.params.id })
+    ])
+
+    if ( !result[0].rows[0] ) {
+        return res.render(`no_results.hbs`)
+    }
+
+    res.render(`book_detail.hbs`, {
+        book_info: result[0].rows[0],
+        instances: result[1].rows,
+        genre_info: result[2].rows
+    })
 }
 exports.book_create_get = (req, res) => {
     res.send(`<❕ placeholder>: Book create (GET)`)

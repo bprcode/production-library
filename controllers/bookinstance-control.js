@@ -1,5 +1,4 @@
 const { inventory } = require('../database.js')
-const { DateTime } = require('luxon')
 
 exports.bookinstance_list = async (req, res) => {
     const result = await inventory.find()

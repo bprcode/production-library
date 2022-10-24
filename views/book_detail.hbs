@@ -1,0 +1,47 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout}}{{#*inline 'content'~}}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h1 class="fs-3 mb-0 fw-semibold">{{book_info.title}}</h1>
+        by <a href="{{book_info.author_url}}">{{book_info.full_name}}</a>
+    </div>
+    
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <p class="mb-3">{{book_info.summary}}</p>
+            <small>{{#each genre_info}}<a href="{{genre_url}}">{{name}}</a>{{comma-list name}}{{/each}}</small>
+        </li>
+        <li class="list-group-item"><small class="text-muted">ISBN: {{book_info.isbn}}</small></li>
+    </ul>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Availability:
+    </div>
+    <ul class="list-group list-group-flush">
+    {{#each instances}}
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-baseline">
+                <a class="" href="{{book_instance_url}}">ID #{{instance_id}} {{imprint}}</a>
+                <span class="
+                    {{~#if (match status 'Available')}}text-success{{/if~}}
+                    {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
+                    ">{{status}}</span>
+            </div>
+            {{~#unless (match status 'Available')}}
+            <div class="fst-italic text-muted">Due back: {{pretty-date due_back}}</div>
+            {{/unless}}
+
+        </li>
+    {{/each}}
+    </ul>
+    {{#unless instances}}
+    <p class="card-body text-muted pt-2 pb-3 pb-0 mb-0">
+        No copies in inventory.
+    </p>
+    {{/unless}}
+</div>
+
+{{~/inline}}{{/catalog_layout}}

@@ -78,7 +78,8 @@ class Model {
         if (where) {
             dirty += ` WHERE `
                         +Array(Object.keys(where).length)
-                        .fill(`%I = %L`)
+                        .fill(`%I = `)
+                        .map((x,i) => x + `$${i + 1}`) // %I = $1, %I = $2...
                         .join(` AND `)
         } else {
             where = {} // Use blank object for easier formatting
@@ -87,12 +88,13 @@ class Model {
         dirty += this.orderClause
 
         log(dirty, yellow)
-        clean = format(dirty, ...etc,
-                            ...[...Object.entries(where)].flat(),
-                            this.order)
+        clean = format(dirty,
+                        ...etc, // column names
+                        ...Object.keys(where), // where-columns
+                        this.order)
         log(clean, blue)
 
-        return query(clean)
+        return query(clean, Object.values(where))
     }
 
     join (other, key) {
@@ -133,11 +135,20 @@ const books = new Model({
     .join(authors, 'author_id')
 
 const genres = new Model({ schema: 'lib', table: 'genres', order: 'name' })
+const bookGenres = new Model({ schema: 'lib', table: 'book_genres' })
+
+const booksByGenre = new Model({
+    schema: 'lib', table: 'books', order: 'title'})
+    .join(bookGenres, 'book_id')
+
+const genresByBook = bookGenres
+    .join(genres, 'genre_id')
+
 const bookInstances = new Model({
     schema: 'lib', table: 'book_instance', order: 'instance_id' })
 const inventory = books.join(bookInstances, 'book_id')
 
-// Data model for cd.members
+// Data model for cd.members -- not used in library project
 const members = {
     async find ( memid ) {
         memid = parseInt(memid)
@@ -155,7 +166,7 @@ const members = {
     }
 }
 
-// Data model for library tables
+// General library object -- not used much
 const library = {
     async allBooks () {
         const result = await query({
@@ -211,5 +222,5 @@ function getStatus () {
 
 module.exports = {
     query, members, getStatus, library, books, authors, genres, bookInstances,
-    inventory,
+    inventory, booksByGenre, genresByBook
 }

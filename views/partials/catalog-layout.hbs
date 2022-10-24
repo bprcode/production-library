@@ -98,6 +98,7 @@
     <div class="container ms-0 me-sm-5 mb-5 reasonable-width">
       <h1 class="mb-3">{{title}}</h1>
       {{#>content}}{{/content}}
+      {{#unless no_back}}<div class="mt-4"><a id="back-link">&laquo; back</a></div>{{/unless}}
     </div>
 
   </div>
@@ -109,6 +110,10 @@
 </body>
 </html>
 
+<script>
+  document.getElementById('back-link').setAttribute('href', document.referrer)
+  document.getElementById('back-link').onclick = () => {history.back(); return 0;}
+</script>
 <style>
   .d {  /* Debug class */
     border: 3px red dashed;

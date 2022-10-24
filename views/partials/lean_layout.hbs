@@ -35,9 +35,13 @@
     </div>
     <footer>
         {{~#> mod_foot }}
-            <a href="/">Back</a>
+            <a id="back-link">Back</a>
         {{/mod_foot~}}
     </footer>
   </div>
+<script>
+document.getElementById('back-link').setAttribute('href', document.referrer)
+document.getElementById('back-link').onclick = () => {history.back(); return 0;}
+</script>
 </body>
 </html>

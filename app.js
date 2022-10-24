@@ -18,6 +18,13 @@ hbs.registerHelper('pretty-date', date => {
     return DateTime.fromJSDate(date).toLocaleString(DateTime.DATE_MED)
 })
 
+// Helper to use position in iterable to insert a comma, or not:
+hbs.registerHelper('comma-list', (...stuff) => {
+    if ( !stuff[stuff.length-1].data.last )
+        return `, `
+    else
+        return ``})
+
 // Load routers
 const layoutExampleRouter = require('./routes/layout-examples.js')
 const dbRouter = require('./routes/db-route.js')
@@ -57,4 +64,5 @@ app
 
 const server = app.listen(process.env.PORT || 2666, () => {
     log(moo() + ' Server active on: ', green, server.address())
+    log('Todo: Fix nav bar spacing (slightly different between pages?)')
 })
