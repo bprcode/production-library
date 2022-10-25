@@ -3,3 +3,4 @@ node_modules
 .*.txt
 populatedb.js.txt
 *.png
+.vscode/launch.json

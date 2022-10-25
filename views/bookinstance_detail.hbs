@@ -1,0 +1,18 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout no_title=1}}{{#*inline 'content'~}}
+<div class="card">
+    <div class="card-header serif h3">Inventory item #{{instance_id}}</div>
+    <div class="card-body">
+
+    <div><strong>Title: </strong><a href="{{book_url}}">{{title}}</a></div>
+    <div><strong>Catalog ID: </strong>{{instance_id}}</div>
+    <div><strong>Imprint: </strong>{{imprint}}</div>
+    <div><strong>Availability: </strong>
+        <span class="
+            {{~#if (match status 'Available')}}text-success{{/if~}}
+            {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
+            ">{{status}}</span></div>
+    <div><strong>Due: </strong>{{pretty-date due_back}}</div>
+    </div>
+</div>
+{{~/inline}}{{/catalog_layout}}

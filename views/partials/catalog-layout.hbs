@@ -96,7 +96,7 @@
 
     <!-- Central content -->
     <div class="container ms-0 me-sm-5 mb-5 reasonable-width">
-      <h1 class="mb-3">{{title}}</h1>
+      {{#unless no_title}}<h1 class="mb-3">{{title}}</h1>{{/unless}}
       {{#>content}}{{/content}}
       {{#unless no_back}}<div class="mt-4"><a id="back-link">&laquo; back</a></div>{{/unless}}
     </div>

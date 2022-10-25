@@ -47,7 +47,7 @@ router
         bookinstanceController.bookinstance_update_get)
     .post('/bookinstance/:id/update',
         bookinstanceController.bookinstance_update_post)
-    .get(['/bookinstance/:id', '/inventory:id'],
+    .get(['/bookinstance/:id', '/inventory/:id'],
         bookinstanceController.bookinstance_detail)
     .get(['/bookinstances', '/inventory'],
         bookinstanceController.bookinstance_list)
