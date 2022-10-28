@@ -1,4 +1,36 @@
+require('express-async-errors')
+const { body, validationResult } = require('express-validator')
 const { authors, books } = require('../database.js')
+
+async function alreadyHaveAuthor (lname, { req }) {
+    if ((await authors.find({
+            first_name: req.body.first_name, last_name: lname
+        })).rows.length)
+        throw new Error(`Author already created`)
+}
+
+const authorValidators = [
+    body('first_name')
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage('First name required')
+        .escape(),
+    body('last_name')
+        .trim()
+        .isLength({ min: 1})
+        .escape()
+        .withMessage('Last name required')
+        .custom(alreadyHaveAuthor)
+        .withMessage('Author already in catalog.'),
+    body('dob', 'Invalid date')
+        .optional({ checkFalsy: true })
+        .isISO8601()
+        .toDate(),
+    body('dod', 'Invalid date')
+        .optional({ checkFalsy: true })
+        .isISO8601()
+        .toDate()
+]
 
 exports.author_list = async (req, res) => {
     const result = await authors.find()
@@ -19,11 +51,35 @@ exports.author_detail = async (req, res) => {
     })
 }
 exports.author_create_get = (req, res) => {
-    res.send(`<❕ placeholder>: Author create (GET)`)
+    res.render(`author_form.hbs`)
 }
-exports.author_create_post = (req, res) => {
-    res.send(`<❕ placeholder>: Author create (POST)`)
-}
+exports.author_create_post = [
+    ...authorValidators,
+    async (req, res) => {
+        let result
+        const trouble = validationResult(req)
+
+        if ( !trouble.isEmpty() ) {
+            return res.status(400).render(`author_form.hbs`, {
+                trouble: trouble.array()
+            })
+        }
+
+        try {
+            result = await authors.insert({
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                dob: req.body.dob || null,
+                dod: req.body.dod || null
+            })
+        } catch (e) {
+            log.err(e.message)
+            throw e
+        }
+
+        res.redirect(result.rows[0].author_url)
+    }
+]
 exports.author_delete_get = (req, res) => {
     res.send(`<❕ placeholder>: Author delete (GET)`)
 }

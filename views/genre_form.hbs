@@ -1,0 +1,18 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout use_script='/form-eraser.js' title='Add Genre' no_title=1}}{{#*inline 'content'~}}
+<div class="card">
+    <div class="card-header mb-3"><h1 class="fs-3">Add Genre</h1></div>
+
+    <div class="container col-md-10">
+        <form class="mb-4" action="" method="POST">
+
+            <label class="form-label" for="genre-name-id">Name</label>
+            <div class="input-group has-validation">
+                <input class="form-control {{#if (error-check trouble 'name')}}is-invalid{{/if}}" id="genre-name-id" name="name" type="text">
+                <button class="btn btn-primary fw-semibold" type="submit">Create</button>
+            <div class="invalid-feedback">{{error-check trouble 'name'}}</div>
+            </div>
+        </form>
+    </div>
+</div>
+{{~/inline}}{{/catalog_layout}}

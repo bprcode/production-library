@@ -1,3 +1,5 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout title="No results found."}}{{#*inline 'content'~}}
+{{#> catalog_layout }}{{#*inline 'content'~}}
+{{#unless text}}<p class="fs-5">No results found.</p>{{/unless}}
+{{text}}
 {{~/inline}}{{/catalog_layout}}

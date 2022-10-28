@@ -23,7 +23,14 @@ hbs.registerHelper('comma-list', (...stuff) => {
     if ( !stuff[stuff.length-1].data.last )
         return `, `
     else
-        return ``})
+        return ``
+})
+
+hbs.registerHelper('error-check', (trouble, name) => {
+    if (trouble)
+        return trouble.find(t => t.param === name)?.msg
+    return undefined
+})
 
 // Load routers
 const layoutExampleRouter = require('./routes/layout-examples.js')
@@ -33,6 +40,9 @@ const catalogRouter = require('./routes/catalog-route.js')
 
 app
     .disable('x-powered-by')
+
+    .use(express.urlencoded({ extended: true }))
+
     .use((req, res, next) => {
         log(req.method + ': ' + req.originalUrl, dim)
         next()

@@ -1,4 +1,20 @@
+require('express-async-errors')
 const { genres, booksByGenre } = require('../database.js')
+const { body, validationResult } = require('express-validator')
+
+async function alreadyHaveGenre (name) {
+    if ((await genres.find({ name: name })).rows.length)
+        throw new Error(`Genre already created`)
+}
+
+const genreValidators = [
+    body('name')
+        .trim()
+        .isLength({ min: 1 }).withMessage('Name required')
+        .isString().withMessage('Name must be a string')
+        .custom(alreadyHaveGenre).withMessage('Genre already in catalog')
+        .escape(),
+]
 
 exports.genre_list = async (req, res) => {
     const result = await genres.find()
@@ -10,20 +26,48 @@ exports.genre_detail = async (req, res) => {
         booksByGenre.find({ genre_id: req.params.id })
     ])
 
-    if( !result[0].rows[0] )
-        return res.render(`no_results.hbs`)
+    if (!result[0].rows.length)
+        return res.render(`no_results.hbs`, {
+            title: 'Genre not found.',
+            text: ' '
+        })
+
+    let title = result[0].rows[0].name + ` titles`
+    if( !result[1].rows.length )
+        return res.render(`no_results.hbs`, {
+            title: title,
+            text: 'None in catalog.'
+        })
 
     res.render(`genre_detail.hbs`, {
-        title: result[0].rows[0].name + ` titles`,
+        title: title,
         result: result[1].rows
     })
 }
 exports.genre_create_get = (req, res) => {
-    res.send(`<❕ placeholder>: Genre create (GET)`)
+    res.render(`genre_form.hbs`)
 }
-exports.genre_create_post = (req, res) => {
-    res.send(`<❕ placeholder>: Genre create (POST)`)
-}
+exports.genre_create_post = [
+    ...genreValidators,
+    async (req, res) => {
+        let result
+        const trouble = validationResult(req)
+
+        if ( !trouble.isEmpty() ) {
+            return res.status(400).render(`genre_form.hbs`, {
+                trouble: trouble.array()
+            })
+        }
+        try {
+            result = await genres.insert({ name: req.body.name })
+        } catch (e) {
+            log.err(e.message)
+            throw e
+        }
+
+        res.redirect(result.rows[0].genre_url)
+    }
+]
 exports.genre_update_get = (req, res) => {
     res.send(`<❕ placeholder>: Genre update (GET)`)
 }

@@ -3,6 +3,7 @@
 
   --primary: rgb(235, 37, 11);
   --primary-light: rgb(255, 105, 105);
+  --primary-dark: rgb(167, 25, 7);
 }
 
 a {
@@ -45,6 +46,21 @@ h1 {
 body {
     background-color: var(--light);
 }
+
+.form-control:focus {
+  box-shadow: 0 0 0 .25rem rgba(225, 34, 0, 0.25);
+  border-color: var(--primary);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--primary);
+  --bs-btn-border-color: var(--primary-dark);
+  --bs-btn-hover-bg: var(--primary-light);
+  --bs-btn-hover-border-color: var(--primary);
+  --bs-btn-active-bg: white;
+  --bs-btn-active-color: var(--primary);
+  --bs-btn-active-border-color: var(--primary);
+  }
 
 .btn-toggle {
     display: inline-flex;

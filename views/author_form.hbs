@@ -1,0 +1,47 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout use_script='/form-eraser.js' title='Add Author' no_title=1}}{{#*inline 'content'~}}
+<div class="card">
+    <div class="card-header mb-3"><h1 class="fs-3">{{title}}</h1></div>
+
+    <div class="container col-md-10">
+        <form class="mb-4" action="" method="POST">
+            
+            <div class="row mb-3">
+                <label for="first-id" class="col-form-label col-sm-3">First name</label>
+                <div class="col input-group-has-validation">
+                    <input class="form-control {{#if (error-check trouble 'first_name')}}is-invalid{{/if}}" id="first-id" name="first_name" type="text">
+                    <div class="invalid-feedback">{{error-check trouble 'first_name'}}</div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="last-id" class="col-form-label col-sm-3">Last name</label>
+                <div class="col input-group-has-validation">
+                    <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text">
+                    <div class="invalid-feedback">{{error-check trouble 'last_name'}}</div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="dob-id" class="col-form-label col-sm-3">Date of Birth</label>
+                <div class="col input-group-has-validation">
+                    <input class="form-control {{#if (error-check trouble 'dob')}}is-invalid{{/if}}" id="dob-id" name="dob" type="date">
+                    <div class="invalid-feedback">{{error-check trouble 'dob'}}</div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="dod-id" class="col-form-label col-sm-3">Date of Death</label>
+                <div class="col input-group-has-validation">
+                    <input class="form-control {{#if (error-check trouble 'dod')}}is-invalid{{/if}}" id="dod-id" name="dod" type="date">
+                    <div class="invalid-feedback">{{error-check trouble 'dod'}}</div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+            <button class="btn btn-primary fw-semibold" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{~/inline}}{{/catalog_layout}}

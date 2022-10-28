@@ -1,0 +1,79 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout }}{{#*inline 'content'~}}
+
+<style>
+.split {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+.split>* {
+    flex: 0 0 0;
+    margin-bottom: 0.5rem;
+}
+</style>
+
+<div class="card">
+    <div class="card-header"><h1 class="fs-3">Welcome to the Example</h1></div>
+    <div class="card-body">
+    <form action="">
+        <fieldset>
+            <legend>I Am Legend</legend>
+            <input type="radio" id="rad-a" name="rad-abc" value="a">
+            <label for="rad-a">Label for rad-a</label>
+            <br>
+            <input type="radio" id="rad-b" name="rad-abc" value="b" checked>
+            <label for="rad-b">Label for rad-b</label>
+            <br>
+            <input type="radio" id="rad-c" name="rad-abc" value="c">
+            <label for="rad-c">Label for rad-c</label>
+        </fieldset>
+        <hr>
+
+        <div class="split">
+            <span class="form-check form-switch">
+            <input type="checkbox" role="switch" id="checkbox-id-1" name="check-name-1">
+            <label for="checkbox-id-1">First checkbox label</label></span>
+            <span>
+            <input class="form-check-input" type="checkbox" role="switch" id="checkbox-id-2" name="check-name-2">
+            <label for="checkbox-id-2">Second checkbox label</label></span>
+            <div class="container">
+            <input class="form-range" type="range" id="range-id" name="range-name" min="2" max="12">
+            </div>
+            <span>
+            <label class="form-label" for="abc-id">Letters only, no numbers!?</label>
+            <input class="form-control" type="text" name="abc" id="abc-id" required pattern="\p{L}+">
+            <div class="form-text">We will spam your e-mail everywhere.</div>
+            </span>
+        </div>
+        <div class="mb-2">
+            <label class="form-label" for="optional-id">This part is optional</label>
+            <input class="form-control" type="text" name="optional" id="optional-id">
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Send me away!">
+    </form>
+    </div>
+</div>
+
+<script>
+const abcInput = document.getElementById('abc-id')
+
+abcInput.addEventListener('input', () => {
+    abcInput.classList.remove('is-invalid')
+    abcInput.classList.add('is-valid')
+    abcInput.setCustomValidity('')
+    abcInput.checkValidity()
+})
+
+abcInput.addEventListener('invalid', () => {
+    abcInput.classList.remove('is-valid')
+    abcInput.classList.add('is-invalid')
+    if (abcInput.value.length === 0) {
+        abcInput.setCustomValidity('Zero length??')
+    } else {
+        abcInput.setCustomValidity('Invalid format, sorry')
+    }
+})
+</script>
+{{~/inline}}{{/catalog_layout}}

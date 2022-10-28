@@ -46,12 +46,32 @@ class Model {
         return (await query(clean)).rows[0].count
     }
 
+    insert (item) {
+        let clean = ``
+        let dirty = `INSERT INTO ${this.relation} (` +
+                    Array(Reflect.ownKeys(item).length)
+                        .fill('%I')
+                        .join(', ')
+                    + `) VALUES (`
+                    + Object.values(item)
+                        .map((_,i) => `$` + (i+1))
+                        .join(', ')
+                    + `) RETURNING *`
+
+        log(dirty, yellow)
+        clean = format(dirty,
+                        ...Object.keys(item))
+        log(clean, blue)
+
+        return query(clean, [...Object.values(item)])
+    }
+
     /**
      * Columns to retrieve, followed by where-clause object
      * Ex: find('name', 'age', 'height', {state: 'NY', year: 1999})
      * @returns promise for query
      */
-    async find (...etc) {
+    find (...etc) {
         let dirty = `SELECT * FROM ${this.relation}`
         let clean = ``
 
@@ -78,9 +98,10 @@ class Model {
         if (where) {
             dirty += ` WHERE `
                         +Array(Object.keys(where).length)
-                        .fill(`%I = `)
-                        .map((x,i) => x + `$${i + 1}`) // %I = $1, %I = $2...
+                        .fill(`%I::text ILIKE `)
+                        .map((x,i) => x + `$${i + 1}`)
                         .join(` AND `)
+                        // %I::text ILIKE '$1', %I::text ILIKE '$2'...
         } else {
             where = {} // Use blank object for easier formatting
         }
