@@ -3,6 +3,7 @@
 
   --primary: rgb(235, 37, 11);
   --primary-light: rgb(255, 105, 105);
+  --primary-transparent: rgba(235, 37, 11, 0.25);
   --primary-dark: rgb(167, 25, 7);
 }
 
@@ -61,6 +62,25 @@ body {
   --bs-btn-active-color: var(--primary);
   --bs-btn-active-border-color: var(--primary);
   }
+
+.form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.form-check-input:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 .25rem var(--primary-transparent);
+}
+
+.form-select:focus{
+  border: 1px solid var(--primary-light);
+  box-shadow: 0 0 0 .25rem var(--primary-transparent);
+}
+
+.min-tiny {
+  min-width: 10rem;
+}
 
 .btn-toggle {
     display: inline-flex;

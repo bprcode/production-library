@@ -155,6 +155,9 @@ const books = new Model({
     schema: 'lib', table: 'books', order: 'title' })
     .join(authors, 'author_id')
 
+// Sometimes you need books without the joined information:
+const justBooks = new Model({ schema: 'lib', table: 'books', order: 'title' })
+
 const genres = new Model({ schema: 'lib', table: 'genres', order: 'name' })
 const bookGenres = new Model({ schema: 'lib', table: 'book_genres' })
 
@@ -242,6 +245,6 @@ function getStatus () {
 }
 
 module.exports = {
-    query, members, getStatus, library, books, authors, genres, bookInstances,
-    inventory, booksByGenre, genresByBook
+    query, members, getStatus, library, books, justBooks, authors, genres,
+    bookInstances, inventory, booksByGenre, genresByBook, bookGenres
 }
