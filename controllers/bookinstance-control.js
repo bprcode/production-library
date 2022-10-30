@@ -3,23 +3,20 @@ const { inventory, justBooks } = require('../database.js')
 
 exports.bookinstance_list = async (req, res) => {
     const result = await inventory.find()
-    res.render('instance_list.hbs', result)
+    res.render('instance_list.hbs', { items: result })
 }
 exports.bookinstance_detail = async (req, res) => {
     const result = await inventory.find({ instance_id: req.params.id })
-    if ( !result.rows.length ) {
+    if ( !result ) {
         return res.render(`no_results.hbs`)
     }
-    res.render(`bookinstance_detail.hbs`, result.rows[0])
+    res.render(`bookinstance_detail.hbs`, result[0])
 }
 exports.bookinstance_create_get = async (req, res) => {
     const result = await justBooks.find()
-
-    log('Out of curiosity, do I need anything but .rows, like ever?', blue)
-    log(result)
     
     res.render(`bookinstance_form.hbs`, {
-        bookList: result.rows
+        bookList: result
     })
 }
 exports.bookinstance_create_post = (req, res) => {

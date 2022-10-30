@@ -7,6 +7,19 @@ function query (...etc)  {
     return pool.query(...etc)
 }
 
+// Run a query, but just return the rows, or row for single results,
+// or null for no results.
+async function queryResult (...etc) {
+    const rows = (await pool.query(...etc)).rows
+    if (rows.length === 0) {
+        log('Got zero-row result', blue)
+        return null
+    }
+
+    log('Returning array of size ', blue, rows.length)
+    return rows
+}
+
 // General model for tables
 // Note: Constructor values are an injection risk and should not
 // be based on user input.
@@ -63,7 +76,7 @@ class Model {
                         ...Object.keys(item))
         log(clean, blue)
 
-        return query(clean, [...Object.values(item)])
+        return queryResult(clean, [...Object.values(item)])
     }
 
     /**
@@ -78,7 +91,7 @@ class Model {
         if (etc.length === 0) {
             dirty += this.orderClause
             log(dirty, yellow)
-            return query(dirty) // Nothing to sanitize
+            return queryResult(dirty) // Nothing to sanitize
         }
         // Otherwise...
         let where = null
@@ -115,7 +128,7 @@ class Model {
                         this.order)
         log(clean, blue)
 
-        return query(clean, Object.values(where))
+        return queryResult(clean, Object.values(where))
     }
 
     join (other, key) {
@@ -216,6 +229,7 @@ const library = {
     },
 
     async createAuthor (...fields) {
+        throw new Error(`Deprecated author creation method -- do not use.`)
         if (fields.length < 1)
             throw new Error('New authors require a first name.')
 

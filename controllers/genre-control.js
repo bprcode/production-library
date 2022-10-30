@@ -3,7 +3,7 @@ const { genres, booksByGenre } = require('../database.js')
 const { body, validationResult } = require('express-validator')
 
 async function alreadyHaveGenre (name) {
-    if ((await genres.find({ name: name })).rows.length)
+    if (await genres.find({ name: name }))
         throw new Error(`Genre already created`)
 }
 
@@ -18,7 +18,7 @@ const genreValidators = [
 
 exports.genre_list = async (req, res) => {
     const result = await genres.find()
-    res.render(`genre_list.hbs`, result)
+    res.render(`genre_list.hbs`, { genres: result })
 }
 exports.genre_detail = async (req, res) => {
     const result = await Promise.all([
@@ -26,14 +26,14 @@ exports.genre_detail = async (req, res) => {
         booksByGenre.find({ genre_id: req.params.id })
     ])
 
-    if (!result[0].rows.length)
+    if ( !result[0] )
         return res.render(`no_results.hbs`, {
             title: 'Genre not found.',
             text: ' '
         })
 
-    let title = result[0].rows[0].name + ` titles`
-    if( !result[1].rows.length )
+    let title = result[0][0].name + ` titles`
+    if( !result[1] )
         return res.render(`no_results.hbs`, {
             title: title,
             text: 'None in catalog.'
@@ -41,7 +41,7 @@ exports.genre_detail = async (req, res) => {
 
     res.render(`genre_detail.hbs`, {
         title: title,
-        result: result[1].rows
+        result: result[1]
     })
 }
 exports.genre_create_get = (req, res) => {
@@ -65,7 +65,7 @@ exports.genre_create_post = [
             throw e
         }
 
-        res.redirect(result.rows[0].genre_url)
+        res.redirect(result[0].genre_url)
     }
 ]
 exports.genre_update_get = (req, res) => {

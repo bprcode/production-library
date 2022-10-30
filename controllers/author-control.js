@@ -3,9 +3,9 @@ const { body, validationResult } = require('express-validator')
 const { authors, books } = require('../database.js')
 
 async function alreadyHaveAuthor (lname, { req }) {
-    if ((await authors.find({
+    if (await authors.find({
             first_name: req.body.first_name, last_name: lname
-        })).rows.length)
+        }))
         throw new Error(`Author already created`)
 }
 
@@ -34,20 +34,25 @@ const authorValidators = [
 
 exports.author_list = async (req, res) => {
     const result = await authors.find()
-    res.render(`author_list.hbs`, result)
+    res.render(`author_list.hbs`, { authors: result })
 }
 exports.author_detail = async (req, res) => {
-    const result = await Promise.all([
+    const [resultAuthors, resultBooks] = await Promise.all([
         authors.find({ author_id: req.params.id }),
         books.find({ author_id: req.params.id })
     ])
-    if ( !result[0].rows.length ) {
+    if ( !resultAuthors ) {
         return res.render(`no_results.hbs`)
     }
 
+    log('resultAuthors', blue)
+    log(resultAuthors)
+    log('resultBooks', blue)
+    log(resultBooks)
+
     res.render(`author_detail.hbs`, {
-        author: result[0].rows[0],
-        books: result[1].rows
+        author: resultAuthors[0],
+        books: resultBooks
     })
 }
 exports.author_create_get = (req, res) => {
@@ -77,7 +82,7 @@ exports.author_create_post = [
             throw e
         }
 
-        res.redirect(result.rows[0].author_url)
+        res.redirect(result[0].author_url)
     }
 ]
 exports.author_delete_get = (req, res) => {

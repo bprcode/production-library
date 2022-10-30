@@ -9,13 +9,17 @@ const bookValidators = [
         .trim()
         .isLength({ min: 1 })
         .withMessage('Title required')
-        .escape(),
+        .escape()
+        .custom(async value => {
+            if(await books.find({ title: value }))
+                throw new Error('Title already in catalog.')
+        }),
     body('author_id', 'Unable to match author.')
         .isLength({ min: 1 })
         .withMessage('No author indicated.')
         .bail()
         .custom(async value => {
-            if( !(await authors.find({ author_id: value })).rows.length )
+            if( !(await authors.find({ author_id: value })) )
                 throw new Error('Invalid author.')
         }),
     body('isbn', 'ISBN required')
@@ -25,7 +29,7 @@ const bookValidators = [
     body('summary')
         .optional({ checkFalsy: true }),
     body()
-        .custom(async (value, { req }) => {
+        .custom(async (_, { req }) => {
             // Extract IDs from genre checkbox fields
             let genreList = Object.keys(req.body)
                             .filter(k => k.startsWith('genre'))
@@ -34,7 +38,7 @@ const bookValidators = [
                 genreList.map(g => genres.find({ genre_id: g }))
             )
             for(const r of result) {
-                if ( !r.rows.length ) {
+                if ( !r ) {
                     throw new Error('Invalid genre ID')
                 }
             }
@@ -64,7 +68,7 @@ exports.index = async (req, res) => {
 }
 exports.book_list = async (req, res) => {
     const result = await books.find()
-    res.render('book_list.hbs', result)
+    res.render('book_list.hbs', { books: result })
 }
 exports.book_detail = async (req, res) => {
     const result = await Promise.all([
@@ -73,14 +77,14 @@ exports.book_detail = async (req, res) => {
         genresByBook.find({ book_id: req.params.id })
     ])
 
-    if ( !result[0].rows[0] ) {
+    if ( !result[0] ) {
         return res.render(`no_results.hbs`)
     }
 
     res.render(`book_detail.hbs`, {
-        book_info: result[0].rows[0],
-        instances: result[1].rows,
-        genre_info: result[2].rows
+        book_info: result[0][0],
+        instances: result[1],
+        genre_info: result[2]
     })
 }
 exports.book_create_get = async (req, res) => {
@@ -90,8 +94,8 @@ exports.book_create_get = async (req, res) => {
     ])
 
     res.render(`book_form.hbs`, {
-        genres: result[0].rows,
-        authors: result[1].rows
+        genres: result[0],
+        authors: result[1]
     })
 }
 exports.book_create_post = [
@@ -106,8 +110,8 @@ exports.book_create_post = [
         if ( !trouble.isEmpty() ) {
             return res.status(400).render(`book_form.hbs`, {
                 trouble: trouble.array(),
-                genres: necessaryLabels[0].rows,
-                authors: necessaryLabels[1].rows
+                genres: necessaryLabels[0],
+                authors: necessaryLabels[1]
             })
         }
 
@@ -119,8 +123,8 @@ exports.book_create_post = [
             summary: req.body.summary || null
         })
 
-        // Also need to insert on genre/book junction table
-        const bookID = result.rows[0].book_id
+        // Also need to repeatedly insert on genre/book junction table
+        const bookID = result[0].book_id
         for (const genreID of req.body.genreList) {
             try {
                 await bookGenres.insert({
@@ -133,7 +137,7 @@ exports.book_create_post = [
             }
         }
 
-        res.redirect(result.rows[0].book_url)
+        res.redirect(result[0].book_url)
     }
 ]
 exports.book_update_get = (req, res) => {
