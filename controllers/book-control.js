@@ -111,8 +111,6 @@ exports.book_create_post = [
             })
         }
 
-        // log(req.body.genreList)
-
         // Having passed validation, create the new book.
         const result = await justBooks.insert({
             title: req.body.title,

@@ -1,4 +1,5 @@
-const { inventory } = require('../database.js')
+require('express-async-errors')
+const { inventory, justBooks } = require('../database.js')
 
 exports.bookinstance_list = async (req, res) => {
     const result = await inventory.find()
@@ -11,8 +12,15 @@ exports.bookinstance_detail = async (req, res) => {
     }
     res.render(`bookinstance_detail.hbs`, result.rows[0])
 }
-exports.bookinstance_create_get = (req, res) => {
-    res.send(`<❕ placeholder>: Bookinstance create (GET)`)
+exports.bookinstance_create_get = async (req, res) => {
+    const result = await justBooks.find()
+
+    log('Out of curiosity, do I need anything but .rows, like ever?', blue)
+    log(result)
+    
+    res.render(`bookinstance_form.hbs`, {
+        bookList: result.rows
+    })
 }
 exports.bookinstance_create_post = (req, res) => {
     res.send(`<❕ placeholder>: Bookinstance create (POST)`)

@@ -35,7 +35,7 @@ router
     .get('/genre/:id', genreController.genre_detail)
     .get('/genres', genreController.genre_list)
 
-    .get('/bookinstance/create',
+    .get(['/bookinstance/create', '/inventory/create'],
         bookinstanceController.bookinstance_create_get)
     .post('/bookinstance/create',
         bookinstanceController.bookinstance_create_post)
