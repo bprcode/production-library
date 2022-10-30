@@ -7,34 +7,40 @@
         <form class="mb-4" action="" method="POST">
             
             <div class="row mb-3">
-                <label for="first-id" class="col-form-label col-sm-3">First name</label>
+                <label for="title-id" class="col-form-label col-sm-3">Title</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'first_name')}}is-invalid{{/if}}" id="first-id" name="first_name" type="text">
-                    <div class="invalid-feedback">{{error-check trouble 'first_name'}}</div>
+                    <select class="form-select {{#if (error-check trouble 'book_id')}}is-invalid{{/if}}" name="book_id" id="title-id">
+                        <option value="default" selected>Select title...</option>
+                        {{#each bookList}}<option value="{{book_id}}">{{title}}</option>{{/each}}
+                    </select>
+                    <div class="invalid-feedback">{{error-check trouble 'book_id'}}</div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="last-id" class="col-form-label col-sm-3">Last name</label>
+                <label for="imprint-id" class="col-form-label col-sm-3">Imprint</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text">
-                    <div class="invalid-feedback">{{error-check trouble 'last_name'}}</div>
+                    <input class="form-control {{#if (error-check trouble 'imprint')}}is-invalid{{/if}}" id="imprint-id" name="imprint" type="text">
+                    <div class="invalid-feedback">{{error-check trouble 'imprint'}}</div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="dob-id" class="col-form-label col-sm-3">Date of Birth</label>
+                <label for="due-id" class="col-form-label col-sm-3">Due back</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'dob')}}is-invalid{{/if}}" id="dob-id" name="dob" type="date">
-                    <div class="invalid-feedback">{{error-check trouble 'dob'}}</div>
+                    <input class="form-control {{#if (error-check trouble 'due_back')}}is-invalid{{/if}}" id="due-id" name="due_back" type="date">
+                    <div class="invalid-feedback">{{error-check trouble 'due_back'}}</div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="dod-id" class="col-form-label col-sm-3">Date of Death</label>
+                <label for="status-id" class="col-form-label col-sm-3">Status</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'dod')}}is-invalid{{/if}}" id="dod-id" name="dod" type="date">
-                    <div class="invalid-feedback">{{error-check trouble 'dod'}}</div>
+                    <select class="form-select {{#if (error-check trouble 'status')}}is-invalid{{/if}}" name="status" id="status-id">
+                        <option value="default" selected>Select status...</option>
+                        {{#each statusList}}<option value="{{.}}">{{.}}</option>{{/each}}
+                    </select>
+                    <div class="invalid-feedback">{{error-check trouble 'status'}}</div>
                 </div>
             </div>
 

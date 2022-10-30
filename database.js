@@ -15,8 +15,7 @@ async function queryResult (...etc) {
         log('Got zero-row result', blue)
         return null
     }
-
-    log('Returning array of size ', blue, rows.length)
+    
     return rows
 }
 
@@ -185,6 +184,16 @@ const bookInstances = new Model({
     schema: 'lib', table: 'book_instance', order: 'instance_id' })
 const inventory = books.join(bookInstances, 'book_id')
 
+/**
+ * Retrieve an array of book status strings.
+ * @returns Promise
+ */
+async function bookStatusList () {
+    return (await queryResult(
+                    `SELECT unnest(enum_range(NULL::lib.book_status))`))
+                    .map(e => e.unnest)
+}
+
 // Data model for cd.members -- not used in library project
 const members = {
     async find ( memid ) {
@@ -230,26 +239,6 @@ const library = {
 
     async createAuthor (...fields) {
         throw new Error(`Deprecated author creation method -- do not use.`)
-        if (fields.length < 1)
-            throw new Error('New authors require a first name.')
-
-        fields = {
-            1: '',
-            ...fields
-        }
-
-        for (const k in fields) {
-            let m = fields[k].match(/'(.*)'/)
-            fields[k] = m?.[1]
-        }
-        log(`Creating author:`, blue)
-        log(fields)
-
-        return query(
-            'INSERT INTO lib.authors(first_name, last_name, dob, dod) '
-            +'VALUES ($1, $2, $3, $4)',
-            [fields[0], fields[1], fields[2], fields[3]]
-        )
     }
 }
 
@@ -259,6 +248,8 @@ function getStatus () {
 }
 
 module.exports = {
-    query, members, getStatus, library, books, justBooks, authors, genres,
-    bookInstances, inventory, booksByGenre, genresByBook, bookGenres
+    query, queryResult, members, getStatus, library,
+    books, justBooks, authors, genres,
+    bookInstances, inventory, booksByGenre, genresByBook, bookGenres,
+    bookStatusList
 }

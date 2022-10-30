@@ -37,15 +37,15 @@ router
 
     .get(['/bookinstance/create', '/inventory/create'],
         bookinstanceController.bookinstance_create_get)
-    .post('/bookinstance/create',
+    .post(['/bookinstance/create', '/inventory/create'],
         bookinstanceController.bookinstance_create_post)
-    .get('/bookinstance/:id/delete',
+    .get(['/bookinstance/:id/delete', '/inventory/:id/delete'],
         bookinstanceController.bookinstance_delete_get)
-    .post('/bookinstance/:id/delete',
+    .post(['/bookinstance/:id/delete', '/inventory/:id/delete'],
         bookinstanceController.bookinstance_delete_post)
-    .get('/bookinstance/:id/update',
+    .get(['/bookinstance/:id/update', '/inventory/:id/update'],
         bookinstanceController.bookinstance_update_get)
-    .post('/bookinstance/:id/update',
+    .post(['/bookinstance/:id/update', '/inventory/:id/update'],
         bookinstanceController.bookinstance_update_post)
     .get(['/bookinstance/:id', '/inventory/:id'],
         bookinstanceController.bookinstance_detail)

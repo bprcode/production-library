@@ -45,11 +45,6 @@ exports.author_detail = async (req, res) => {
         return res.render(`no_results.hbs`)
     }
 
-    log('resultAuthors', blue)
-    log(resultAuthors)
-    log('resultBooks', blue)
-    log(resultBooks)
-
     res.render(`author_detail.hbs`, {
         author: resultAuthors[0],
         books: resultBooks
