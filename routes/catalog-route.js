@@ -19,6 +19,7 @@ router
 
     .get('/author/create', authorController.author_create_get)
     .post('/author/create', authorController.author_create_post)
+    .get('/author/delete', authorController.author_delete_choose)
     .get('/author/:id/delete', authorController.author_delete_get)
     .post('/author/:id/delete', authorController.author_delete_post)
     .get('/author/:id/update', authorController.author_update_get)

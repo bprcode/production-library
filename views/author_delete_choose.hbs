@@ -1,0 +1,15 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout title='Delete author'}}{{#*inline 'content'~}}
+<div class="card mt-4">
+    <div class="card-header">
+        Choose author to delete...
+    </div>
+    <ul class="list-group list-group-flush">
+        {{#each authors}}
+        <li class="list-group-item">
+            <a class="serif h5" href="{{author_url}}/delete">{{full_name}}</a>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+{{~/inline}}{{/catalog_layout}}

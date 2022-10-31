@@ -1,0 +1,30 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout no_title=1}}{{#*inline 'content'~}}
+<div class="fs-1">
+    Delete author: {{author.full_name}}?
+</div>
+
+
+{{#if books}}
+<div class="card mt-4 mb-4">
+    <div class="card-header text-bg-danger">
+        Note: This will also delete the following works by this author:
+    </div>
+    <ul class="list-group list-group-flush">
+        {{#each books}}
+        <li class="list-group-item">
+            <a class="serif h5" href="{{book_url}}">{{title}}</a>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+{{/if}}
+
+<div class="fs-5 fw-semibold my-4">
+    <form action="{{author.author_url}}/delete" method="POST">
+        Are you sure?
+        <a class="btn btn-secondary ms-4 fw-semibold text-decoration-none" role="button" href="/catalog/">Cancel</a>
+        <button class="btn btn-danger ms-2 fw-semibold">Delete</button>
+    </form>
+</div>
+{{~/inline}}{{/catalog_layout}}

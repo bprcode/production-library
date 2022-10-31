@@ -58,6 +58,25 @@ class Model {
         return (await query(clean)).rows[0].count
     }
 
+    delete (where) {
+        if ( !where )
+            throw new Error(`No where parameters specified.`)
+
+        let clean = ``
+        let dirty = `DELETE FROM ${this.relation} WHERE ` +
+                    Array(Reflect.ownKeys(where).length)
+                        .fill('%I = $')
+                        .map((v,i) => v + (i+1))
+                        .join(' AND ')
+                        + ` RETURNING *`
+
+        log(dirty, yellow)
+        clean = format(dirty, ...Reflect.ownKeys(where))
+        log(clean, blue)
+
+        return queryResult(clean, Object.values(where))
+    }
+
     insert (item) {
         let clean = ``
         let dirty = `INSERT INTO ${this.relation} (` +
@@ -75,7 +94,7 @@ class Model {
                         ...Object.keys(item))
         log(clean, blue)
 
-        return queryResult(clean, [...Object.values(item)])
+        return queryResult(clean, Object.values(item))
     }
 
     /**
