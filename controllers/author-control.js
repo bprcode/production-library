@@ -115,7 +115,7 @@ exports.author_delete_post = [
     authorDeleteValidator,
     (req, res) => {
         authors.delete({ author_id: req.params.id })
-        res.redirect(`/catalog/authors`)
+        res.status(200).redirect(`/catalog/authors`)
     }
 ]
 exports.author_update_get = (req, res) => {

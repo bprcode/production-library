@@ -1,6 +1,6 @@
 require('express-async-errors')
 const { genres, booksByGenre } = require('../database.js')
-const { body, validationResult } = require('express-validator')
+const { body, param, validationResult } = require('express-validator')
 
 async function alreadyHaveGenre (name) {
     if (await genres.find({ name: name }))
@@ -15,6 +15,15 @@ const genreValidators = [
         .custom(alreadyHaveGenre).withMessage('Genre already in catalog')
         .escape(),
 ]
+
+const genreDeleteValidator =
+    param('id')
+        .escape()
+        .custom(async id => {
+            if ( !(await genres.find({ genre_id: id })) )
+                throw new Error(`Invalid genre ID.`)
+        })
+        .withMessage('Genre ID not found.')
 
 exports.genre_list = async (req, res) => {
     const result = await genres.find()
@@ -74,9 +83,31 @@ exports.genre_update_get = (req, res) => {
 exports.genre_update_post = (req, res) => {
     res.send(`<❕ placeholder>: Genre update (POST)`)
 }
-exports.genre_delete_get = (req, res) => {
-    res.send(`<❕ placeholder>: Genre delete (GET)`)
+exports.genre_delete_choose = async (req, res) => {
+    const result = await genres.find()
+    res.render(`genre_delete_choose.hbs`, { genres: result })
 }
-exports.genre_delete_post = (req, res) => {
-    res.send(`<❕ placeholder>: Genre delete (POST)`)
-}
+exports.genre_delete_get = [
+    genreDeleteValidator,
+    async (req, res) => {
+        const trouble = validationResult(req)
+        if ( !trouble.isEmpty() ) {
+            return res.status(303).redirect(`/catalog/genre/delete`)
+        }
+
+        const result = await genres.find({ genre_id: req.params.id })
+        res.render(`genre_delete.hbs`, { genre: result[0] })
+    }
+]
+exports.genre_delete_post = [
+    genreDeleteValidator,
+    async (req, res) => {
+        const trouble = validationResult(req)
+        if ( !trouble.isEmpty() ) {
+            return res.status(303).redirect(`/catalog/genre/delete`)
+        }
+
+        genres.delete({ genre_id: req.params.id })
+        res.status(200).redirect(`/catalog/genres`)
+    }
+]
