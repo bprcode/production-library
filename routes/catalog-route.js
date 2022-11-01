@@ -10,6 +10,7 @@ router
     .get('/', bookController.index)
     .get('/book/create', bookController.book_create_get)
     .post('/book/create', bookController.book_create_post)
+    .get('/book/delete', bookController.book_delete_choose)
     .get('/book/:id/delete', bookController.book_delete_get)
     .post('/book/:id/delete', bookController.book_delete_post)
     .get('/book/:id/update', bookController.book_update_get)
@@ -41,6 +42,8 @@ router
         bookinstanceController.bookinstance_create_get)
     .post(['/bookinstance/create', '/inventory/create'],
         bookinstanceController.bookinstance_create_post)
+    .get(['/bookinstance/delete', '/inventory/delete'],
+        bookinstanceController.bookinstance_delete_choose)
     .get(['/bookinstance/:id/delete', '/inventory/:id/delete'],
         bookinstanceController.bookinstance_delete_get)
     .post(['/bookinstance/:id/delete', '/inventory/:id/delete'],

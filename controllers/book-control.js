@@ -1,5 +1,5 @@
 require('express-async-errors')
-const { body, validationResult } = require('express-validator')
+const { body, param, validationResult } = require('express-validator')
 const { books, justBooks, authors, genres, bookInstances, genresByBook,
         bookGenres }
         = require('../database.js')
@@ -47,6 +47,15 @@ const bookValidators = [
         })
         .withMessage('Invalid genre.')
 ]
+
+const bookIdValidator =
+    param('id', 'Invalid book ID.')
+        .trim()
+        .escape()
+        .custom(async value => {
+            if ( ! await books.find({ book_id: value }))
+                throw new Error(`Book ID not found.`)
+        })
 
 exports.index = async (req, res) => {
     const result = await Promise.all([
@@ -146,9 +155,33 @@ exports.book_update_get = (req, res) => {
 exports.book_update_post = (req, res) => {
     res.send(`<❕ placeholder>: Book update (POST)`)
 }
-exports.book_delete_get = (req, res) => {
-    res.send(`<❕ placeholder>: Book delete (GET)`)
+exports.book_delete_choose = async (req, res) => {
+    const result = await books.find()
+    res.render(`book_delete_choose.hbs`, { books: result })
 }
-exports.book_delete_post = (req, res) => {
-    res.send(`<❕ placeholder>: Book delete (POST)`)
-}
+exports.book_delete_get = [
+    bookIdValidator,
+    async (req, res) => {
+        const trouble = validationResult(req)
+        if ( ! trouble.isEmpty() ) {
+            log('got trouble>>', yellow)
+            log(trouble.array())
+            return res.status(400).redirect(`/catalog/book/delete`)
+        }
+        const [ resultBook, resultInstances ] = await Promise.all([
+            books.find({ book_id: req.params.id }),
+            bookInstances.find({ book_id: req.params.id })
+        ])
+        res.render(`book_delete.hbs`, {
+            book: resultBook[0],
+            instances: resultInstances
+        })
+    }
+]
+exports.book_delete_post = [
+    bookIdValidator,
+    async (req, res) => {
+        justBooks.delete({ book_id: req.params.id })
+        res.status(200).redirect(`/catalog/books`)
+    }
+]

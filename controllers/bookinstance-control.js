@@ -1,5 +1,5 @@
 require('express-async-errors')
-const { body, validationResult } = require('express-validator')
+const { body, param, validationResult } = require('express-validator')
 const { inventory, justBooks, bookStatusList, bookInstances }
         = require('../database.js')
 
@@ -31,6 +31,15 @@ const instanceValidators = [
         .isISO8601()
         .toDate()
 ]
+
+const instanceDeleteValidator =
+    param('id', 'Invalid item ID.')
+        .trim()
+        .escape()
+        .custom(async id => {
+            if ( !await bookInstances.find({ instance_id: id }) )
+                throw new Error(`Item ID not found.`)
+        })
 
 exports.bookinstance_list = async (req, res) => {
     const result = await inventory.find()
@@ -101,9 +110,31 @@ exports.bookinstance_update_get = (req, res) => {
 exports.bookinstance_update_post = (req, res) => {
     res.send(`<❕ placeholder>: Bookinstance update (POST)`)
 }
-exports.bookinstance_delete_get = (req, res) => {
-    res.send(`<❕ placeholder>: Bookinstance delete (GET)`)
+exports.bookinstance_delete_choose = async (req, res) => {
+    const result = await inventory.find()
+    res.render(`bookinstance_delete_choose.hbs`, { items: result })
 }
-exports.bookinstance_delete_post = (req, res) => {
-    res.send(`<❕ placeholder>: Bookinstance delete (POST)`)
-}
+exports.bookinstance_delete_get = [
+    instanceDeleteValidator,
+    async (req, res) => {
+        const trouble = validationResult(req)
+        if ( !trouble.isEmpty() ) {
+            return res.status(400).redirect(`/catalog/inventory/delete`)
+        }
+
+        const result = await inventory.find({ instance_id: req.params.id })
+        res.render(`bookinstance_delete.hbs`, { item: result[0] })
+    }
+]
+exports.bookinstance_delete_post = [
+    instanceDeleteValidator,
+    async (req, res) => {
+        const trouble = validationResult(req)
+        if ( !trouble.isEmpty() ) {
+            return res.status(400).redirect(`/catalog/inventory/delete`)
+        }
+
+        bookInstances.delete({ instance_id: req.params.id })
+        res.status(200).redirect(`/catalog/inventory`)
+    }
+]
