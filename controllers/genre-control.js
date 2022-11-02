@@ -54,7 +54,8 @@ exports.genre_detail = async (req, res) => {
     })
 }
 exports.genre_create_get = (req, res) => {
-    res.render(`genre_form.hbs`)
+    res.render(`genre_form.hbs`,
+        { title: 'Add Genre', form_action: '/catalog/genre/create' })
 }
 exports.genre_create_post = [
     ...genreValidators,
@@ -64,7 +65,9 @@ exports.genre_create_post = [
 
         if ( !trouble.isEmpty() ) {
             return res.status(400).render(`genre_form.hbs`, {
-                trouble: trouble.array()
+                trouble: trouble.array(),
+                title: 'Add Genre',
+                form_action: '/catalog/genre/create'
             })
         }
         try {

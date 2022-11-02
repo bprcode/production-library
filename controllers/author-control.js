@@ -60,7 +60,8 @@ exports.author_detail = async (req, res) => {
     })
 }
 exports.author_create_get = (req, res) => {
-    res.render(`author_form.hbs`)
+    res.render(`author_form.hbs`,
+        { title: 'Add Author', form_action: '/catalog/author/create' })
 }
 exports.author_create_post = [
     ...authorValidators,
@@ -70,7 +71,9 @@ exports.author_create_post = [
 
         if ( !trouble.isEmpty() ) {
             return res.status(400).render(`author_form.hbs`, {
-                trouble: trouble.array()
+                trouble: trouble.array(),
+                title: 'Add Author',
+                form_action: '/catalog/author/create'
             })
         }
 

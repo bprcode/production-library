@@ -97,20 +97,22 @@ exports.book_detail = async (req, res) => {
     })
 }
 exports.book_create_get = async (req, res) => {
-    const result = await Promise.all([
+    const [genreLabels, authorLabels] = await Promise.all([
         genres.find(),
         authors.find()
     ])
 
     res.render(`book_form.hbs`, {
-        genres: result[0],
-        authors: result[1]
+        genres: genreLabels,
+        authors: authorLabels,
+        title: 'Add Book',
+        form_action: '/catalog/book/create'
     })
 }
 exports.book_create_post = [
     ...bookValidators,
     async (req, res) => {
-        const necessaryLabels = await Promise.all([
+        const [genreLabels, authorLabels] = await Promise.all([
             genres.find(),
             authors.find()
         ])
@@ -119,8 +121,10 @@ exports.book_create_post = [
         if ( !trouble.isEmpty() ) {
             return res.status(400).render(`book_form.hbs`, {
                 trouble: trouble.array(),
-                genres: necessaryLabels[0],
-                authors: necessaryLabels[1]
+                genres: genreLabels,
+                authors: authorLabels,
+                title: 'Add Book',
+                form_action: '/catalog/book/create'
             })
         }
 

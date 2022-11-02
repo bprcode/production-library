@@ -1,10 +1,10 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout use_script='/form-eraser.js' title='Add inventory item' no_title=1}}{{#*inline 'content'~}}
+{{#> catalog_layout use_script='/form-eraser.js' no_title=1}}{{#*inline 'content'~}}
 <div class="card">
     <div class="card-header mb-3"><h1 class="fs-3">{{title}}</h1></div>
 
     <div class="container col-md-10">
-        <form class="mb-4" action="" method="POST">
+        <form class="mb-4" action="{{form_action}}" method="POST">
             
             <div class="row mb-3">
                 <label for="title-id" class="col-form-label col-sm-3">Title</label>

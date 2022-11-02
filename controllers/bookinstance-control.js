@@ -63,7 +63,9 @@ exports.bookinstance_create_get = async (req, res) => {
 
     res.render(`bookinstance_form.hbs`, {
         bookList,
-        statusList
+        statusList,
+        title: 'Add inventory item',
+        form_action: '/catalog/inventory/create'
     })
 }
 exports.bookinstance_create_post = [
@@ -80,7 +82,9 @@ exports.bookinstance_create_post = [
             return res.status(400).render(`bookinstance_form.hbs`, {
                 bookList,
                 statusList,
-                trouble: trouble.array()
+                trouble: trouble.array(),
+                title: 'Add inventory item',
+                form_action: '/catalog/inventory/create'
             })
         }
 
