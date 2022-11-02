@@ -1,5 +1,5 @@
 require('express-async-errors')
-const { genres, booksByGenre } = require('../database.js')
+const { genres, booksByGenre, bookInstances } = require('../database.js')
 const { body, param, validationResult } = require('express-validator')
 
 async function alreadyHaveGenre (name) {
@@ -7,7 +7,16 @@ async function alreadyHaveGenre (name) {
         throw new Error(`Genre already created`)
 }
 
-const genreValidators = [
+const genreIdValidator =
+    param('id')
+        .escape()
+        .custom(async id => {
+            if ( ! await genres.find({ genre_id: id }) )
+                throw new Error(`Invalid genre ID.`)
+        })
+        .withMessage('Genre ID not found.')
+
+const genreCreateValidators = [
     body('name')
         .trim()
         .isLength({ min: 1 }).withMessage('Name required')
@@ -16,14 +25,24 @@ const genreValidators = [
         .escape(),
 ]
 
-const genreDeleteValidator =
-    param('id')
-        .escape()
-        .custom(async id => {
-            if ( !(await genres.find({ genre_id: id })) )
-                throw new Error(`Invalid genre ID.`)
+const genreUpdateValidators = [
+    genreIdValidator,
+    body('name')
+        .trim()
+        .isLength({ min: 1 }).withMessage('Name required')
+        .isString().withMessage('Name must be a string')
+        .custom(async (value, { req }) => {
+            const result = await genres.find({ name: value })
+            if (result && result.find(r =>
+                    String(r.genre_id) !== String(req.params.id))) {
+                throw new Error(`Genre name unavailable.`)
+            }
         })
-        .withMessage('Genre ID not found.')
+        .withMessage('Genre name already in use.')
+        .escape()
+]
+
+
 
 exports.genre_list = async (req, res) => {
     const result = await genres.find()
@@ -54,20 +73,25 @@ exports.genre_detail = async (req, res) => {
     })
 }
 exports.genre_create_get = (req, res) => {
-    res.render(`genre_form.hbs`,
-        { title: 'Add Genre', form_action: '/catalog/genre/create' })
+    res.render(`genre_form.hbs`, {
+        title: 'Add Genre',
+        form_action: '/catalog/genre/create',
+        submit: 'Create'
+    })
 }
 exports.genre_create_post = [
-    ...genreValidators,
+    ...genreCreateValidators,
     async (req, res) => {
         let result
         const trouble = validationResult(req)
 
-        if ( !trouble.isEmpty() ) {
+        if ( ! trouble.isEmpty() ) {
             return res.status(400).render(`genre_form.hbs`, {
                 trouble: trouble.array(),
                 title: 'Add Genre',
-                form_action: '/catalog/genre/create'
+                form_action: '/catalog/genre/create',
+                submit: 'Create',
+                populate: { name: req.body.name }
             })
         }
         try {
@@ -80,12 +104,59 @@ exports.genre_create_post = [
         res.redirect(result[0].genre_url)
     }
 ]
-exports.genre_update_get = (req, res) => {
-    res.send(`<❕ placeholder>: Genre update (GET)`)
-}
-exports.genre_update_post = (req, res) => {
-    res.send(`<❕ placeholder>: Genre update (POST)`)
-}
+exports.genre_update_get = [
+    genreIdValidator,
+    async (req, res) => {
+        // Check for valid genre ID
+        const trouble = validationResult(req)
+        if ( ! trouble.isEmpty() ) {
+            return res.status(400).redirect(`/catalog/genre/update`)
+        }
+
+        // Retrieve prior record
+        const prior = await genres.find({ genre_id: req.params.id })
+
+        // Render populated update form
+        res.render(`genre_form.hbs`, {
+            title: 'Edit Genre',
+            form_action: undefined, // post to current URL
+            populate: prior[0],
+            submit: 'Save Changes'
+        })
+    }
+]
+exports.genre_update_post = [
+    ...genreUpdateValidators,
+    async (req, res) => {
+        // Check for valid genre ID
+        const trouble = validationResult(req)
+        if ( ! trouble.isEmpty() ) {
+            log('Trouble encountered:',yellow)
+            log(trouble.array())
+            // Redirect invalid ID update requests
+            if (trouble.array().find(e => e.param === 'id')) {
+                log('id issue. Redirecting...', yellow)
+                return res.status(400).redirect(`/catalog/genre/update`)
+            }
+
+            // Re-render the form for invalid submitted data
+            return res.status(400).render(`genre_form.hbs`, {
+                trouble: trouble.array(),
+                title: 'Edit Genre',
+                form_action: undefined,
+                submit: 'Save Changes',
+                populate: { name: req.body.name }
+            })
+        }
+
+        const result = await genres.update(
+            { name: req.body.name },
+            { genre_id: req.params.id }
+        )
+
+        res.status(200).redirect(result[0].genre_url)
+    }
+]
 exports.genre_update_choose = async (req, res) => {
     const result = await genres.find()
     res.render(`genre_action_choose.hbs`, { genres: result, action: 'update' })
@@ -95,7 +166,7 @@ exports.genre_delete_choose = async (req, res) => {
     res.render(`genre_action_choose.hbs`, { genres: result, action: 'delete' })
 }
 exports.genre_delete_get = [
-    genreDeleteValidator,
+    genreIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
@@ -107,7 +178,7 @@ exports.genre_delete_get = [
     }
 ]
 exports.genre_delete_post = [
-    genreDeleteValidator,
+    genreIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {

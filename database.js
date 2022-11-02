@@ -98,13 +98,51 @@ class Model {
     }
 
     /**
+     * Makes the changes specified in the first object,
+     * given that the conditions in the second object are met.
+     * Ex: update({ price: 19.99 }, { state: 'CA', item_id: 123 })
+     * @param {Object} replace - The key-value pairs to substitute
+     * @param {Object} where - The conditions to meet
+     */
+    update (replace, where) {
+        let clean = ``
+        let dirty = `UPDATE ${this.relation} SET `
+        let i = 1 // SQL substitution index
+
+        dirty +=
+            Object.keys(replace)
+                .map(_ => `%I = $` + (i++))
+                .join(', ')
+        
+        if (where) {
+            dirty += ' WHERE '
+            dirty +=
+                Object.keys(where)
+                    .map(_ => `%I::text ILIKE $` + (i++))
+                    .join(' AND ')
+        }
+
+        dirty += ` RETURNING *`
+
+        clean = format(dirty,
+                    ...Object.keys(replace),
+                    ...Object.keys(where))
+
+        log(dirty, yellow)
+        log(clean, blue)
+
+        return queryResult(clean,
+            [...Object.values(replace), ...Object.values(where)])
+    }
+
+    /**
      * Columns to retrieve, followed by where-clause object
      * Ex: find('name', 'age', 'height', {state: 'NY', year: 1999})
      * @returns promise for query
      */
     find (...etc) {
-        let dirty = `SELECT * FROM ${this.relation}`
         let clean = ``
+        let dirty = `SELECT * FROM ${this.relation}`
 
         if (etc.length === 0) {
             dirty += this.orderClause

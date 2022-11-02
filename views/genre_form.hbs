@@ -8,8 +8,8 @@
 
             <label class="form-label" for="genre-name-id">Name</label>
             <div class="input-group has-validation">
-                <input class="form-control {{#if (error-check trouble 'name')}}is-invalid{{/if}}" id="genre-name-id" name="name" type="text">
-                <button class="btn btn-primary fw-semibold" type="submit">Create</button>
+                <input class="form-control {{#if (error-check trouble 'name')}}is-invalid{{/if}}" id="genre-name-id" name="name" type="text" value="{{populate.name}}">
+                <button class="btn btn-primary fw-semibold" type="submit">{{submit}}</button>
             <div class="invalid-feedback">{{error-check trouble 'name'}}</div>
             </div>
         </form>
