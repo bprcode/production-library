@@ -157,7 +157,8 @@ exports.book_update_post = (req, res) => {
 }
 exports.book_delete_choose = async (req, res) => {
     const result = await books.find()
-    res.render(`book_delete_choose.hbs`, { books: result })
+    res.render(`book_action_choose.hbs`,
+        { books: result, action: 'delete' })
 }
 exports.book_delete_get = [
     bookIdValidator,

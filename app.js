@@ -32,6 +32,8 @@ hbs.registerHelper('error-check', (trouble, name) => {
     return undefined
 })
 
+hbs.registerHelper('capitalize', v => 'FOO')
+
 // Load routers
 const layoutExampleRouter = require('./routes/layout-examples.js')
 const dbRouter = require('./routes/db-route.js')
@@ -78,4 +80,5 @@ const server = app.listen(process.env.PORT || 2666, () => {
     log('Adding author bios and styling more like book detail page would look nicer, but would take more data')
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
     log('Should available books even have a non-null due_back? both a DB and a display question')
+    log('Really need pencil/trashcan buttons on each resource page. Implement after update routes.')
 })

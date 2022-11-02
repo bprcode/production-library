@@ -1,13 +1,13 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout title='Delete genre'}}{{#*inline 'content'~}}
-<div class="card mt-4">
-    <div class="card-header">
-        Choose genre to delete...
+{{#> catalog_layout }}{{#*inline 'content'~}}
+<div class="card mt-3">
+    <div class="card-header fs-4 fw-semibold">
+        Choose genre to {{action}}...
     </div>
     <ul class="list-group list-group-flush">
         {{#each genres}}
         <li class="list-group-item">
-            <a class="serif h5" href="{{genre_url}}/delete">{{name}}</a>
+            <a class="serif h5" href="{{genre_url}}/{{../action}}">{{name}}</a>
         </li>
         {{/each}}
     </ul>

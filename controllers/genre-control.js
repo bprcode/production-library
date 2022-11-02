@@ -85,7 +85,7 @@ exports.genre_update_post = (req, res) => {
 }
 exports.genre_delete_choose = async (req, res) => {
     const result = await genres.find()
-    res.render(`genre_delete_choose.hbs`, { genres: result })
+    res.render(`genre_action_choose.hbs`, { genres: result, action: 'delete' })
 }
 exports.genre_delete_get = [
     genreDeleteValidator,

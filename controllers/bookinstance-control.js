@@ -112,7 +112,8 @@ exports.bookinstance_update_post = (req, res) => {
 }
 exports.bookinstance_delete_choose = async (req, res) => {
     const result = await inventory.find()
-    res.render(`bookinstance_delete_choose.hbs`, { items: result })
+    res.render(`bookinstance_action_choose.hbs`,
+        { items: result, action: 'delete' })
 }
 exports.bookinstance_delete_get = [
     instanceDeleteValidator,

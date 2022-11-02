@@ -91,7 +91,8 @@ exports.author_create_post = [
 ]
 exports.author_delete_choose = async (req, res) => {
     const result = await authors.find()
-    res.render(`author_delete_choose.hbs`, { authors: result })
+    res.render(`author_action_choose.hbs`,
+        { authors: result, action: 'delete' })
 }
 exports.author_delete_get = [
     authorDeleteValidator,

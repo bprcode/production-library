@@ -1,15 +1,14 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout title='Delete book'}}{{#*inline 'content'~}}
-
-<div class="card mt-4">
-    <div class="card-header">
-        Choose book to delete...
+{{#> catalog_layout }}{{#*inline 'content'~}}
+<div class="card mt-3">
+    <div class="card-header fs-4 fw-semibold">
+        Choose book to {{action}}...
     </div>
     <ul class="list-group list-group-flush">
         {{#each books}}
         <li class="list-group-item">
         <div class="d-flex justify-content-between align-items-baseline">
-            <a class="serif" href="{{book_url}}/delete"><h2 class="fs-5">{{title}}</h2></a>
+            <a class="serif" href="{{book_url}}/{{../action}}"><h2 class="fs-5">{{title}}</h2></a>
             <a class="fst-italic" href="{{author_url}}">{{full_name}}</a>
         </div>
         <p>{{summary}}</p>
