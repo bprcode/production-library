@@ -166,22 +166,23 @@ class Model {
 
         if (where) {
             dirty += ` WHERE `
-                        +Array(Object.keys(where).length)
-                        .fill(`%I::text ILIKE `)
-                        .map((x,i) => x + `$${i + 1}`)
-                        .join(` AND `)
-                        // %I::text ILIKE '$1', %I::text ILIKE '$2'...
+                        +Object.keys(where)
+                            .map((_, i) => `%I::text ILIKE $` + (i+1))
+                            .join(` AND `)
+                        // %I::text ILIKE $1 AND %I::text ILIKE $2...
         } else {
             where = {} // Use blank object for easier formatting
         }
 
         dirty += this.orderClause
 
-        log(dirty, yellow)
+        
         clean = format(dirty,
                         ...etc, // column names
                         ...Object.keys(where), // where-columns
                         this.order)
+                        
+        log(dirty, yellow)                        
         log(clean, blue)
 
         return queryResult(clean, Object.values(where))

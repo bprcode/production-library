@@ -1,5 +1,5 @@
 require('express-async-errors')
-const { genres, booksByGenre, bookInstances } = require('../database.js')
+const { genres, booksByGenre, books } = require('../database.js')
 const { body, param, validationResult } = require('express-validator')
 
 async function alreadyHaveGenre (name) {
