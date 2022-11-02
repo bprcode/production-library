@@ -83,6 +83,10 @@ exports.genre_update_get = (req, res) => {
 exports.genre_update_post = (req, res) => {
     res.send(`<❕ placeholder>: Genre update (POST)`)
 }
+exports.genre_update_choose = async (req, res) => {
+    const result = await genres.find()
+    res.render(`genre_action_choose.hbs`, { genres: result, action: 'update' })
+}
 exports.genre_delete_choose = async (req, res) => {
     const result = await genres.find()
     res.render(`genre_action_choose.hbs`, { genres: result, action: 'delete' })

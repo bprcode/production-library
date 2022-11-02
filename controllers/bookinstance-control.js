@@ -110,6 +110,11 @@ exports.bookinstance_update_get = (req, res) => {
 exports.bookinstance_update_post = (req, res) => {
     res.send(`<❕ placeholder>: Bookinstance update (POST)`)
 }
+exports.bookinstance_update_choose = async (req, res) => {
+    const result = await inventory.find()
+    res.render(`bookinstance_action_choose.hbs`,
+        { items: result, action: 'update' })
+}
 exports.bookinstance_delete_choose = async (req, res) => {
     const result = await inventory.find()
     res.render(`bookinstance_action_choose.hbs`,

@@ -13,6 +13,7 @@ router
     .get('/book/delete', bookController.book_delete_choose)
     .get('/book/:id/delete', bookController.book_delete_get)
     .post('/book/:id/delete', bookController.book_delete_post)
+    .get('/book/update', bookController.book_update_choose)
     .get('/book/:id/update', bookController.book_update_get)
     .post('/book/:id/update', bookController.book_update_post)
     .get('/book/:id', bookController.book_detail)
@@ -23,6 +24,7 @@ router
     .get('/author/delete', authorController.author_delete_choose)
     .get('/author/:id/delete', authorController.author_delete_get)
     .post('/author/:id/delete', authorController.author_delete_post)
+    .get('/author/update', authorController.author_update_choose)
     .get('/author/:id/update', authorController.author_update_get)
     .post('/author/:id/update', authorController.author_update_post)
     .get('/author/:id', authorController.author_detail)
@@ -33,6 +35,7 @@ router
     .get('/genre/delete', genreController.genre_delete_choose)
     .get('/genre/:id/delete', genreController.genre_delete_get)
     .post('/genre/:id/delete', genreController.genre_delete_post)
+    .get('/genre/update', genreController.genre_update_choose)
     .get('/genre/:id/update', genreController.genre_update_get)
     .post('/genre/:id/update', genreController.genre_update_post)
     .get('/genre/:id', genreController.genre_detail)
@@ -48,6 +51,8 @@ router
         bookinstanceController.bookinstance_delete_get)
     .post(['/bookinstance/:id/delete', '/inventory/:id/delete'],
         bookinstanceController.bookinstance_delete_post)
+    .get(['/bookinstance/update', '/inventory/update'],
+        bookinstanceController.bookinstance_update_choose)
     .get(['/bookinstance/:id/update', '/inventory/:id/update'],
         bookinstanceController.bookinstance_update_get)
     .post(['/bookinstance/:id/update', '/inventory/:id/update'],

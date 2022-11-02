@@ -155,6 +155,11 @@ exports.book_update_get = (req, res) => {
 exports.book_update_post = (req, res) => {
     res.send(`<❕ placeholder>: Book update (POST)`)
 }
+exports.book_update_choose = async (req, res) => {
+    const result = await books.find()
+    res.render(`book_action_choose.hbs`,
+        { books: result, action: 'update' })
+}
 exports.book_delete_choose = async (req, res) => {
     const result = await books.find()
     res.render(`book_action_choose.hbs`,

@@ -89,6 +89,11 @@ exports.author_create_post = [
         res.redirect(result[0].author_url)
     }
 ]
+exports.author_update_choose = async (req, res) => {
+    const result = await authors.find()
+    res.render(`author_action_choose.hbs`,
+        { authors: result, action: 'update' })
+}
 exports.author_delete_choose = async (req, res) => {
     const result = await authors.find()
     res.render(`author_action_choose.hbs`,
