@@ -176,7 +176,7 @@ exports.book_delete_get = [
         if ( ! trouble.isEmpty() ) {
             log('got trouble>>', yellow)
             log(trouble.array())
-            return res.status(400).redirect(`/catalog/book/delete`)
+            return res.redirect(`/catalog/book/delete`)
         }
         const [ resultBook, resultInstances ] = await Promise.all([
             books.find({ book_id: req.params.id }),
@@ -192,6 +192,6 @@ exports.book_delete_post = [
     bookIdValidator,
     async (req, res) => {
         justBooks.delete({ book_id: req.params.id })
-        res.status(200).redirect(`/catalog/books`)
+        res.redirect(`/catalog/books`)
     }
 ]

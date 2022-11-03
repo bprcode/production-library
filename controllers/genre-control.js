@@ -110,7 +110,7 @@ exports.genre_update_get = [
         // Check for valid genre ID
         const trouble = validationResult(req)
         if ( ! trouble.isEmpty() ) {
-            return res.status(400).redirect(`/catalog/genre/update`)
+            return res.redirect(`/catalog/genre/update`)
         }
 
         // Retrieve prior record
@@ -136,7 +136,7 @@ exports.genre_update_post = [
             // Redirect invalid ID update requests
             if (trouble.array().find(e => e.param === 'id')) {
                 log('id issue. Redirecting...', yellow)
-                return res.status(400).redirect(`/catalog/genre/update`)
+                return res.redirect(`/catalog/genre/update`)
             }
 
             // Re-render the form for invalid submitted data
@@ -154,7 +154,7 @@ exports.genre_update_post = [
             { genre_id: req.params.id }
         )
 
-        res.status(200).redirect(result[0].genre_url)
+        res.redirect(result[0].genre_url)
     }
 ]
 exports.genre_update_choose = async (req, res) => {
@@ -170,7 +170,7 @@ exports.genre_delete_get = [
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
-            return res.status(303).redirect(`/catalog/genre/delete`)
+            return res.redirect(`/catalog/genre/delete`)
         }
 
         const result = await genres.find({ genre_id: req.params.id })
@@ -182,10 +182,10 @@ exports.genre_delete_post = [
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
-            return res.status(303).redirect(`/catalog/genre/delete`)
+            return res.redirect(`/catalog/genre/delete`)
         }
 
         genres.delete({ genre_id: req.params.id })
-        res.status(200).redirect(`/catalog/genres`)
+        res.redirect(`/catalog/genres`)
     }
 ]

@@ -32,7 +32,7 @@ const instanceValidators = [
         .toDate()
 ]
 
-const instanceDeleteValidator =
+const instanceIdValidator =
     param('id', 'Invalid item ID.')
         .trim()
         .escape()
@@ -108,9 +108,16 @@ exports.bookinstance_create_post = [
         res.redirect(result[0].book_instance_url)
     }
 ]
-exports.bookinstance_update_get = (req, res) => {
-    res.send(`<❕ placeholder>: Bookinstance update (GET)`)
-}
+exports.bookinstance_update_get = [
+    instanceIdValidator,
+    async (req, res) => {
+        const trouble = validationResult(req)
+        if ( ! trouble.isEmpty() ) {
+            return res.redirect(`/catalog/inventory/update`)
+        }
+        res.send(`<❕ placeholder>: Bookinstance update (GET)`)
+    }
+]
 exports.bookinstance_update_post = (req, res) => {
     res.send(`<❕ placeholder>: Bookinstance update (POST)`)
 }
@@ -125,11 +132,11 @@ exports.bookinstance_delete_choose = async (req, res) => {
         { items: result, action: 'delete' })
 }
 exports.bookinstance_delete_get = [
-    instanceDeleteValidator,
+    instanceIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
-            return res.status(400).redirect(`/catalog/inventory/delete`)
+            return res.redirect(`/catalog/inventory/delete`)
         }
 
         const result = await inventory.find({ instance_id: req.params.id })
@@ -137,14 +144,14 @@ exports.bookinstance_delete_get = [
     }
 ]
 exports.bookinstance_delete_post = [
-    instanceDeleteValidator,
+    instanceIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
-            return res.status(400).redirect(`/catalog/inventory/delete`)
+            return res.redirect(`/catalog/inventory/delete`)
         }
 
         bookInstances.delete({ instance_id: req.params.id })
-        res.status(200).redirect(`/catalog/inventory`)
+        res.redirect(`/catalog/inventory`)
     }
 ]

@@ -107,7 +107,7 @@ exports.author_delete_get = [
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
-            return res.status(303).redirect(`/catalog/author/delete`)
+            return res.redirect(`/catalog/author/delete`)
         }
 
         const [resultAuthor, resultBooks] = await Promise.all([
@@ -124,7 +124,7 @@ exports.author_delete_post = [
     authorDeleteValidator,
     (req, res) => {
         authors.delete({ author_id: req.params.id })
-        res.status(200).redirect(`/catalog/authors`)
+        res.redirect(`/catalog/authors`)
     }
 ]
 exports.author_update_get = (req, res) => {
