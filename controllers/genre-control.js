@@ -42,8 +42,6 @@ const genreUpdateValidators = [
         .escape()
 ]
 
-
-
 exports.genre_list = async (req, res) => {
     const result = await genres.find()
     res.render(`genre_list.hbs`, { genres: result })
@@ -131,11 +129,8 @@ exports.genre_update_post = [
         // Check for valid genre ID
         const trouble = validationResult(req)
         if ( ! trouble.isEmpty() ) {
-            log('Trouble encountered:',yellow)
-            log(trouble.array())
             // Redirect invalid ID update requests
             if (trouble.array().find(e => e.param === 'id')) {
-                log('id issue. Redirecting...', yellow)
                 return res.redirect(`/catalog/genre/update`)
             }
 

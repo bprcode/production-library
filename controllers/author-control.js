@@ -24,12 +24,10 @@ const authorValidators = [
         .withMessage('Author already in catalog.'),
     body('dob', 'Invalid date')
         .optional({ checkFalsy: true })
-        .isISO8601()
-        .toDate(),
+        .isISO8601(),
     body('dod', 'Invalid date')
         .optional({ checkFalsy: true })
         .isISO8601()
-        .toDate()
 ]
 
 const authorDeleteValidator =

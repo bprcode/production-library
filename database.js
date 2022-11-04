@@ -19,6 +19,34 @@ async function queryResult (...etc) {
     return rows
 }
 
+/**
+ * Find all Date objects in a result, and truncate them to YYYY-MM-DD strings.
+ * Intended to work around the sometimes-problematic default behavior of pg,
+ * wherein dates without timestamps are given "assumed" timestamps.
+ * @param {*} source - An object, array of objects, or promise which resolves
+ * to an object or array of objects, from which to convert Date objects into
+ * date strings.
+ */
+async function snipTimes (source) {
+    function snipObject (o) {
+        for(const key in o) {
+            if (o[key] instanceof Date)
+                o[key] = o[key].toISOString().split('T')[0]
+        }    
+    }
+
+    result = await source
+
+    if (Array.isArray(result)) {
+        for (const r of result)
+            snipObject(r)
+    } else {
+        snipObject(result)
+    }
+    
+    return result
+}
+
 // General model for tables
 // Note: Constructor values are an injection risk and should not
 // be based on user input.
@@ -306,7 +334,7 @@ function getStatus () {
 }
 
 module.exports = {
-    query, queryResult, members, getStatus, library,
+    query, queryResult, members, getStatus, library, snipTimes,
     books, justBooks, authors, genres,
     bookInstances, inventory, booksByGenre, genresByBook, bookGenres,
     bookStatusList

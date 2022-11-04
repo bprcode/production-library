@@ -1,6 +1,6 @@
 require('express-async-errors')
 const { body, param, validationResult } = require('express-validator')
-const { inventory, justBooks, bookStatusList, bookInstances }
+const { inventory, justBooks, bookStatusList, bookInstances, snipTimes }
         = require('../database.js')
 
 const instanceValidators = [
@@ -9,7 +9,7 @@ const instanceValidators = [
         .escape()
         .isLength({ min: 1 })
         .custom(async value => {
-            if ( !(await justBooks.find({ book_id: value })) )
+            if ( ! await justBooks.find({ book_id: value }) )
                 throw new Error(`book_id not found.`)
         })
         .withMessage('Invalid title.'),
@@ -22,14 +22,13 @@ const instanceValidators = [
         .isLength({ min: 1})
         .custom(async value => {
             const validStatusList = await bookStatusList()
-            if ( !validStatusList.includes(value) )
+            if ( ! validStatusList.includes(value) )
                 throw new Error(`Status not recognized.`)
         })
         .withMessage('Invalid status.'),
     body('due_back', 'Invalid date')
         .optional({ checkFalsy: true })
         .isISO8601()
-        .toDate()
 ]
 
 const instanceIdValidator =
@@ -65,7 +64,8 @@ exports.bookinstance_create_get = async (req, res) => {
         bookList,
         statusList,
         title: 'Add inventory item',
-        form_action: '/catalog/inventory/create'
+        form_action: '/catalog/inventory/create',
+        submit: 'Create'
     })
 }
 exports.bookinstance_create_post = [
@@ -78,15 +78,6 @@ exports.bookinstance_create_post = [
         ])
 
         const trouble = validationResult(req)
-        if ( !trouble.isEmpty() ) {
-            return res.status(400).render(`bookinstance_form.hbs`, {
-                bookList,
-                statusList,
-                trouble: trouble.array(),
-                title: 'Add inventory item',
-                form_action: '/catalog/inventory/create'
-            })
-        }
 
         let item = {
             book_id: req.body.book_id,
@@ -95,7 +86,19 @@ exports.bookinstance_create_post = [
             due_back: req.body.due_back
         }
 
-        if ( !req.body.due_back )
+        if ( !trouble.isEmpty() ) {
+            return res.status(400).render(`bookinstance_form.hbs`, {
+                bookList,
+                statusList,
+                trouble: trouble.array(),
+                title: 'Add inventory item',
+                form_action: '/catalog/inventory/create',
+                submit: 'Create',
+                populate: item
+            })
+        }
+
+        if ( ! req.body.due_back )
             delete item.due_back // Allow database to handle default
 
         try {
@@ -111,16 +114,71 @@ exports.bookinstance_create_post = [
 exports.bookinstance_update_get = [
     instanceIdValidator,
     async (req, res) => {
+        // Validate the ID route parameter
         const trouble = validationResult(req)
         if ( ! trouble.isEmpty() ) {
             return res.redirect(`/catalog/inventory/update`)
         }
-        res.send(`<❕ placeholder>: Bookinstance update (GET)`)
+
+        const [[resultItem], bookList, statusList] = 
+            await Promise.all([
+                snipTimes(inventory.find({ instance_id: req.params.id })),
+                justBooks.find(),
+                bookStatusList()
+            ])
+
+        res.render(`bookinstance_form.hbs`, {
+            bookList,
+            statusList,
+            title: 'Edit inventory item',
+            form_action: undefined,
+            submit: 'Save Changes',
+            populate: resultItem
+        })
     }
 ]
-exports.bookinstance_update_post = (req, res) => {
-    res.send(`<❕ placeholder>: Bookinstance update (POST)`)
-}
+exports.bookinstance_update_post = [
+    instanceIdValidator,
+    ...instanceValidators,
+    async (req, res) => {
+        const [bookList, statusList] = 
+            await Promise.all([
+                justBooks.find(),
+                bookStatusList()
+            ])
+
+        const item = {
+            book_id: req.body.book_id,
+            imprint: req.body.imprint,
+            due_back: req.body.due_back,
+            status: req.body.status
+        }
+
+        const trouble = validationResult(req)
+        if ( ! trouble.isEmpty() ) {
+            // Redirect invalid ID update requests
+            if (trouble.array().find(e => e.param === 'id')) {
+                return res.redirect(`/catalog/inventory/update`)
+            }
+
+            return res.status(400).render(`bookinstance_form.hbs`, {
+                bookList,
+                statusList,
+                trouble: trouble.array(),
+                title: 'Edit inventory item',
+                form_action: undefined,
+                submit: 'Save Changes',
+                populate: item
+            })
+        }
+
+        const [result] = await bookInstances.update(
+            item, { instance_id: req.params.id }
+        )
+
+        res.redirect(result.book_instance_url)
+    }
+]
 exports.bookinstance_update_choose = async (req, res) => {
     const result = await inventory.find()
     res.render(`bookinstance_action_choose.hbs`,
