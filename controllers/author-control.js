@@ -1,6 +1,6 @@
 require('express-async-errors')
 const { body, param, validationResult } = require('express-validator')
-const { authors, books } = require('../database.js')
+const { authors, books, snipTimes } = require('../database.js')
 
 async function alreadyHaveAuthor (lname, { req }) {
     if (await authors.find({
@@ -30,25 +30,25 @@ const authorValidators = [
         .isISO8601()
 ]
 
-const authorDeleteValidator =
+const authorIdValidator =
     param('id')
         .escape()
         .custom(async id => {
-            if ( !(await authors.find({ author_id: id })) )
+            if ( ! await authors.find({ author_id: id }) )
                 throw new Error(`Invalid author ID.`)
         })
         .withMessage('Author ID not found.')
 
 exports.author_list = async (req, res) => {
-    const result = await authors.find()
+    const result = await snipTimes(authors.find())
     res.render(`author_list.hbs`, { authors: result })
 }
 exports.author_detail = async (req, res) => {
     const [resultAuthors, resultBooks] = await Promise.all([
-        authors.find({ author_id: req.params.id }),
+        snipTimes(authors.find({ author_id: req.params.id })),
         books.find({ author_id: req.params.id })
     ])
-    if ( !resultAuthors ) {
+    if ( ! resultAuthors ) {
         return res.render(`no_results.hbs`)
     }
 
@@ -101,7 +101,7 @@ exports.author_delete_choose = async (req, res) => {
         { authors: result, action: 'delete' })
 }
 exports.author_delete_get = [
-    authorDeleteValidator,
+    authorIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
@@ -119,7 +119,7 @@ exports.author_delete_get = [
     }
 ]
 exports.author_delete_post = [
-    authorDeleteValidator,
+    authorIdValidator,
     (req, res) => {
         authors.delete({ author_id: req.params.id })
         res.redirect(`/catalog/authors`)

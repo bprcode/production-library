@@ -16,7 +16,10 @@ hbs.registerHelper('match', (a,b) => a === b)
 hbs.registerHelper('match-string', (a,b) => String(a) === String(b))
 hbs.registerHelper('pretty-date', date => {
     if ( !date ) { return '' }
-    return DateTime.fromJSDate(date).toLocaleString(DateTime.DATE_MED)
+    if (date instanceof Date) {
+        return DateTime.fromJSDate(date).toLocaleString(DateTime.DATE_MED)
+    }
+    return DateTime.fromISO(date).toLocaleString(DateTime.DATE_MED)
 })
 
 // Helper to use position in iterable to insert a comma, or not:
@@ -79,6 +82,5 @@ const server = app.listen(process.env.PORT || 2666, () => {
     log('Todo: Fix nav bar spacing (slightly different between pages?)')
     log('Adding author bios and styling more like book detail page would look nicer, but would take more data')
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
-    log('Should available books even have a non-null due_back? both a DB and a display question')
     log('Really need pencil/trashcan buttons on each resource page. Implement after update routes.')
 })
