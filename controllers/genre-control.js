@@ -47,9 +47,10 @@ exports.genre_list = async (req, res) => {
     res.render(`genre_list.hbs`, { genres: result })
 }
 exports.genre_detail = async (req, res) => {
-    const [resultGenre, resultBooks] = await Promise.all([
+    const [resultGenre, resultBooks, genreCount] = await Promise.all([
         genres.find({ genre_id: req.params.id }),
-        booksByGenre.find({ genre_id: req.params.id })
+        booksByGenre.find({ genre_id: req.params.id }),
+        genres.count()
     ])
 
     if ( !resultGenre )
@@ -58,7 +59,7 @@ exports.genre_detail = async (req, res) => {
             text: ' '
         })
 
-    let title = resultGenre[0].name + ` titles`
+    let title = resultGenre[0].name
     if( !resultBooks )
         return res.render(`no_results.hbs`, {
             title: title,
@@ -67,6 +68,7 @@ exports.genre_detail = async (req, res) => {
 
     res.render(`genre_detail.hbs`, {
         title: title,
+        genre_url: resultGenre[0].genre_url,
         result: resultBooks
     })
 }

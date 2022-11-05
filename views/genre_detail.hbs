@@ -1,12 +1,22 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout }}{{#*inline 'content'~}}
+{{#> catalog_layout no_title=1}}{{#*inline 'content'~}}
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+        <span>
+        <h1 class="serif h2">{{title}}</h1>
+        </span>
+        <span class="">
+            <a class="btn edit-button" href="{{genre_url}}/update"><img src="/pencil-fill.svg" alt="Pencil icon click to edit"></a>
+            <a class="btn delete-button" href="{{genre_url}}/delete"><img src="/trash.svg" alt="Trash icon click to delete"></a>
+        </span>
+    </div>
 
-<ul class="list-group">
-{{#each result}}
-<li class="list-group-item">
-    <a href="{{book_url}}" class="serif fs-5">{{title}}</a>
-</li>
-{{/each}}
-</ul>
-
+    <ul class="list-group list-group-flush">
+        {{#each result}}
+        <li class="list-group-item">
+            <a href="{{book_url}}" class="serif fs-5">{{title}}</a>
+        </li>
+        {{/each}}
+    </ul>
+</div>
 {{~/inline}}{{/catalog_layout}}

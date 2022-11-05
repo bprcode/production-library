@@ -85,5 +85,6 @@ const server = app.listen(process.env.PORT || 2666, () => {
     log('Todo: Fix nav bar spacing (slightly different between pages?)')
     log('Adding author bios and styling more like book detail page would look nicer, but would take more data')
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
-    log('Really need pencil/trashcan buttons on each resource page. Implement after update routes.')
+    log('Would be nice to have Create (plus) icon on all the Browse pages, also detail sub-lists.')
+    log('Todo: Rewrite the query escape for model.find to $1, $2...')
 })

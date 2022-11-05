@@ -2,9 +2,15 @@
 {{#> catalog_layout title='Book' no_title=1}}{{#*inline 'content'~}}
 
 <div class="card mb-4">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between">
+        <span class="">
         <h1 class="fs-3 mb-0 fw-semibold">{{book_info.title}}</h1>
         by <a href="{{book_info.author_url}}">{{book_info.full_name}}</a>
+        </span>
+        <span class="">
+            <a class="btn edit-button" href="{{book_info.book_url}}/update"><img src="/pencil-fill.svg" alt="Pencil icon click to edit"></a>
+            <a class="btn delete-button" href="{{book_info.book_url}}/delete"><img src="/trash.svg" alt="Trash icon click to delete"></a>
+        </span>
     </div>
     
     <ul class="list-group list-group-flush">

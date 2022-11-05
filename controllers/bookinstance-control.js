@@ -42,7 +42,7 @@ const instanceIdValidator =
 
 exports.bookinstance_list = async (req, res) => {
     const result = await inventory.find()
-    res.render('instance_list.hbs', { items: result })
+    res.render('bookinstance_list.hbs', { items: result })
 }
 exports.bookinstance_detail = async (req, res) => {
     const result = await inventory.find({ instance_id: req.params.id })

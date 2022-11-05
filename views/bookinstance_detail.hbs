@@ -1,8 +1,16 @@
 {{! This template populates catalog-layout.hbs }}
 {{#> catalog_layout title='Inventory item' no_title=1}}{{#*inline 'content'~}}
 <div class="card">
-    <div class="card-header serif h3">Inventory foo item #{{instance_id}}</div>
-    <div class="card-body">
+    <div class="card-header d-flex justify-content-between">
+        <span class="">
+        <h3 class="serif">Inventory item #{{instance_id}}</h3>
+        </span>
+        <span class="">
+            <a class="btn edit-button" href="{{book_instance_url}}/update"><img src="/pencil-fill.svg" alt="Pencil icon click to edit"></a>
+            <a class="btn delete-button" href="{{book_instance_url}}/delete"><img src="/trash.svg" alt="Trash icon click to delete"></a>
+        </span>
+    </div>
+    <div class="card-body pt-2">
 
     <div><strong>Title: </strong><a href="{{book_url}}">{{book_title}}</a></div>
     <div><strong>Catalog ID: </strong>{{instance_id}}</div>
