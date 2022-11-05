@@ -12,7 +12,6 @@ function query (...etc)  {
 async function queryResult (...etc) {
     const rows = (await pool.query(...etc)).rows
     if (rows.length === 0) {
-        log('Got zero-row result', blue)
         return null
     }
     

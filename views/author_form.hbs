@@ -9,7 +9,7 @@
             <div class="row mb-3">
                 <label for="first-id" class="col-form-label col-sm-3">First name</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'first_name')}}is-invalid{{/if}}" id="first-id" name="first_name" type="text">
+                    <input class="form-control {{#if (error-check trouble 'first_name')}}is-invalid{{/if}}" id="first-id" name="first_name" type="text" value="{{author.first_name}}">
                     <div class="invalid-feedback">{{error-check trouble 'first_name'}}</div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
             <div class="row mb-3">
                 <label for="last-id" class="col-form-label col-sm-3">Last name</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text">
+                    <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text" value="{{author.last_name}}">
                     <div class="invalid-feedback">{{error-check trouble 'last_name'}}</div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="row mb-3">
                 <label for="dob-id" class="col-form-label col-sm-3">Date of Birth</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'dob')}}is-invalid{{/if}}" id="dob-id" name="dob" type="date">
+                    <input class="form-control {{#if (error-check trouble 'dob')}}is-invalid{{/if}}" id="dob-id" name="dob" type="date" value="{{author.dob}}">
                     <div class="invalid-feedback">{{error-check trouble 'dob'}}</div>
                 </div>
             </div>
@@ -33,13 +33,13 @@
             <div class="row mb-3">
                 <label for="dod-id" class="col-form-label col-sm-3">Date of Death</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'dod')}}is-invalid{{/if}}" id="dod-id" name="dod" type="date">
+                    <input class="form-control {{#if (error-check trouble 'dod')}}is-invalid{{/if}}" id="dod-id" name="dod" type="date" value="{{author.dod}}">
                     <div class="invalid-feedback">{{error-check trouble 'dod'}}</div>
                 </div>
             </div>
 
             <div class="d-flex justify-content-end">
-            <button class="btn btn-primary fw-semibold" type="submit">Create</button>
+            <button class="btn btn-primary fw-semibold" type="submit">{{submit}}</button>
             </div>
         </form>
     </div>

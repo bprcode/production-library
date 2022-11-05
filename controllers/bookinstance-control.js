@@ -150,7 +150,7 @@ exports.bookinstance_update_post = [
         const item = {
             book_id: req.body.book_id,
             imprint: req.body.imprint,
-            due_back: req.body.due_back,
+            due_back: req.body.due_back || null,
             status: req.body.status
         }
 

@@ -4,22 +4,39 @@ const { books, justBooks, authors, genres, bookInstances, genresByBook,
         bookGenres }
         = require('../database.js')
 
+const preventTitleCollision =
+    body('title', 'Title already in catalog')
+        .trim()
+        .escape()
+        .custom(async value => {
+            if (await books.find({ title: value }))
+                throw new Error('Title already in catalog.')
+        })
+
+const onlySelfTitleCollision =
+    body('title', 'Title already in catalog')
+        .trim()
+        .escape()
+        .custom(async (value, { req }) => {
+            const result = await books.find({ title: value })
+            if (result
+                && String(req.params.id) !== String(result[0].book_id)) {
+                throw new Error('Title already in catalog.')
+            }
+        })
+
 const bookValidators = [
     body('title')
         .trim()
         .isLength({ min: 1 })
         .withMessage('Title required')
-        .escape()
-        .custom(async value => {
-            if(await books.find({ title: value }))
-                throw new Error('Title already in catalog.')
-        }),
+        .escape(),
     body('author_id', 'Unable to match author.')
         .isLength({ min: 1 })
         .withMessage('No author indicated.')
         .bail()
         .custom(async value => {
-            if( !(await authors.find({ author_id: value })) )
+            if ( !(await authors.find({ author_id: value })) )
                 throw new Error('Invalid author.')
         }),
     body('isbn', 'ISBN required')
@@ -37,7 +54,7 @@ const bookValidators = [
             const result = await Promise.all(
                 genreList.map(g => genres.find({ genre_id: g }))
             )
-            for(const r of result) {
+            for (const r of result) {
                 if ( !r ) {
                     throw new Error('Invalid genre ID')
                 }
@@ -106,16 +123,25 @@ exports.book_create_get = async (req, res) => {
         genres: genreLabels,
         authors: authorLabels,
         title: 'Add Book',
-        form_action: '/catalog/book/create'
+        form_action: '/catalog/book/create',
+        submit: 'Create'
     })
 }
 exports.book_create_post = [
+    preventTitleCollision,
     ...bookValidators,
     async (req, res) => {
         const [genreLabels, authorLabels] = await Promise.all([
             genres.find(),
             authors.find()
         ])
+
+        const item = {
+            title: req.body.title,
+            isbn: req.body.isbn,
+            author_id: req.body.author_id,
+            summary: req.body.summary || null
+        }
 
         const trouble = validationResult(req)
         if ( !trouble.isEmpty() ) {
@@ -124,17 +150,16 @@ exports.book_create_post = [
                 genres: genreLabels,
                 authors: authorLabels,
                 title: 'Add Book',
-                form_action: '/catalog/book/create'
+                form_action: '/catalog/book/create',
+                submit: 'Create',
+                populate: item,
+                genreChecks: req.body.genreList
+                            ?.map(g => { return { genre_id: parseInt(g) } })
             })
         }
 
         // Having passed validation, create the new book.
-        const result = await justBooks.insert({
-            title: req.body.title,
-            isbn: req.body.isbn,
-            author_id: req.body.author_id,
-            summary: req.body.summary || null
-        })
+        const result = await justBooks.insert(item)
 
         // Also need to repeatedly insert on genre/book junction table
         const bookID = result[0].book_id
@@ -153,12 +178,91 @@ exports.book_create_post = [
         res.redirect(result[0].book_url)
     }
 ]
-exports.book_update_get = (req, res) => {
-    res.send(`<❕ placeholder>: Book update (GET)`)
-}
-exports.book_update_post = (req, res) => {
-    res.send(`<❕ placeholder>: Book update (POST)`)
-}
+exports.book_update_get = [
+    bookIdValidator,
+    async (req, res) => {
+        const trouble = validationResult(req)
+        if ( ! trouble.isEmpty() ) {
+            return res.redirect(`/catalog/book/update`)
+        }
+
+        const [[previous], genreList, authorList, genreChecks] =
+        await Promise.all([
+            books.find({ book_id: req.params.id }),
+            genres.find(),
+            authors.find(),
+            genresByBook.find({ book_id: req.params.id })
+        ])
+
+        res.render(`book_form.hbs`, {
+            genres: genreList,
+            authors: authorList,
+            title: 'Edit Book',
+            form_action: undefined,
+            submit: 'Save Changes',
+            populate: previous,
+            genreChecks: genreChecks
+        })
+    }
+]
+exports.book_update_post = [
+    bookIdValidator,
+    ...bookValidators,
+    onlySelfTitleCollision,
+    async (req, res) => {
+        const [genreLabels, authorLabels] = await Promise.all([
+            genres.find(),
+            authors.find()
+        ])
+
+        const item = {
+            title: req.body.title,
+            isbn: req.body.isbn,
+            author_id: req.body.author_id,
+            summary: req.body.summary || null
+        }
+
+        const trouble = validationResult(req)
+        if (!trouble.isEmpty()) {
+            if (trouble.array().find(e => e.param === 'id')) {
+                return res.redirect(`/catalog/book/update`)
+            }
+
+            return res.status(400).render(`book_form.hbs`, {
+                trouble: trouble.array(),
+                genres: genreLabels,
+                authors: authorLabels,
+                title: 'Edit Book',
+                form_action: undefined,
+                submit: 'Save Changes',
+                populate: item,
+                genreChecks: req.body.genreList
+                            ?.map(g => { return { genre_id: parseInt(g) } })
+            })
+        }
+
+        // Remove the old book_genres table entries
+        await bookGenres.delete({ book_id: req.params.id })
+        const [resultBook] =
+            await justBooks.update(item, { book_id: req.params.id})
+
+        // Also need to repeatedly insert on genre/book junction table
+        const bookID = resultBook.book_id
+        for (const genreID of req.body.genreList) {
+            try {
+                await bookGenres.insert({
+                    book_id: bookID,
+                    genre_id: genreID
+                })
+            } catch (e) {
+                log.err(e.message)
+                throw e
+            }
+        }
+
+        res.redirect(resultBook.book_url)
+    }
+]
 exports.book_update_choose = async (req, res) => {
     const result = await books.find()
     res.render(`book_action_choose.hbs`,

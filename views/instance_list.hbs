@@ -12,9 +12,9 @@
         {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
         ">{{status}}</span>
 </div>
-{{~#unless (match status 'Available')}}
+{{#if due_back}}
 <div class="fst-italic text-muted">Due back: {{pretty-date due_back}}</div>
-{{/unless}}
+{{/if}}
 
 </li>
 {{/each}}

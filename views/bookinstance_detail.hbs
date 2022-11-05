@@ -12,7 +12,7 @@
             {{~#if (match status 'Available')}}text-success{{/if~}}
             {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
             ">{{status}}</span></div>
-    {{#unless (match status 'Available')}}<div><strong>Due: </strong>{{pretty-date due_back}}</div>{{/unless}}
+    {{#if due_back}}<div><strong>Due: </strong>{{pretty-date due_back}}</div>{{/if}}
     </div>
 </div>
 {{~/inline}}{{/catalog_layout}}

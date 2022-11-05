@@ -14,6 +14,9 @@ const hbs = require('hbs')
 hbs.registerPartials(path.join(__dirname, '/views/partials'))
 hbs.registerHelper('match', (a,b) => a === b)
 hbs.registerHelper('match-string', (a,b) => String(a) === String(b))
+hbs.registerHelper('find-in', (arr, key, value) => {
+    return arr?.find(e => e[key] === value)
+})
 hbs.registerHelper('pretty-date', date => {
     if ( !date ) { return '' }
     if (date instanceof Date) {
