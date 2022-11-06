@@ -128,32 +128,27 @@ body {
     background-color: var(--primary-light);
   }
   
-.edit-button,
-.delete-button {
+.ui-button {
   position: relative;
   width: 32px;
   height: 32px;
   border: 1px #aaa solid;
 }
 
-.edit-button:hover,
-.delete-button:hover {
+.ui-button:hover {
   background-color: var(--primary-light);
 }
 
-.edit-button:active > img,
-.delete-button:active > img {
+.ui-button:active > img {
   filter: invert();
 }
 
-.edit-button:active,
-.delete-button:active {
+.ui-button:active {
   background-color: var(--light) !important;
   border: 1px var(--primary-light) solid !important;
 }
 
-.edit-button > img,
-.delete-button > img {
+.ui-button > img {
   position: absolute;
   top: 50%;
   left: 50%;
