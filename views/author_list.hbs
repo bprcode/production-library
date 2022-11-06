@@ -1,14 +1,23 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout title='Browse authors'}}{{#*inline 'content'~}}
+{{#> catalog_layout title='Authors' no_title=1}}{{#*inline 'content'~}}
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+        <span>
+        <h1 class="serif h2">Browse authors</h1>
+        </span>
+        <span class="">
+            <a class="btn ui-button" href="/catalog/author/create"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
+        </span>
+    </div>
 
-<ul class="list-group">
-{{#each authors}}
-<li class="list-group-item">
-    <a href="{{author_url}}" class="serif fs-5">{{full_name}}</a>
-    {{~#if dob}}<div>{{pretty-date dob}} &mdash; {{pretty-date dod}}</div>{{/if~}}
+    <ul class="list-group list-group-flush">
+    {{#each authors}}
+    <li class="list-group-item">
+        <a href="{{author_url}}" class="serif fs-5">{{full_name}}</a>
+        {{~#if dob}}<div>{{pretty-date dob}} &mdash; {{pretty-date dod}}</div>{{/if~}}
 
-</li>
-{{/each}}
-</ul>
-
+    </li>
+    {{/each}}
+    </ul>
+</div>
 {{~/inline}}{{/catalog_layout}}

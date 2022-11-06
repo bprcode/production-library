@@ -1,16 +1,26 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout title='Browse books'}}{{#*inline 'content'~}}
+{{#> catalog_layout title='Books' no_title=1}}{{#*inline 'content'~}}
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+        <span>
+        <h1 class="serif h2">Browse books</h1>
+        </span>
+        <span class="">
+            <a class="btn ui-button" href="/catalog/book/create"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
+        </span>
+    </div>
 
-<ul class="list-group">
-{{#each books}}
-<li class="list-group-item">
-<div class="d-flex justify-content-between align-items-baseline">
-    <a class="serif" href="{{book_url}}"><h2 class="fs-5">{{title}}</h2></a>
-    <a class="fst-italic" href="{{author_url}}">{{full_name}}</a>
+    <ul class="list-group list-group-flush">
+    {{#each books}}
+    <li class="list-group-item">
+    <div class="d-flex justify-content-between align-items-baseline">
+        <a class="serif" href="{{book_url}}"><h2 class="fs-5">{{title}}</h2></a>
+        <a class="fst-italic" href="{{author_url}}">{{full_name}}</a>
+    </div>
+    <p>{{summary}}</p>
+    </li>
+    {{/each}}
+    </ul>
+
 </div>
-<p>{{summary}}</p>
-</li>
-{{/each}}
-</ul>
-
 {{~/inline}}{{/catalog_layout}}

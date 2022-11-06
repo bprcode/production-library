@@ -1,12 +1,21 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout title='Browse genres'}}{{#*inline 'content'~}}
+{{#> catalog_layout title='Genres' no_title=1}}{{#*inline 'content'~}}
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+        <span>
+        <h1 class="serif h2">Browse genres</h1>
+        </span>
+        <span class="">
+            <a class="btn ui-button" href="/catalog/genre/create"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
+        </span>
+    </div>
 
-<ul class="list-group">
-{{#each genres}}
-<li class="list-group-item">
-    <a href="{{genre_url}}" class="serif fs-5">{{name}}</a>
-</li>
-{{/each}}
-</ul>
-
+    <ul class="list-group list-group-flush">
+    {{#each genres}}
+    <li class="list-group-item">
+        <a href="{{genre_url}}" class="serif fs-5">{{name}}</a>
+    </li>
+    {{/each}}
+    </ul>
+</div>
 {{~/inline}}{{/catalog_layout}}
