@@ -115,8 +115,13 @@
 </html>
 
 <script>
-  document.getElementById('back-link').setAttribute('href', document.referrer)
-  document.getElementById('back-link').onclick = () => {history.back(); return 0;}
+  if (document.getElementById('back-link')) {
+    document.getElementById('back-link').setAttribute('href', document.referrer)
+    document.getElementById('back-link').onclick = () => {
+      history.back()
+      return 0
+    }
+  }
 </script>
 <style>
   .d {  /* Debug class */

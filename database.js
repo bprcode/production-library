@@ -65,24 +65,25 @@ class Model {
     }
 
     async count (conditions) {
-        let clean
+        let clean = ``
         let dirty = `SELECT count(*) FROM ${this.relation}`
-        if ( !conditions ) {
-            clean = format(dirty)
-            log(clean, blue)
-            return (await query(clean)).rows[0].count
+
+        if (!conditions) {    // Nothing to format
+            log(dirty, green)
+            return (await queryResult(dirty))[0].count
         }
         // Otherwise...
         dirty += ` WHERE `
-                    +Array(Object.keys(conditions).length)
-                    .fill(`%I = %L`) // Escapes for format()
-                    .join(` AND `)
+                    +Object.keys(conditions)
+                        .map((_, i) => `%I = $` + (i+1))
+                        .join(` AND `)
+
+        clean = format(dirty, ...Object.keys(conditions))
 
         log(dirty, yellow)
-        clean = format(dirty,
-                        ...[...Object.entries(conditions)].flat())
-        log(clean,blue)
-        return (await query(clean)).rows[0].count
+        log(clean, blue)
+
+        return (await queryResult(clean, Object.values(conditions)))[0].count
     }
 
     delete (where) {
