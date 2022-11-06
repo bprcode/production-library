@@ -67,7 +67,8 @@ exports.author_detail = async (req, res) => {
 
     res.render(`author_detail.hbs`, {
         author: resultAuthors[0],
-        books: resultBooks
+        books: resultBooks,
+        title: resultAuthors[0].full_name
     })
 }
 exports.author_create_get = (req, res) => {
