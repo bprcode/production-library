@@ -8,6 +8,7 @@ const bookinstanceController =
 
 router
     .get('/', bookController.index)
+    .get('/book/import', bookController.book_import_get)
     .get('/book/create', bookController.book_create_get)
     .post('/book/create', bookController.book_create_post)
     .get('/book/delete', bookController.book_delete_choose)
@@ -19,6 +20,7 @@ router
     .get('/book/:id', bookController.book_detail)
     .get('/books', bookController.book_list)
 
+    .get('/author/import', authorController.author_import_get)
     .get('/author/create', authorController.author_create_get)
     .post('/author/create', authorController.author_create_post)
     .get('/author/delete', authorController.author_delete_choose)

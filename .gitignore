@@ -4,3 +4,4 @@ node_modules
 populatedb.js.txt
 *.png
 .vscode/launch.json
+deleteme*

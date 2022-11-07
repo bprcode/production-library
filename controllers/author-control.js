@@ -203,3 +203,6 @@ exports.author_update_post = [
         res.redirect(result.author_url)
     }
 ]
+exports.author_import_get = (req, res) => {
+    res.render(`import_author.hbs`, { title: 'Import author' })
+}

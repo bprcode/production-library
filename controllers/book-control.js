@@ -97,20 +97,20 @@ exports.book_list = async (req, res) => {
     res.render('book_list.hbs', { books: result })
 }
 exports.book_detail = async (req, res) => {
-    const result = await Promise.all([
+    const [resultBook, resultInstances, resultGenres] = await Promise.all([
         books.find({ book_id: req.params.id }),
         bookInstances.find({ book_id: req.params.id }),
         genresByBook.find({ book_id: req.params.id })
     ])
 
-    if ( !result[0] ) {
+    if ( !resultBook ) {
         return res.render(`no_results.hbs`)
     }
 
     res.render(`book_detail.hbs`, {
-        book_info: result[0][0],
-        instances: result[1],
-        genre_info: result[2]
+        book_info: resultBook[0],
+        instances: resultInstances,
+        genre_info: resultGenres
     })
 }
 exports.book_create_get = async (req, res) => {
@@ -299,3 +299,6 @@ exports.book_delete_post = [
         res.redirect(`/catalog/books`)
     }
 ]
+exports.book_import_get = (req, res) => {
+    res.render(`import_book.hbs`)
+}

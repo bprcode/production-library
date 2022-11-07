@@ -61,7 +61,13 @@ body {
   --bs-btn-active-bg: white;
   --bs-btn-active-color: var(--primary);
   --bs-btn-active-border-color: var(--primary);
-  }
+}
+
+.btn:disabled {
+  --bs-btn-disabled-color: var(--primary);
+  --bs-btn-disabled-bg: var(--light);
+  --bs-btn-disabled-border-color: var(--primary);
+}
 
 .form-check-input:checked {
   background-color: var(--primary);
@@ -155,4 +161,8 @@ body {
   transform: translate(-50%, -50%);
 
   width: 20px;
+}
+
+.invert {
+  filter: invert();
 }

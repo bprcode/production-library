@@ -1,0 +1,68 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout no_title=1}}{{#*inline 'content'~}}
+<script defer src="/handlebars/handlebars.min-v4.7.7.js"></script>
+<script defer src="/import-author.js"></script>
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+        <span>
+        <h1 class="serif h2">Import Author</h1>
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="col-6">
+            <label class="form-label" for="search-text">Name</label>
+            <form class="input-group">
+                <input type="text" class="form-control" id="search-text">
+                <button class="btn btn-primary px-0" id="search-button" style="width: 6rem;">
+                    <span class="spinner-border spinner-border-sm visually-hidden" id="search-spinner" role="status" aria-hidden="true"></span>
+                    <span class="fw-semibold">Search</span>
+                    <img class="invert align-baseline ms-1" id="magnifying-glass" src="/search.svg" alt="magnifing glass icon, click to search">
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<template id="result-template">
+    <div class="card-header" id="list-header">
+        \{{header}}
+    </div>
+    <ul class="list-group list-group-flush">
+        \{{#each authors}}
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <span class="">
+                    <div class="fs-5 serif">\{{author_name}}</div>
+                    <div class="text-muted lh-1"><small>\{{dob}}\{{#if dob}} &ndash; \{{/if}}\{{dod}}</small></div>
+                </span>
+                <span><button class="btn ui-button"><img src="/plus.svg"></button></span>
+            </div>
+
+            \{{#if aka}}
+            <details>
+                <summary class="text-muted"><small>Also known as...</small></summary>
+                <ul>
+                    \{{#each aka}}
+                    <li class="fs-6 serif">\{{.}}</li>
+                    \{{/each}}
+                </ul>
+            </details>
+            \{{/if}}
+        </li>
+        \{{/each}}
+    </ul>
+</template>
+
+
+<div class="card" id="test-id">
+    <div class="card-header" id="list-header">
+        Secondary placeholder header:
+    </div>
+    <ul class="list-group list-group-flush" id="list-root">
+        <li class="list-group-item">
+            Example item
+        </li>
+    </ul>
+</div>
+
+{{~/inline}}{{/catalog_layout}}
