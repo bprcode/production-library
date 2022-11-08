@@ -1,7 +1,7 @@
 :root {
   --light: #f0eeee;
   --light-shade: #f0eeee;
-  --header-bg-overwrite: rgba(255, 171, 107, 0.293);
+  --header-bg-overwrite: #ffe5da;
 
   --primary: rgb(235, 37, 11);
   --primary-light: rgb(255, 105, 105);
