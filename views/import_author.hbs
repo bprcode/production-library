@@ -30,6 +30,40 @@
     <ul class="list-group list-group-flush">
         \{{#each authors}}
         <li class="list-group-item">
+            <div class="row">
+                <!-- snap bio -->
+                <div class="col-4">
+                    <div class="fs-5 serif">\{{author_name}}</div>
+                    <div class="text-muted lh-1"><small>\{{dob}}\{{#if dob}} &ndash; \{{/if}}\{{dod}}</small></div>
+                    <div class="text-muted">\{{#if top_work}}<small>Author of <em>\{{top_work}}</em></small>\{{/if}}</div>
+                </div>
+                <!-- expandables -->
+                <div class="col">
+                    \{{#if aka}}
+                    <details>
+                        <summary class="text-muted"><small>Also known as...</small></summary>
+                        <ul>
+                            \{{#each aka}}
+                            <li class="fs-6 serif">\{{.}}</li>
+                            \{{/each}}
+                        </ul>
+                    </details>
+                    \{{/if}}
+                    <details>
+                        <summary class="text-muted"><small>Bio</small></summary>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt labore laudantium adipisci minima eos pariatur quae perspiciatis ipsa nostrum corrupti asperiores, doloribus consectetur nobis ratione maxime vitae hic dicta maiores.</p>
+                    </details>
+                </div>
+                <!-- plus button -->
+                <div class="col-1 pe-2" align="right">
+                    <div><button class="btn ui-button"><img src="/plus.svg"></button></div>
+                    <div class="text-muted"><small><em>Added</em></small></div>
+                </div>
+
+            </div>
+            <!-- rearranging -->
+
+            <!--
             <div class="d-flex justify-content-between">
                 <span class="">
                     <div class="fs-5 serif">\{{author_name}}</div>
@@ -48,6 +82,7 @@
                 </ul>
             </details>
             \{{/if}}
+            -->
         </li>
         \{{/each}}
     </ul>

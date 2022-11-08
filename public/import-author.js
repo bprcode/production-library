@@ -1,26 +1,28 @@
 const openLibraryAddress = `https://openlibrary.org/search.json`
 
+
+// DEBUG:
 const log = console.log
-log('Do I have Handlebars?')
-log(Handlebars)
-log('Can I find my template?')
 const template = document.getElementById('result-template')
 log(template.innerHTML.trim())
 const renderTest = Handlebars.compile(template.innerHTML.trim())
-log('Can I render with it?')
 const templateData = {
     header: `Matching authors (${13} of ${69}):`,
     authors: [
         {author_name: 'Stevie King', dob: '1969-01-02',
+            top_work: 'The Shrining',
             aka: ['Li\'l Steve', 'Steve the Wonderful', 'Mr. King', 'The KING']},
         {author_name: 'Ernie Hamingway', dod: '2039-13-27',
+            top_work: 'The Old Man I Can See',
             aka: ['Easy E', 'The \'Way', 'El Presidente']},
         {author_name: 'Joy Carrot Oatmeal', dob: '1969-01-02', dod: '2039-13-27'},
-        {author_name: 'Bill Faultner'},
+        {author_name: 'Bill Faultner',
+            top_work: 'As I Lay Drying'},
     ]
 }
 log(renderTest(templateData))
 document.getElementById('test-id').innerHTML = renderTest(templateData)
+// </DEBUG>
 
 document.getElementById('search-button')
     .addEventListener('click', async event => {

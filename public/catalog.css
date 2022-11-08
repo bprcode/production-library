@@ -1,5 +1,7 @@
 :root {
   --light: #f0eeee;
+  --light-shade: #f0eeee;
+  --header-bg-overwrite: rgba(255, 171, 107, 0.293);
 
   --primary: rgb(235, 37, 11);
   --primary-light: rgb(255, 105, 105);
@@ -21,6 +23,10 @@ a:hover {
   color: var(--primary-light) !important;
 }
 
+.card {
+  box-shadow: 9px 9px 0px #00f1;
+}
+
 .reasonable-width {
   max-width: 800px;
 }
@@ -39,13 +45,17 @@ h1 {
 }
 
 .shelf {
-    background-image: url(/shelf.png);
-    background-size: 100% auto;
-    background-position-y: 70%;
+  background-image: url(/shelf.png);
+  background-size: 100% auto;
+  background-position-y: 70%;
 }
 
 body {
-    background-color: var(--light);
+  background-color: var(--light-shade);
+}
+
+.card-header {
+  --bs-card-cap-bg: var(--header-bg-overwrite);
 }
 
 .form-control:focus {
