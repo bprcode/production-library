@@ -15,10 +15,12 @@ const authorNameValidator =
 const preventNameCollision =
     body('last_name')
         .custom(async (lname, { req }) => {
-            const [result] = await authors.find({
+            const result = await authors.find({
                 first_name: req.body.first_name, last_name: lname
             })
-            if (result && String(result.author_id) !== String(req.params.id)) {
+
+            if (result &&
+                String(result[0].author_id) !== String(req.params.id)) {
                 throw new Error(`Author name in use.`)
             }
         })
@@ -28,19 +30,20 @@ const authorValidators = [
     body('first_name')
         .trim()
         .isLength({ min: 1 })
-        .withMessage('First name required')
-        .escape(),
+        .withMessage('First name required'),
     body('last_name')
         .trim()
         .isLength({ min: 1})
-        .escape()
         .withMessage('Last name required'),
     body('dob', 'Invalid date')
         .optional({ checkFalsy: true })
         .isISO8601(),
     body('dod', 'Invalid date')
         .optional({ checkFalsy: true })
-        .isISO8601()
+        .isISO8601(),
+    body('bio')
+        .optional({ checkFalsy: true })
+        .trim()
 ]
 
 const authorIdValidator =
@@ -61,7 +64,7 @@ exports.author_detail = async (req, res) => {
         snipTimes(authors.find({ author_id: req.params.id })),
         books.find({ author_id: req.params.id })
     ])
-    if ( ! resultAuthors ) {
+    if (!resultAuthors) {
         return res.render(`no_results.hbs`)
     }
 
@@ -84,15 +87,17 @@ exports.author_create_post = [
     async (req, res) => {
         let result
         const trouble = validationResult(req)
+        const item = {
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            dob: req.body.dob || null,
+            dod: req.body.dod || null,
+            bio: req.body.bio || null
+        }
 
         if ( !trouble.isEmpty() ) {
             return res.status(400).render(`author_form.hbs`, {
-                author: {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    dob: req.body.dob,
-                    dod: req.body.dod,
-                },
+                author: item,
                 trouble: trouble.array(),
                 title: 'Add Author',
                 form_action: '/catalog/author/create',
@@ -100,6 +105,32 @@ exports.author_create_post = [
             })
         }
 
+        try {
+            [result] = await authors.insert(item)
+        } catch (e) {
+            log.err(e.message)
+            throw e
+        }
+
+        res.redirect(result.author_url)
+    }
+]
+exports.author_json_post = [
+    ...authorValidators,
+    authorNameValidator,
+    async (req, res) => {
+        let result
+        const trouble = validationResult(req)
+
+        if (!trouble.isEmpty()) {
+            return res.status(418).send({
+                trouble: trouble.array()
+            })
+        }
+
+        req.body.foo = 'bar'
+        res.status(202).send(req.body)
+        /*
         try {
             [result] = await authors.insert({
                 first_name: req.body.first_name,
@@ -113,6 +144,7 @@ exports.author_create_post = [
         }
 
         res.redirect(result.author_url)
+        */
     }
 ]
 exports.author_update_choose = async (req, res) => {
@@ -129,7 +161,7 @@ exports.author_delete_get = [
     authorIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
-        if ( ! trouble.isEmpty() ) {
+        if (!trouble.isEmpty()) {
             return res.redirect(`/catalog/author/delete`)
         }
 
@@ -154,7 +186,7 @@ exports.author_update_get = [
     authorIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
-        if( ! trouble.isEmpty() ) {
+        if (!trouble.isEmpty()) {
             return res.redirect(`/catalog/author/update`)
         }
 
@@ -178,7 +210,8 @@ exports.author_update_post = [
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             dob: req.body.dob || null,
-            dod: req.body.dod || null
+            dod: req.body.dod || null,
+            bio: req.body.bio || null
         }
 
         const trouble = validationResult(req)

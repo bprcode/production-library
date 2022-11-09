@@ -7,7 +7,6 @@ const { books, justBooks, authors, genres, bookInstances, genresByBook,
 const preventTitleCollision =
     body('title', 'Title already in catalog')
         .trim()
-        .escape()
         .custom(async value => {
             if (await books.find({ title: value }))
                 throw new Error('Title already in catalog.')
@@ -16,7 +15,6 @@ const preventTitleCollision =
 const onlySelfTitleCollision =
     body('title', 'Title already in catalog')
         .trim()
-        .escape()
         .custom(async (value, { req }) => {
             const result = await books.find({ title: value })
             if (result
@@ -29,8 +27,7 @@ const bookValidators = [
     body('title')
         .trim()
         .isLength({ min: 1 })
-        .withMessage('Title required')
-        .escape(),
+        .withMessage('Title required'),
     body('author_id', 'Unable to match author.')
         .isLength({ min: 1 })
         .withMessage('No author indicated.')
@@ -41,8 +38,7 @@ const bookValidators = [
         }),
     body('isbn', 'ISBN required')
         .trim()
-        .isLength({ min: 1 })
-        .escape(),
+        .isLength({ min: 1 }),
     body('summary')
         .optional({ checkFalsy: true }),
     body()
@@ -68,7 +64,6 @@ const bookValidators = [
 const bookIdValidator =
     param('id', 'Invalid book ID.')
         .trim()
-        .escape()
         .custom(async value => {
             if ( ! await books.find({ book_id: value }))
                 throw new Error(`Book ID not found.`)

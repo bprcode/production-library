@@ -6,7 +6,6 @@ const { inventory, justBooks, bookStatusList, bookInstances, snipTimes }
 const instanceValidators = [
     body('book_id')
         .trim()
-        .escape()
         .isLength({ min: 1 })
         .custom(async value => {
             if ( ! await justBooks.find({ book_id: value }) )
@@ -15,10 +14,8 @@ const instanceValidators = [
         .withMessage('Invalid title.'),
     body('imprint', 'Imprint required')
         .trim()
-        .escape()
         .isLength({ min: 1 }),
     body('status')
-        .escape()
         .isLength({ min: 1})
         .custom(async value => {
             const validStatusList = await bookStatusList()
@@ -34,7 +31,6 @@ const instanceValidators = [
 const instanceIdValidator =
     param('id', 'Invalid item ID.')
         .trim()
-        .escape()
         .custom(async id => {
             if ( !await bookInstances.find({ instance_id: id }) )
                 throw new Error(`Item ID not found.`)

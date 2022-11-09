@@ -21,6 +21,7 @@ router
     .get('/books', bookController.book_list)
 
     .get('/author/import', authorController.author_import_get)
+    .post('/author/json', authorController.author_json_post)
     .get('/author/create', authorController.author_create_get)
     .post('/author/create', authorController.author_create_post)
     .get('/author/delete', authorController.author_delete_choose)

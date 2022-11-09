@@ -78,7 +78,6 @@ app
 const server = app.listen(process.env.PORT || 2666, () => {
     log(moo() + ' Server active on: ', green, server.address())
     log('Todo: Fix nav bar spacing (slightly different between pages?)')
-    log('Adding author bios and styling more like book detail page would look nicer, but would take more data')
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
     log('There is a 2px doubled border on book_detail availability. Low-priority but debug.')
 })

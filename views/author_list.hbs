@@ -13,9 +13,18 @@
     <ul class="list-group list-group-flush">
     {{#each authors}}
     <li class="list-group-item">
-        <a href="{{author_url}}" class="serif fs-5">{{full_name}}</a>
-        {{~#if dob}}<div>{{pretty-date dob}} &ndash; {{pretty-date dod}}</div>{{/if~}}
-
+        <div class="row">
+            <div class="col-4">
+                <a href="{{author_url}}" class="serif fs-5">{{full_name}}</a>
+                {{~#if dob}}<div class="text-muted"><small>{{pretty-date dob}} &ndash; {{pretty-date dod}}</small></div>{{/if~}}
+            </div>
+            {{#if bio}}
+            <details class="col">
+                <summary class="text-muted"><small>Bio</small></summary>
+                {{bio}}
+            </details>
+            {{/if}}
+        </div>
     </li>
     {{/each}}
     </ul>

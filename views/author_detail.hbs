@@ -2,8 +2,9 @@
 {{#> catalog_layout no_title=1}}{{#*inline 'content'~}}
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between">
-        <span>
+        <span class="">
         <h1 class="serif h2 fw-semibold">{{author.full_name}}</h1>
+        {{#if author.dob}}<h2 class="fs-6 serif mb-0">{{pretty-date author.dob}} &ndash; {{pretty-date author.dod}}</h2>{{/if}}
         </span>
         <span class="">
             <a class="btn ui-button" href="{{author.author_url}}/update"><img src="/pencil-fill.svg" alt="Pencil icon click to edit"></a>
@@ -11,7 +12,8 @@
         </span>
     </div>
     <div class="card-body pt-1 pb-0">
-        {{#if author.dob}}<h2 class="fs-5 serif">{{pretty-date author.dob}} &ndash; {{pretty-date author.dod}}</h2>{{/if}}
+        {{#if author.bio}}<p>{{author.bio}}</p>{{/if}}
+        {{#unless author.bio}}<p class="text-muted"><em>No biography available.</em></p>{{/unless}}
     </div>
 </div>
 

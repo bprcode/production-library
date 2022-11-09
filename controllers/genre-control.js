@@ -9,7 +9,6 @@ async function alreadyHaveGenre (name) {
 
 const genreIdValidator =
     param('id')
-        .escape()
         .custom(async id => {
             if ( ! await genres.find({ genre_id: id }) )
                 throw new Error(`Invalid genre ID.`)
@@ -21,8 +20,7 @@ const genreCreateValidators = [
         .trim()
         .isLength({ min: 1 }).withMessage('Name required')
         .isString().withMessage('Name must be a string')
-        .custom(alreadyHaveGenre).withMessage('Genre already in catalog')
-        .escape(),
+        .custom(alreadyHaveGenre).withMessage('Genre already in catalog'),
 ]
 
 const genreUpdateValidators = [
@@ -39,7 +37,6 @@ const genreUpdateValidators = [
             }
         })
         .withMessage('Genre name already in use.')
-        .escape()
 ]
 
 exports.genre_list = async (req, res) => {
