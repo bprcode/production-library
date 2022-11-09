@@ -24,6 +24,7 @@
 </div>
 
 <template id="result-template">
+<div class="card">
     <div class="card-header" id="list-header">
         \{{header}}
     </div>
@@ -33,71 +34,40 @@
             <div class="row">
                 <!-- snap bio -->
                 <div class="col-4">
-                    <div class="fs-5 serif">\{{author_name}}</div>
-                    <div class="text-muted lh-1"><small>\{{dob}}\{{#if dob}} &ndash; \{{/if}}\{{dod}}</small></div>
+                    <div class="fs-5 serif">\{{name}}</div>
+                    <div class="text-muted lh-1"><small>\{{birth_date}}\{{#if birth_date}} &ndash; \{{/if}}\{{death_date}}</small></div>
                     <div class="text-muted">\{{#if top_work}}<small>Author of <em>\{{top_work}}</em></small>\{{/if}}</div>
                 </div>
                 <!-- expandables -->
                 <div class="col">
-                    \{{#if aka}}
+                    \{{#if alternate_names}}
                     <details>
                         <summary class="text-muted"><small>Also known as...</small></summary>
                         <ul>
-                            \{{#each aka}}
+                            \{{#each alternate_names}}
                             <li class="fs-6 serif">\{{.}}</li>
                             \{{/each}}
                         </ul>
                     </details>
                     \{{/if}}
-                    <details>
+                    <details class="bio">
                         <summary class="text-muted"><small>Bio</small></summary>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt labore laudantium adipisci minima eos pariatur quae perspiciatis ipsa nostrum corrupti asperiores, doloribus consectetur nobis ratione maxime vitae hic dicta maiores.</p>
+                        <p class="ps-2" data-key="\{{key}}"><em class="text-muted">Loading...</em></p>
                     </details>
                 </div>
                 <!-- plus button -->
                 <div class="col-1 pe-2" align="right">
-                    <div><button class="btn ui-button"><img src="/plus.svg"></button></div>
+                    <div><button class="btn ui-button plus-button"><img src="/plus.svg"></button></div>
                     <div class="text-muted"><small><em>Added</em></small></div>
                 </div>
 
             </div>
-            <!-- rearranging -->
-
-            <!--
-            <div class="d-flex justify-content-between">
-                <span class="">
-                    <div class="fs-5 serif">\{{author_name}}</div>
-                    <div class="text-muted lh-1"><small>\{{dob}}\{{#if dob}} &ndash; \{{/if}}\{{dod}}</small></div>
-                </span>
-                <span><button class="btn ui-button"><img src="/plus.svg"></button></span>
-            </div>
-
-            \{{#if aka}}
-            <details>
-                <summary class="text-muted"><small>Also known as...</small></summary>
-                <ul>
-                    \{{#each aka}}
-                    <li class="fs-6 serif">\{{.}}</li>
-                    \{{/each}}
-                </ul>
-            </details>
-            \{{/if}}
-            -->
         </li>
         \{{/each}}
     </ul>
+</div>
 </template>
 
-
-<div class="card" id="test-id">
-    <div class="card-header" id="list-header">
-        Secondary placeholder header:
-    </div>
-    <ul class="list-group list-group-flush" id="list-root">
-        <li class="list-group-item">
-            Example item
-        </li>
-    </ul>
-</div>
+<div id="search-result-id"></div>
 
 {{~/inline}}{{/catalog_layout}}

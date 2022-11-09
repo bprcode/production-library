@@ -1,47 +1,53 @@
 const openLibraryAddress = `https://openlibrary.org/search.json`
+const authorApiAddress = `https://openlibrary.org/search/authors.json`
+const authorDetailAddress = `https://openlibrary.org/authors/`
 
-
-// DEBUG:
 const log = console.log
 const template = document.getElementById('result-template')
-log(template.innerHTML.trim())
-const renderTest = Handlebars.compile(template.innerHTML.trim())
-const templateData = {
-    header: `Matching authors (${13} of ${69}):`,
-    authors: [
-        {author_name: 'Stevie King', dob: '1969-01-02',
-            top_work: 'The Shrining',
-            aka: ['Li\'l Steve', 'Steve the Wonderful', 'Mr. King', 'The KING']},
-        {author_name: 'Ernie Hamingway', dod: '2039-13-27',
-            top_work: 'The Old Man I Can See',
-            aka: ['Easy E', 'The \'Way', 'El Presidente']},
-        {author_name: 'Joy Carrot Oatmeal', dob: '1969-01-02', dod: '2039-13-27'},
-        {author_name: 'Bill Faultner',
-            top_work: 'As I Lay Drying'},
-    ]
+const renderTemplate = Handlebars.compile(template.innerHTML.trim())
+
+async function retrieveBio (url) {
+    const response = await fetch(url)
+    const result = await response.json()
+    if (!result.bio)
+        return 'No bio available.'
+
+    if (typeof result.bio === 'string')
+        return result.bio
+
+    if (typeof result.bio?.value === 'string')
+        return result.bio.value
+
+    return 'Unrecognized format for bio.'
 }
-log(renderTest(templateData))
-document.getElementById('test-id').innerHTML = renderTest(templateData)
-// </DEBUG>
+
+async function handleBioToggle (event) {
+    const paragraph = event.target.children[1]
+
+    if (paragraph.textContent === 'Loading...') {
+        const url = authorDetailAddress + paragraph.dataset.key + '.json'
+        paragraph.textContent = await retrieveBio(url)
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('search-text').focus()
+})
 
 document.getElementById('search-button')
     .addEventListener('click', async event => {
         event.preventDefault()
 
+        const query = document.getElementById('search-text').value
         let searchParams = new URLSearchParams({
-            q: 'tolkien',
+            q: query,
             limit: 20,
             page: 1
         })
-        
-        let queryUrl = new URL(openLibraryAddress)
+
+        let queryUrl = new URL(authorApiAddress)
         queryUrl.search = searchParams
 
-        console.log('>>')
-        console.log(queryUrl.toString())
-
-        // const query = document.getElementById('search-text').value
-        // const listRoot = document.getElementById('list-root')
         const searchButton = document.getElementById('search-button')
         const searchSpinner = document.getElementById('search-spinner')
         const magnifyingGlass = document.getElementById('magnifying-glass')
@@ -53,23 +59,23 @@ document.getElementById('search-button')
         const response = await fetch(queryUrl)
         const json = await response.json()
 
-        // document.getElementById('list-header').textContent =
-        //     `Displaying ${json.docs.length} of ${json.numFound} results.`
-        
-        // while (listRoot.lastElementChild) {
-        //     listRoot.removeChild(listRoot.lastElementChild)
-        // }
+        for (const e of document.querySelectorAll('.plus-button')) {
+            e.removeEventListener('toggle', handleBioToggle)
+        }
 
-        // for (const doc of json.docs) {
-        //     const li = document.createElement('li')
-        //     li.textContent = doc.title
-        //     li.classList.add('list-group-item')
-        //     listRoot.append(li)
-        // }
+        document.getElementById('search-result-id').innerHTML
+            = renderTemplate({
+                header: `Displaying ${json.start + 1} `
+                        + ` to ${json.start + json.docs.length} `
+                        + `of ${json.numFound} results:`,
+                authors: json.docs
+            })
+
+        for (const e of document.querySelectorAll('.bio')) {
+            e.addEventListener('toggle', handleBioToggle)
+        }
 
         magnifyingGlass.classList.remove('d-none')
         searchButton.removeAttribute('disabled')
         searchSpinner.classList.add('visually-hidden')
-        
-        console.log(json)
     })

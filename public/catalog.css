@@ -1,9 +1,9 @@
 :root {
   --light: hsl(0, 6%, 94%);
   --light-shade: hsl(35, 10%, 89%);
-  --header-bg-overwrite: hsl(35, 20%, 96%);
+  --header-bg-overwrite: hsl(35, 10%, 96%);
 
-  --primary: hsl(12, 80%, 52%);
+  --primary: hsl(4, 85%, 52%);
   --primary-light: hsl(5, 100%, 68%);
   --primary-transparent: rgba(235, 37, 11, 0.25);
   --primary-dark: rgb(200, 39, 18);
