@@ -1,9 +1,9 @@
 :root {
-  --light: #f0eeee;
-  --light-shade: #eee9e9;
-  --header-bg-overwrite: hsl(30, 97%, 92%);
+  --light: hsl(0, 6%, 94%);
+  --light-shade: hsl(20, 18%, 88%);
+  --header-bg-overwrite: hsl(30, 100%, 91%);
 
-  --primary: rgb(235, 37, 11);
+  --primary: rgb(231, 70, 49);
   --primary-light: rgb(255, 105, 105);
   --primary-transparent: rgba(235, 37, 11, 0.25);
   --primary-dark: rgb(200, 39, 18);
@@ -24,7 +24,7 @@ a:hover {
 }
 
 .card {
-  box-shadow: 9px 9px 0px #0000ff14;
+  box-shadow: 9px 9px 0px #0000aa14;
 }
 
 .reasonable-width {

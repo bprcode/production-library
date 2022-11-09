@@ -29,12 +29,12 @@ document.getElementById('search-button')
         event.preventDefault()
 
         let searchParams = new URLSearchParams({
-            author: 'tolkien',
+            q: 'tolkien',
             limit: 20,
             page: 1
         })
+        
         let queryUrl = new URL(openLibraryAddress)
-
         queryUrl.search = searchParams
 
         console.log('>>')
