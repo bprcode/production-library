@@ -30,10 +30,6 @@ async function handleBioToggle (event) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('search-text').focus()
-})
-
 document.getElementById('search-button')
     .addEventListener('click', async event => {
         event.preventDefault()
@@ -58,6 +54,8 @@ document.getElementById('search-button')
 
         const response = await fetch(queryUrl)
         const json = await response.json()
+
+        log(json)
 
         for (const e of document.querySelectorAll('.plus-button')) {
             e.removeEventListener('toggle', handleBioToggle)

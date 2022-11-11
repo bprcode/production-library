@@ -37,13 +37,32 @@ const authorValidators = [
         .withMessage('Last name required'),
     body('dob', 'Invalid date')
         .optional({ checkFalsy: true })
-        .isISO8601(),
+        .trim(),
     body('dod', 'Invalid date')
         .optional({ checkFalsy: true })
-        .isISO8601(),
+        .trim(),
     body('bio')
         .optional({ checkFalsy: true })
+        .trim(),
+    body('yob', 'Year of birth must be numeric.')
         .trim()
+        .optional({ checkFalsy: true })
+        .isNumeric(),
+    body('yod', 'Year of death must be numeric.')
+        .trim()
+        .optional({ checkFalsy: true })
+        .isNumeric(),
+    body().custom((_, { req }) => {
+        // If no date is specified, use the year instead.
+        if (!req.body.dob)
+            req.body.dob = req.body.yob
+
+        if (!req.body.dod)
+            req.body.dod = req.body.yod
+            
+        return true
+    })
+
 ]
 
 const authorIdValidator =

@@ -3,11 +3,11 @@
 <div class="card">
     <div class="card-header mb-3"><h1 class="fs-3">{{title}}</h1></div>
 
-    <div class="container col-md-10">
+    <div class="container col-md-11">
         <form class="mb-4" action="{{form_action}}" method="POST">
             
             <div class="row mb-3">
-                <label for="first-id" class="col-form-label col-sm-3">First name</label>
+                <label for="first-id" class="col-form-label col-sm-4">First name</label>
                 <div class="col input-group-has-validation">
                     <input class="form-control {{#if (error-check trouble 'first_name')}}is-invalid{{/if}}" id="first-id" name="first_name" type="text" value="{{author.first_name}}">
                     <div class="invalid-feedback">{{error-check trouble 'first_name'}}</div>
@@ -15,31 +15,43 @@
             </div>
 
             <div class="row mb-3">
-                <label for="last-id" class="col-form-label col-sm-3">Last name</label>
+                <label for="last-id" class="required-star col-form-label col-sm-4">Last name</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text" value="{{author.last_name}}">
+                    <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text" value="{{author.last_name}}" required>
                     <div class="invalid-feedback">{{error-check trouble 'last_name'}}</div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="dob-id" class="col-form-label col-sm-3">Date of Birth</label>
+                <label for="dob-id" class="col-form-label col-sm-4">Date (or year) of birth</label>
                 <div class="col input-group-has-validation">
+                    <label class="text-muted" for="dob-id">Date</label>
                     <input class="form-control {{#if (error-check trouble 'dob')}}is-invalid{{/if}}" id="dob-id" name="dob" type="date" value="{{author.dob}}">
                     <div class="invalid-feedback">{{error-check trouble 'dob'}}</div>
                 </div>
-            </div>
-
-            <div class="row mb-3">
-                <label for="dod-id" class="col-form-label col-sm-3">Date of Death</label>
                 <div class="col input-group-has-validation">
-                    <input class="form-control {{#if (error-check trouble 'dod')}}is-invalid{{/if}}" id="dod-id" name="dod" type="date" value="{{author.dod}}">
-                    <div class="invalid-feedback">{{error-check trouble 'dod'}}</div>
+                    <label class="text-muted" for="yob-id">Year</label>
+                    <input class="form-control {{#if (error-check trouble 'yob')}}is-invalid{{/if}}" id="yob-id" name="yob" type="text" value="{{author.yob}}">
+                    <div class="invalid-feedback">{{error-check trouble 'yob'}}</div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="bio-id" class="col-form-label col-sm-3">Biography</label>
+                <label for="dod-id" class="col-form-label col-sm-4">Date (or year) of death</label>
+                <div class="col input-group-has-validation">
+                    <label class="text-muted" for="dod-id">Date</label>
+                    <input class="form-control {{#if (error-check trouble 'dod')}}is-invalid{{/if}}" id="dod-id" name="dod" type="date" value="{{author.dod}}">
+                    <div class="invalid-feedback">{{error-check trouble 'dod'}}</div>
+                </div>
+                <div class="col input-group-has-validation">
+                    <label class="text-muted" for="yod-id">Year</label>
+                    <input class="form-control {{#if (error-check trouble 'yod')}}is-invalid{{/if}}" id="yod-id" name="yod" type="text" value="{{author.yod}}">
+                    <div class="invalid-feedback">{{error-check trouble 'yod'}}</div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="bio-id" class="col-form-label col-sm-4">Biography</label>
                 <div class="col input-group">
                     <textarea name="bio" id="bio-id" cols="30" rows="10" class="form-control">{{author.bio}}</textarea>
                 </div>
@@ -51,4 +63,22 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Keep fields in sync
+    document.getElementById('dod-id').addEventListener('change', event => {
+        let changed = document.getElementById('dod-id').value
+        document.getElementById('yod-id').value = changed.split('-')[0]
+    })
+    document.getElementById('dob-id').addEventListener('change', event => {
+        let changed = document.getElementById('dob-id').value
+        document.getElementById('yob-id').value = changed.split('-')[0]
+    })
+    document.getElementById('yod-id').addEventListener('input', event => {
+        document.getElementById('dod-id').value = ''
+    })
+    document.getElementById('yob-id').addEventListener('input', event => {
+        document.getElementById('dob-id').value = ''
+    })
+</script>
 {{~/inline}}{{/catalog_layout}}

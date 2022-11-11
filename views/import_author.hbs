@@ -23,51 +23,75 @@
     </div>
 </div>
 
-<template id="result-template">
-<div class="card">
-    <div class="card-header" id="list-header">
-        \{{header}}
-    </div>
-    <ul class="list-group list-group-flush">
-        \{{#each authors}}
-        <li class="list-group-item">
-            <div class="row">
-                <!-- snap bio -->
-                <div class="col-4">
-                    <div class="fs-5 serif">\{{name}}</div>
-                    <div class="text-muted lh-1"><small>\{{birth_date}}\{{#if birth_date}} &ndash; \{{/if}}\{{death_date}}</small></div>
-                    <div class="text-muted">\{{#if top_work}}<small>Author of <em>\{{top_work}}</em></small>\{{/if}}</div>
-                </div>
-                <!-- expandables -->
-                <div class="col">
-                    \{{#if alternate_names}}
-                    <details>
-                        <summary class="text-muted"><small>Also known as...</small></summary>
-                        <ul>
-                            \{{#each alternate_names}}
-                            <li class="fs-6 serif">\{{.}}</li>
-                            \{{/each}}
-                        </ul>
-                    </details>
-                    \{{/if}}
-                    <details class="bio">
-                        <summary class="text-muted"><small>Bio</small></summary>
-                        <p class="ps-2" data-key="\{{key}}"><em class="text-muted">Loading...</em></p>
-                    </details>
-                </div>
-                <!-- plus button -->
-                <div class="col-1 pe-2" align="right">
-                    <div><button class="btn ui-button plus-button"><img src="/plus.svg"></button></div>
-                    <div class="text-muted"><small><em>Added</em></small></div>
-                </div>
-
+<!-- input form modal -->
+<div class="modal fade" id="test-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Title for test modal</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </li>
-        \{{/each}}
-    </ul>
+            <div class="modal-body">
+                <p>Sample content for modal body.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary">Import</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- search result template -->
+<template id="result-template">
+    <div class="card">
+        <div class="card-header" id="list-header">
+            \{{header}}
+        </div>
+        <ul class="list-group list-group-flush">
+            \{{#each authors}}
+            <li class="list-group-item">
+                <div class="row">
+                    <!-- snap bio -->
+                    <div class="col-4">
+                        <div class="fs-5 serif">\{{name}}</div>
+                        <div class="text-muted lh-1"><small>\{{birth_date}}\{{#if birth_date}} &ndash; \{{/if}}\{{death_date}}</small></div>
+                        <div class="text-muted">\{{#if top_work}}<small>Author of <em>\{{top_work}}</em></small>\{{/if}}</div>
+                    </div>
+                    <!-- expandables -->
+                    <div class="col">
+                        \{{#if alternate_names}}
+                        <details>
+                            <summary class="text-muted"><small>Also known as...</small></summary>
+                            <ul>
+                                \{{#each alternate_names}}
+                                <li class="fs-6 serif">\{{.}}</li>
+                                \{{/each}}
+                            </ul>
+                        </details>
+                        \{{/if}}
+                        <details class="bio">
+                            <summary class="text-muted"><small>Bio</small></summary>
+                            <p class="ps-2" data-key="\{{key}}"><em class="text-muted">Loading...</em></p>
+                        </details>
+                    </div>
+                    <!-- plus button -->
+                    <div class="col-1 pe-2" align="right">
+                        <div><button class="btn ui-button plus-button"><img src="/plus.svg"></button></div>
+                        <div class="text-muted"><small><em>Added</em></small></div>
+                    </div>
+
+                </div>
+            </li>
+            \{{/each}}
+        </ul>
+    </div>
 </template>
 
+<!-- div serving as parent for dynamic search results -->
 <div id="search-result-id"></div>
+
+<!-- DEBUG: modal test launcher -->
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#test-modal">Test modal</button>
 
 {{~/inline}}{{/catalog_layout}}

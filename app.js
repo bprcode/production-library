@@ -18,7 +18,8 @@ hbs.registerHelper('find-in', (arr, key, value) => {
     return arr?.find(e => e[key] === value)
 })
 hbs.registerHelper('pretty-date', date => {
-    if ( !date ) { return '' }
+    if (!date) { return '' }
+    if (date.match?.(/^\d*$/)) { return date }
     if (date instanceof Date) {
         return DateTime.fromJSDate(date).toLocaleString(DateTime.DATE_MED)
     }
