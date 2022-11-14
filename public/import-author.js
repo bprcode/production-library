@@ -2,23 +2,70 @@ const openLibraryAddress = `https://openlibrary.org/search.json`
 const authorApiAddress = `https://openlibrary.org/search/authors.json`
 const authorDetailAddress = `https://openlibrary.org/authors/`
 
-const log = console.log
-const template = document.getElementById('result-template')
-const renderTemplate = Handlebars.compile(template.innerHTML.trim())
+// Convenience shorthands
+const log = console.log.bind(console)
+const el = document.getElementById.bind(document)
 
-async function retrieveBio (url) {
-    const response = await fetch(url)
-    const result = await response.json()
-    if (!result.bio)
+const listTemplate = el('list-template')
+const renderList = Handlebars.compile(listTemplate.innerHTML.trim())
+
+Handlebars.registerHelper('error-check', (trouble, name) => {
+    if (trouble)
+        return trouble.find(t => t.param === name)?.msg
+    return undefined
+})
+Handlebars.registerHelper('extract-year', dateString => {
+    return dateString?.match(/\d*/)[0]
+})
+
+function parseBio (doc) {
+    if (!doc.bio)
         return 'No bio available.'
 
-    if (typeof result.bio === 'string')
-        return result.bio
+    if (typeof doc.bio === 'string')
+        return doc.bio
 
-    if (typeof result.bio?.value === 'string')
-        return result.bio.value
+    if (typeof doc.bio?.value === 'string')
+        return doc.bio.value
 
     return 'Unrecognized format for bio.'
+}
+
+function parseDate (dateString) {
+    if (typeof dateString === 'string' && !dateString.match(/^\d*$/)) {
+        return new Date(dateString).toISOString().split('T')[0]
+    }
+
+    return dateString
+}
+
+function parseName (fullName) {
+    if (!fullName)
+        return fullName
+
+    // Some OpenLibrary names end in a period.
+    fullName = fullName.replace(/\.$/, '')
+
+    // Some OpenLibrary names are last, first; others are first last.
+    if (fullName.match(',')){
+        fullName = fullName.split(', ').reverse().join(' ')
+    }
+
+    const split = fullName.split(' ')
+    return {
+        first: split.slice(0, -1).join(' '),
+        last: split.slice(-1)[0]
+    }
+}
+
+async function retrieveBio (url) {
+    try {
+        const response = await fetch(url)
+        const result = await response.json()
+        return parseBio(result)
+    } catch (e) {
+        return 'Unable to retrieve biography.'
+    }
 }
 
 async function handleBioToggle (event) {
@@ -30,50 +77,94 @@ async function handleBioToggle (event) {
     }
 }
 
-document.getElementById('search-button')
-    .addEventListener('click', async event => {
-        event.preventDefault()
+async function revealModal (event) {
+    revealModal.template ??=
+        await
+            (await fetch('/templates/author_form_body.hbs'))
+        .text()
+    revealModal.renderTemplate ??= Handlebars.compile(revealModal.template)
 
-        const query = document.getElementById('search-text').value
-        let searchParams = new URLSearchParams({
-            q: query,
-            limit: 20,
-            page: 1
-        })
+    const authorKey = event.relatedTarget.dataset.key
+    const modalBody = event.target.querySelector('#modal-body-id')
+    let response
+    let json
 
-        let queryUrl = new URL(authorApiAddress)
-        queryUrl.search = searchParams
+    modalBody.innerHTML = 'Loading...'
 
-        const searchButton = document.getElementById('search-button')
-        const searchSpinner = document.getElementById('search-spinner')
-        const magnifyingGlass = document.getElementById('magnifying-glass')
+    try {
+        response = await fetch(authorDetailAddress + authorKey + '.json')
+        json = await response.json()
+    } catch (e) {
+        return modalBody.innerHTML = 'Unable to retrieve record.'
+    }
 
-        searchButton.setAttribute('disabled', 'true')
-        searchSpinner.classList.remove('visually-hidden')
-        magnifyingGlass.classList.add('d-none')
+    log('Got author record >>')
+    log(json)
 
-        const response = await fetch(queryUrl)
-        const json = await response.json()
+    let parsedName
+    let author
 
-        log(json)
+    try {
+        parsedName = parseName(json.personal_name || json.name)
+        author = {
+            first_name: parsedName.first,
+            last_name: parsedName.last,
+            bio: parseBio(json),
+            dob: parseDate(json.birth_date),
+            dod: parseDate(json.death_date)
+    }
+    } catch(e) {
+        return modalBody.innerHTML = 'Unable to parse record.'
+    }
 
-        for (const e of document.querySelectorAll('.plus-button')) {
-            e.removeEventListener('toggle', handleBioToggle)
-        }
+    modalBody.innerHTML = revealModal.renderTemplate({ author })
+}
 
-        document.getElementById('search-result-id').innerHTML
-            = renderTemplate({
-                header: `Displaying ${json.start + 1} `
-                        + ` to ${json.start + json.docs.length} `
-                        + `of ${json.numFound} results:`,
-                authors: json.docs
-            })
 
-        for (const e of document.querySelectorAll('.bio')) {
-            e.addEventListener('toggle', handleBioToggle)
-        }
+el('input-modal').addEventListener('show.bs.modal', revealModal)
 
-        magnifyingGlass.classList.remove('d-none')
-        searchButton.removeAttribute('disabled')
-        searchSpinner.classList.add('visually-hidden')
+el('search-button').addEventListener('click', async event => {
+    event.preventDefault()
+
+    const query = el('search-text').value
+    let searchParams = new URLSearchParams({
+        q: query,
+        limit: 20,
+        page: 1
     })
+
+    let queryUrl = new URL(authorApiAddress)
+    queryUrl.search = searchParams
+
+    const searchButton = el('search-button')
+    const searchSpinner = el('search-spinner')
+    const magnifyingGlass = el('magnifying-glass')
+
+    searchButton.setAttribute('disabled', 'true')
+    searchSpinner.classList.remove('visually-hidden')
+    magnifyingGlass.classList.add('d-none')
+
+    const response = await fetch(queryUrl)
+    const json = await response.json()
+
+    log(json)
+
+    for (const e of document.querySelectorAll('.plus-button')) {
+        e.removeEventListener('toggle', handleBioToggle)
+    }
+
+    el('search-result-id').innerHTML = renderList({
+        header: `Displaying ${json.start + 1} `
+                + ` to ${json.start + json.docs.length} `
+                + `of ${json.numFound} results:`,
+        authors: json.docs
+    })
+
+    for (const e of document.querySelectorAll('.bio')) {
+        e.addEventListener('toggle', handleBioToggle)
+    }
+
+    magnifyingGlass.classList.remove('d-none')
+    searchButton.removeAttribute('disabled')
+    searchSpinner.classList.add('visually-hidden')
+})

@@ -12,10 +12,14 @@ const app = express()
 const { DateTime } = require('luxon')
 const hbs = require('hbs')
 hbs.registerPartials(path.join(__dirname, '/views/partials'))
+hbs.registerPartials(path.join(__dirname, '/public/templates'))
 hbs.registerHelper('match', (a,b) => a === b)
 hbs.registerHelper('match-string', (a,b) => String(a) === String(b))
 hbs.registerHelper('find-in', (arr, key, value) => {
     return arr?.find(e => e[key] === value)
+})
+hbs.registerHelper('extract-year', dateString => {
+    return dateString?.match(/\d*/)[0]
 })
 hbs.registerHelper('pretty-date', date => {
     if (!date) { return '' }

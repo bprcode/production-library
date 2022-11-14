@@ -24,15 +24,14 @@
 </div>
 
 <!-- input form modal -->
-<div class="modal fade" id="test-modal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="input-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Title for test modal</h5>
+                <h5 class="modal-title serif">Import author</h5>
                 <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <p>Sample content for modal body.</p>
+            <div class="modal-body" id="modal-body-id">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -43,7 +42,7 @@
 </div>
 
 <!-- search result template -->
-<template id="result-template">
+<template id="list-template">
     <div class="card">
         <div class="card-header" id="list-header">
             \{{header}}
@@ -77,8 +76,8 @@
                     </div>
                     <!-- plus button -->
                     <div class="col-1 pe-2" align="right">
-                        <div><button class="btn ui-button plus-button"><img src="/plus.svg"></button></div>
-                        <div class="text-muted"><small><em>Added</em></small></div>
+                        <div><button class="btn ui-button plus-button" data-bs-toggle="modal" data-bs-target="#input-modal" data-key="\{{key}}"><img src="/plus.svg"></button></div>
+                        <div class="text-muted" hidden><small><em>Added</em></small></div>
                     </div>
 
                 </div>
@@ -92,6 +91,7 @@
 <div id="search-result-id"></div>
 
 <!-- DEBUG: modal test launcher -->
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#test-modal">Test modal</button>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#input-modal">Test modal</button>
 
-{{~/inline}}{{/catalog_layout}}
+{{~/inline}}
+{{/catalog_layout}}
