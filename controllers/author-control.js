@@ -147,9 +147,6 @@ exports.author_json_post = [
             })
         }
 
-        log('Accepting author creation via json object:', green)
-        log(req.body)
-
         try {
             result = await authors.insert({
                 first_name: req.body.first_name,

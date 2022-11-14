@@ -161,7 +161,9 @@ el('search-button').addEventListener('click', async event => {
     event.preventDefault()
 
     const query = el('search-text').value
-    let searchParams = new URLSearchParams({
+    if (!query) { return }
+    
+    const searchParams = new URLSearchParams({
         q: query,
         limit: 20,
         page: 1
@@ -181,7 +183,7 @@ el('search-button').addEventListener('click', async event => {
     const response = await fetch(queryUrl)
     const json = await response.json()
 
-    for (const e of document.querySelectorAll('.plus-button')) {
+    for (const e of document.querySelectorAll('.bio')) {
         e.removeEventListener('toggle', handleBioToggle)
     }
 

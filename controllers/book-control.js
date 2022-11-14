@@ -295,5 +295,5 @@ exports.book_delete_post = [
     }
 ]
 exports.book_import_get = (req, res) => {
-    res.render(`import_book.hbs`)
+    res.render(`import_book.hbs`, { title: 'Import book' })
 }
