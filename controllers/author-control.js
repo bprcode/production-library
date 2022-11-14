@@ -142,28 +142,28 @@ exports.author_json_post = [
         const trouble = validationResult(req)
 
         if (!trouble.isEmpty()) {
-            return res.status(418).send({
+            return res.status(400).send({
                 trouble: trouble.array()
             })
         }
 
-        req.body.foo = 'bar'
-        res.status(202).send(req.body)
-        /*
+        log('Accepting author creation via json object:', green)
+        log(req.body)
+
         try {
-            [result] = await authors.insert({
+            result = await authors.insert({
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 dob: req.body.dob || null,
-                dod: req.body.dod || null
+                dod: req.body.dod || null,
+                bio: req.body.bio || null
             })
         } catch (e) {
             log.err(e.message)
             throw e
         }
 
-        res.redirect(result.author_url)
-        */
+        res.status(200).send({ url: result[0].author_url })
     }
 ]
 exports.author_update_choose = async (req, res) => {

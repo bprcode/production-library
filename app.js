@@ -55,6 +55,7 @@ app
     .disable('x-powered-by')
 
     .use(express.urlencoded({ extended: true }))
+    .use(express.json())
 
     .use('/', layoutExampleRouter)
     .get('/', (req, res) => { res.redirect('/catalog') })

@@ -90,7 +90,6 @@ async function revealModal (event) {
     let json
 
     modalBody.innerHTML = 'Loading...'
-
     try {
         response = await fetch(authorDetailAddress + authorKey + '.json')
         json = await response.json()
@@ -98,11 +97,9 @@ async function revealModal (event) {
         return modalBody.innerHTML = 'Unable to retrieve record.'
     }
 
-    log('Got author record >>')
-    log(json)
-
     let parsedName
     let author
+    let trouble = null
 
     try {
         parsedName = parseName(json.personal_name || json.name)
@@ -112,17 +109,54 @@ async function revealModal (event) {
             bio: parseBio(json),
             dob: parseDate(json.birth_date),
             dod: parseDate(json.death_date)
-    }
+        }
     } catch(e) {
         return modalBody.innerHTML = 'Unable to parse record.'
     }
 
-    modalBody.innerHTML = revealModal.renderTemplate({ author })
+    modalBody.innerHTML = revealModal.renderTemplate({ author, trouble })
 }
-
 
 el('input-modal').addEventListener('show.bs.modal', revealModal)
 
+// Attempt to import form input data into our database.
+el('import-button-id').addEventListener('click', async event => {
+    try {
+        const input = Object.fromEntries(
+                        new FormData(el('author-form')).entries())
+
+        el('import-button-id').setAttribute('disabled', 'true')
+        el('import-spinner').classList.remove('visually-hidden')
+
+        const response = await fetch('./json', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(input)
+        })
+
+        const json = await response.json()
+
+        el('import-button-id').removeAttribute('disabled')
+        el('import-spinner').classList.add('visually-hidden')
+
+        if (json.trouble)
+            el('modal-body-id').innerHTML =
+                revealModal.renderTemplate({
+                    author: input,
+                    trouble: json.trouble
+                })
+        else
+            location.href = json.url // Redirect to new author page.
+
+    } catch (e) {
+        return log('Unable to connect to endpoint.')
+    }
+
+})
+
+// Execute OpenLibrary search
 el('search-button').addEventListener('click', async event => {
     event.preventDefault()
 
@@ -146,8 +180,6 @@ el('search-button').addEventListener('click', async event => {
 
     const response = await fetch(queryUrl)
     const json = await response.json()
-
-    log(json)
 
     for (const e of document.querySelectorAll('.plus-button')) {
         e.removeEventListener('toggle', handleBioToggle)

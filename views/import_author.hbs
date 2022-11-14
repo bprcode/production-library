@@ -35,7 +35,10 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-primary">Import</button>
+                <button class="btn btn-primary" id="import-button-id">
+                    <span class="spinner-border spinner-border-sm visually-hidden" id="import-spinner" role="status" aria-hidden="true"></span>
+                    Import
+                </button>
             </div>
         </div>
     </div>
@@ -89,9 +92,6 @@
 
 <!-- div serving as parent for dynamic search results -->
 <div id="search-result-id"></div>
-
-<!-- DEBUG: modal test launcher -->
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#input-modal">Test modal</button>
 
 {{~/inline}}
 {{/catalog_layout}}
