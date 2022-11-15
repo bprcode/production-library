@@ -72,39 +72,13 @@
                         </details>
                         <details class="description">
                             <summary class="text-muted"><small>Description</small></summary>
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti nostrum praesentium molestiae fugit minus hic consequuntur laborum? Cum nemo porro quisquam illum, consequuntur maiores minus praesentium possimus magnam enim veniam.
+                            <p class="text-muted fst-italic" data-key="\{{key}}">Loading...</p>
                         </details>
                     </div>
 
-                    <!-- prior author code:
-                    <!-- snap bio --\>
-                    <div class="col-4">
-                        <div class="fs-5 serif">\{{name}}</div>
-                        <div class="text-muted lh-1"><small>\{{birth_date}}\{{#if birth_date}} &ndash; \{{/if}}\{{death_date}}</small></div>
-                        <div class="text-muted">\{{#if top_work}}<small>Author of <em>\{{top_work}}</em></small>\{{/if}}</div>
-                    </div>
-                    <!-- expandables --\>
-                    <div class="col">
-                        \{{#if alternate_names}}
-                        <details>
-                            <summary class="text-muted"><small>Also known as...</small></summary>
-                            <ul>
-                                \{{#each alternate_names}}
-                                <li class="fs-6 serif">\{{.}}</li>
-                                \{{/each}}
-                            </ul>
-                        </details>
-                        \{{/if}}
-                        <details class="bio">
-                            <summary class="text-muted"><small>Bio</small></summary>
-                            <p class="ps-2" data-key="\{{key}}"><em class="text-muted">Loading...</em></p>
-                        </details>
-                    </div>
-                    -->
                     <!-- plus button -->
                     <div class="col-1 pe-2" align="right">
-                        <div><button class="btn ui-button plus-button" data-bs-toggle="modal" data-bs-target="#input-modal" data-key="\{{key}}"><img src="/plus.svg"></button></div>
-                        <div class="text-muted" hidden><small><em>Added</em></small></div>
+                        <div><button class="btn ui-button plus-button" data-bs-toggle="modal" data-bs-target="#input-modal" data-key="\{{key}}" data-edition-key="\{{#if cover_edition_key}}\{{cover_edition_key}}\{{else}}\{{key}}\{{/if}}"><img src="/plus.svg"></button></div>
                     </div>
 
                 </div>

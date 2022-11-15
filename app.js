@@ -86,5 +86,6 @@ const server = app.listen(process.env.PORT || 2666, () => {
     log('Todo: Fix nav bar spacing (slightly different between pages?)')
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
     log('There is a 2px doubled border on book_detail availability. Low-priority but debug.')
+    log('No current support for AD/BC dates, e.g. Pliny the Elder')
     log('Kinda need pagination everywhere.')
 })
