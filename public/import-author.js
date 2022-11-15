@@ -32,8 +32,14 @@ function parseBio (doc) {
 }
 
 function parseDate (dateString) {
-    if (typeof dateString === 'string' && !dateString.match(/^\d*$/)) {
-        return new Date(dateString).toISOString().split('T')[0]
+    if (typeof dateString === 'string' && !dateString.match(/^\d+$/)) {
+        let parsed
+        try {
+            parsed = new Date(dateString).toISOString().split('T')[0]
+        } catch(e) {
+            parsed = dateString.match(/\d+/)[0]
+        }
+        return parsed
     }
 
     return dateString
