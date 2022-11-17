@@ -209,3 +209,8 @@ exports.bookinstance_delete_post = [
         res.redirect(`/catalog/inventory`)
     }
 ]
+exports.bookinstance_json_post = [
+    async (req, res) => {
+        res.send({ placeholder: 'inventory post' })
+    }
+]

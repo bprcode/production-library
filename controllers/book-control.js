@@ -294,6 +294,11 @@ exports.book_delete_post = [
         res.redirect(`/catalog/books`)
     }
 ]
+exports.book_json_post = [
+    async (req, res) => {
+        res.send({ placeholder: 'book post' })
+    }
+]
 exports.book_import_get = (req, res) => {
     res.render(`import_book.hbs`, { title: 'Import book' })
 }

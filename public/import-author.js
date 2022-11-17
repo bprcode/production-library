@@ -49,6 +49,7 @@ async function revealModal (event) {
             dod: lib.parseDate(json.death_date)
         }
     } catch(e) {
+        log(e)
         return modalBody.innerHTML = 'Unable to parse record.'
     }
 
@@ -78,13 +79,13 @@ el('import-button-id').addEventListener('click', async event => {
         el('import-spinner').classList.add('visually-hidden')
 
         if (json.trouble)
-            el('modal-body-id').innerHTML =
+            return el('modal-body-id').innerHTML =
                 revealModal.renderTemplate({
                     author: input,
                     trouble: json.trouble
                 })
-        else
-            location.href = json.url // Redirect to new author page.
+
+        location.href = json[0].author_url // Redirect to new author page.
 
     } catch (e) {
         return log('Unable to connect to endpoint.')

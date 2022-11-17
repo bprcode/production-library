@@ -9,6 +9,7 @@ const bookinstanceController =
 router
     .get('/', bookController.index)
     .get('/book/import', bookController.book_import_get)
+    .post('/book/json', bookController.book_json_post)
     .get('/book/create', bookController.book_create_get)
     .post('/book/create', bookController.book_create_post)
     .get('/book/delete', bookController.book_delete_choose)
@@ -34,6 +35,7 @@ router
     .get('/authors', authorController.author_list)
 
     .get('/genre/json', genreController.genre_json_get)
+    .post('/genre/json', genreController.genre_json_post)
     .get('/genre/create', genreController.genre_create_get)
     .post('/genre/create', genreController.genre_create_post)
     .get('/genre/delete', genreController.genre_delete_choose)
@@ -45,6 +47,8 @@ router
     .get('/genre/:id', genreController.genre_detail)
     .get('/genres', genreController.genre_list)
 
+    .post(['/bookinstance/json', '/inventory/json'],
+        bookinstanceController.bookinstance_json_post)
     .get(['/bookinstance/create', '/inventory/create'],
         bookinstanceController.bookinstance_create_get)
     .post(['/bookinstance/create', '/inventory/create'],

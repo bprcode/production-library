@@ -179,6 +179,11 @@ exports.genre_delete_post = [
         res.redirect(`/catalog/genres`)
     }
 ]
+exports.genre_json_post = [
+    async (req, res) => {
+        res.send({ placeholder: 'genre post' })
+    }
+]
 exports.genre_json_get = async (req, res) => {
     const result = await genres.find()
     res.send( result )

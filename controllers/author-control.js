@@ -160,7 +160,7 @@ exports.author_json_post = [
             throw e
         }
 
-        res.status(200).send({ url: result[0].author_url })
+        res.status(200).send(result)
     }
 ]
 exports.author_update_choose = async (req, res) => {

@@ -110,42 +110,15 @@ async function revealModal (event) {
         log('error: ', e)
         modalBook.innerHTML = `Record not currently available.`
     }
-
-    return
-/*
-    const authorKey = event.relatedTarget.dataset.key
-    const modalBody = event.target.querySelector('#modal-body-id')
-    let response
-    let json
-
-    modalBody.innerHTML = 'Loading...'
-    try {
-        response = await fetch(authorDetailAddress + authorKey + '.json')
-        json = await response.json()
-    } catch (e) {
-        return modalBody.innerHTML = 'Unable to retrieve record.'
-    }
-
-    let parsedName
-    let author
-    let trouble = null
-
-    try {
-        parsedName = parseName(json.personal_name || json.name)
-        author = {
-            first_name: parsedName.first,
-            last_name: parsedName.last,
-            bio: parseBio(json),
-            dob: parseDate(json.birth_date),
-            dod: parseDate(json.death_date)
-        }
-    } catch(e) {
-        return modalBody.innerHTML = 'Unable to parse record.'
-    }
-
-    modalBody.innerHTML = revealModal.renderTemplate({ author, trouble })
-    */
 }
+
+// Modal import click handler: Attempt to import data
+el('import-button-id').addEventListener('click', async event => {
+    log('Todo: await create author, if successful, use rv to proceed.')
+    log('Todo: await create book, if successful, use rv to proceed.')
+    log('Todo: await create genres, if successful, use rvs to proceed.')
+    log('Todo: create book/genre associations. No failover needed.')
+})
 
 el('input-modal').addEventListener('show.bs.modal', revealModal)
 

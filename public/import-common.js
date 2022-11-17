@@ -70,6 +70,7 @@ export function parseName (fullName) {
     }
 
     const split = fullName.split(' ')
+    
     return {
         first: split.slice(0, -1).join(' '),
         last: split.slice(-1)[0]
