@@ -1,13 +1,14 @@
 <form class="mb-4 bg-warning" id="book-form" action="{{form_action}}" method="POST">
 
     <div class="row mb-3">
-        <label for="title-id" class="col-form-label col-sm-3">Title</label>
+        <label for="title-id" class="col-form-label col-sm-3 required-star">Title</label>
         <div class="col input-group-has-validation">
             <input class="form-control {{#if (error-check trouble 'title')}}is-invalid{{/if}}" id="title-id" name="title" type="text" value="{{populate.title}}">
             <div class="invalid-feedback">{{error-check trouble 'title'}}</div>
         </div>
     </div>
 
+    {{#unless omit_author}}
     <div class="row mb-3">
         <label for="select-author-id" class="col-form-label col-sm-3">Author</label>
         <div class="col input-group-has-validation">
@@ -20,6 +21,7 @@
             <div class="invalid-feedback">{{error-check trouble 'author_id'}}</div>
         </div>
     </div>
+    {{/unless}}
 
     <div class="row mb-3">
         <label for="isbn-id" class="col-form-label col-sm-3">ISBN</label>
@@ -49,7 +51,9 @@
         </div>
     </div>
 
+    {{#if submit}}
     <div class="d-flex justify-content-end">
     <button class="btn btn-primary fw-semibold" type="submit">{{submit}}</button>
     </div>
+    {{/if}}
 </form>

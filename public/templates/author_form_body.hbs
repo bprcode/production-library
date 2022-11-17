@@ -15,6 +15,8 @@
         </div>
     </div>
 
+    {{#if collapse}}<details><summary class="text-muted"><small>Details</small></summary>{{/if}}
+
     <div class="row mb-3">
         <label for="dob-id" class="col-form-label col-sm-4">Date (or year) of birth</label>
         <div class="col input-group-has-validation">
@@ -49,6 +51,8 @@
             <textarea name="bio" id="bio-id" cols="30" rows="10" class="form-control">{{author.bio}}</textarea>
         </div>
     </div>
+
+    {{#if collapse}}</details>{{/if}}
 
     {{#if submit}}
     <div class="d-flex justify-content-end">

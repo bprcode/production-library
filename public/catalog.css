@@ -62,6 +62,10 @@ body {
   --bs-card-cap-bg: var(--header-bg-overwrite);
 }
 
+.modal-header {
+  background-color: var(--header-bg-overwrite);
+}
+
 .form-control:focus {
   box-shadow: 0 0 0 .25rem rgba(225, 34, 0, 0.25);
   border-color: var(--primary);
