@@ -25,7 +25,6 @@ async function revealModal (event) {
 
     const authorKey = event.relatedTarget.dataset.key
     const modalBody = event.target.querySelector('#modal-body-id')
-    let response
     let json
 
     modalBody.innerHTML = 'Loading...'

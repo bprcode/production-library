@@ -49,6 +49,25 @@ async function revealModal (event) {
     modalBook.innerHTML = 'Loading...'
 
     try {
+        const [work, coverEd, authorJson] = await Promise.all([
+
+            fetch(
+                lib.workRootAddress + dataset.key + '.json'
+                ).then(response => response.json()),
+            
+            dataset.editionKey
+                ? fetch(lib.bookDetailAddress + dataset.editionKey + '.json')
+                    .then(response => response.json())
+                : {},
+
+            dataset.firstAuthor
+                ? fetch(
+                    lib.authorDetailAddress + dataset.firstAuthor + '.json')
+                    .then(response => response.json())
+                : {}
+        ])
+
+        /*
         const work = await fetch(
             lib.workRootAddress + dataset.key + '.json'
             ).then(response => response.json())
@@ -66,6 +85,7 @@ async function revealModal (event) {
                 lib.authorDetailAddress + dataset.firstAuthor + '.json'
             ).then(response => response.json())
         }
+        */
 
         let parsedName =
             lib.parseName(authorJson.personal_name || authorJson.name)
@@ -85,7 +105,7 @@ async function revealModal (event) {
         modalBook.innerHTML = revealModal.renderBookForm({
             populate: {
                 title: work.title,
-                summary: work.description,
+                summary: lib.parseDescription(work.description),
                 // Suggested ISBNs, in order of preference:
                 isbn: coverEd.isbn_10 || coverEd.isbn_13
                         || dataset.firstIsbn || ''
@@ -157,17 +177,6 @@ el('search-button').addEventListener('click', async event => {
             'author_key',
             'cover_edition_key',
         ]
-        // possibly take cover_edition_key by preference?
-        // lots of isbns available, suggest taking one from the particular
-        // edition preferred, not just the first one in the isbn arary
-
-        // ... seems like we need description from the work key,
-        // perhaps ISBN preferentially from the cover edition?
-        // ... actually, the existence of a cover edition ISBN seems
-        // uncertain. Ex: Edith Hamilton's "Mythology" has 72 ISBNs,
-        // but the cover edition has none.
-        // Other Cover Editions do have ISBNs, maybe multiple, by names
-        // such as isbn_10 or isbn_13, which may be populated, or not
     })
 
     let queryUrl = new URL(lib.openLibraryAddress)
