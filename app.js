@@ -57,6 +57,11 @@ app
     .use(express.urlencoded({ extended: true }))
     .use(express.json())
 
+    .use((req,res,next) => {
+        log(req.method + '> ' + req.originalUrl, dim)
+        next()
+    })
+
     .use('/', layoutExampleRouter)
     .get('/', (req, res) => { res.redirect('/catalog') })
     .use('/catalog', catalogRouter)

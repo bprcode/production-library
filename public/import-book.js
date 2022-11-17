@@ -24,24 +24,24 @@ async function handleDescriptionToggle (event) {
 }
 
 async function revealModal (event) {
-    // Todo: compile appropriate requests into a parallel Promise.all
-
     // Initialize templates when first needed
-    revealModal.bookTemplate ??= 
-        await fetch('/templates/book_form_body.hbs')
-                .then(response => response.text())
+    if (!revealModal.bookTemplate) {
+        [revealModal.bookTemplate, revealModal.authorTemplate] =
+        await Promise.all([
+            fetch('/templates/book_form_body.hbs')
+                .then(response => response.text()),
 
-    revealModal.renderBookForm ??=
-        Handlebars.compile(revealModal.bookTemplate)
+            fetch('/templates/author_form_body.hbs')
+                .then(response => response.text())  
+        ])
 
-    revealModal.authorTemplate ??=
-        await fetch('/templates/author_form_body.hbs')
-                .then(response => response.text())
+        revealModal.renderBookForm ??=
+            Handlebars.compile(revealModal.bookTemplate)
 
-    revealModal.renderAuthorForm ??=
-        Handlebars.compile(revealModal.authorTemplate)
-
-
+        revealModal.renderAuthorForm ??=
+            Handlebars.compile(revealModal.authorTemplate)
+    }
+    
     const dataset = event.relatedTarget.dataset
 
     const modalBook = el('modal-body-book')
@@ -49,7 +49,7 @@ async function revealModal (event) {
     modalBook.innerHTML = 'Loading...'
 
     try {
-        const [work, coverEd, authorJson] = await Promise.all([
+        const [work, coverEd, authorJson, genres] = await Promise.all([
 
             fetch(
                 lib.workRootAddress + dataset.key + '.json'
@@ -64,28 +64,17 @@ async function revealModal (event) {
                 ? fetch(
                     lib.authorDetailAddress + dataset.firstAuthor + '.json')
                     .then(response => response.json())
-                : {}
+                : {},
+
+            fetch('../genre/json').then(response => response.json())
         ])
 
-        /*
-        const work = await fetch(
-            lib.workRootAddress + dataset.key + '.json'
-            ).then(response => response.json())
-
-        let coverEd = {}
-        if (dataset.editionKey) {
-            coverEd = await fetch(
-                lib.bookDetailAddress + dataset.editionKey + '.json'
-            ).then(response => response.json())
-        }
-
-        let authorJson = {}
-        if (dataset.firstAuthor) {
-            authorJson = await fetch(
-                lib.authorDetailAddress + dataset.firstAuthor + '.json'
-            ).then(response => response.json())
-        }
-        */
+        // Remove already-known genres from the suggestion list:
+        work.subjects =
+        work.subjects.filter(s => !genres.find(g => 
+                g.name.localeCompare(s, undefined, { sensitivity: 'base' })
+                    === 0
+        ))
 
         let parsedName =
             lib.parseName(authorJson.personal_name || authorJson.name)
@@ -97,11 +86,6 @@ async function revealModal (event) {
             dod: lib.parseDate(authorJson.death_date)
         }
 
-        log('dataset:', dataset)
-        log('work object:', work)
-        log('cover edition object:', coverEd)
-        log('first author:', authorJson)
-
         modalBook.innerHTML = revealModal.renderBookForm({
             populate: {
                 title: work.title,
@@ -110,7 +94,12 @@ async function revealModal (event) {
                 isbn: coverEd.isbn_10 || coverEd.isbn_13
                         || dataset.firstIsbn || ''
             },
-            omit_author: true
+            genres: genres,
+            suggestions: work.subjects.map((s,i) => {return {
+                                        suggestion_id: i,
+                                        name: s}}),
+            omit_author: true,
+            condense: true
         })
         modalAuthor.innerHTML = revealModal.renderAuthorForm({
             author: author,
@@ -172,7 +161,6 @@ el('search-button').addEventListener('click', async event => {
         page: 1,
         fields: [
             'key', 'title', 'author_name', 'first_publish_year',
-            'subject',
             'isbn',
             'author_key',
             'cover_edition_key',

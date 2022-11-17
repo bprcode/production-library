@@ -33,6 +33,7 @@ router
     .get('/author/:id', authorController.author_detail)
     .get('/authors', authorController.author_list)
 
+    .get('/genre/json', genreController.genre_json_get)
     .get('/genre/create', genreController.genre_create_get)
     .post('/genre/create', genreController.genre_create_post)
     .get('/genre/delete', genreController.genre_delete_choose)

@@ -10,8 +10,18 @@ Handlebars.registerHelper('error-check', (trouble, name) => {
         return trouble.find(t => t.param === name)?.msg
     return undefined
 })
+
 Handlebars.registerHelper('extract-year', dateString => {
     return dateString?.match(/\d*/)[0]
+})
+
+Handlebars.registerHelper('find-in', (arr, key, value) => {
+    return arr?.find(e => e[key] === value)
+})
+
+Handlebars.registerHelper('delimit-array', (arr, delimiter) => {
+    console.log(arr?.join(delimiter))
+    return arr?.join(delimiter)
 })
 
 export function parseDescription (description) {
