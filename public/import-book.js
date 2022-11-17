@@ -1,45 +1,22 @@
-import * as common from "./import-common.js"
-
-const openLibraryAddress =  `https://openlibrary.org/search.json`
-const bookApiAddress =      `https://openlibrary.org/search/books.json`
-const bookDetailAddress =   `https://openlibrary.org/books/`
-const authorDetailAddress = `https://openlibrary.org/authors/`
-const workRootAddress =     `https://openlibrary.org`
+import * as lib from "./import-common.js"
 
 // Convenience shorthands
 const log = console.log.bind(console)
 const el = document.getElementById.bind(document)
 
-log('imported k=', common.k) 
-
 const listTemplate = el('list-template')
 const renderList = Handlebars.compile(listTemplate.innerHTML.trim())
-
-Handlebars.registerHelper('error-check', (trouble, name) => {
-    if (trouble)
-        return trouble.find(t => t.param === name)?.msg
-    return undefined
-})
-Handlebars.registerHelper('extract-year', dateString => {
-    return dateString?.match(/\d*/)[0]
-})
-
-function parseDescription (description) {
-    if (!description) { return 'No description available.' }
-    if (typeof description === 'string') { return description }
-    return description.value || 'Unrecognized format.'
-}
 
 async function handleDescriptionToggle (event) {
     const paragraph = event.target.children[1]
     if (paragraph.textContent !== 'Loading...') { return }
 
     try {
-        const response = await fetch(workRootAddress
-                                    + paragraph.dataset.key + '.json')
-        const json = await response.json()
-        log(json)
-        paragraph.textContent = parseDescription(json.description)
+        const json = await fetch(lib.workRootAddress
+                                + paragraph.dataset.key + '.json')
+                                .then(response => response.json())
+
+        paragraph.textContent = lib.parseDescription(json.description)
 
     } catch(e) {
         return paragraph.textContent = 'Unable to retrieve record.'
@@ -51,13 +28,15 @@ async function revealModal (event) {
 
     // Initialize templates when first needed
     revealModal.bookTemplate ??= 
-        await (await fetch('/templates/book_form_body.hbs')).text()
+        await fetch('/templates/book_form_body.hbs')
+                .then(response => response.text())
 
     revealModal.renderBookForm ??=
         Handlebars.compile(revealModal.bookTemplate)
 
     revealModal.authorTemplate ??=
-        await (await fetch('/templates/author_form_body.hbs')).text()
+        await fetch('/templates/author_form_body.hbs')
+                .then(response => response.text())
 
     revealModal.renderAuthorForm ??=
         Handlebars.compile(revealModal.authorTemplate)
@@ -70,28 +49,38 @@ async function revealModal (event) {
     modalBook.innerHTML = 'Loading...'
 
     try {
-        const work = await (await fetch(
-            workRootAddress + dataset.key + '.json'
-            )).json()
+        const work = await fetch(
+            lib.workRootAddress + dataset.key + '.json'
+            ).then(response => response.json())
 
         let coverEd = {}
         if (dataset.editionKey) {
-            coverEd = await (await fetch(
-                bookDetailAddress + dataset.editionKey + '.json'
-            )).json()
+            coverEd = await fetch(
+                lib.bookDetailAddress + dataset.editionKey + '.json'
+            ).then(response => response.json())
         }
 
-        let author = {}
+        let authorJson = {}
         if (dataset.firstAuthor) {
-            author = await (await fetch(
-                authorDetailAddress + dataset.firstAuthor + '.json'
-            )).json()
+            authorJson = await fetch(
+                lib.authorDetailAddress + dataset.firstAuthor + '.json'
+            ).then(response => response.json())
+        }
+
+        let parsedName =
+            lib.parseName(authorJson.personal_name || authorJson.name)
+        const author = {
+            first_name: parsedName.first,
+            last_name: parsedName.last,
+            bio: lib.parseBio(authorJson),
+            dob: lib.parseDate(authorJson.birth_date),
+            dod: lib.parseDate(authorJson.death_date)
         }
 
         log('dataset:', dataset)
         log('work object:', work)
         log('cover edition object:', coverEd)
-        log('first author:', author)
+        log('first author:', authorJson)
 
         modalBook.innerHTML = revealModal.renderBookForm({
             populate: {
@@ -104,7 +93,7 @@ async function revealModal (event) {
             omit_author: true
         })
         modalAuthor.innerHTML = revealModal.renderAuthorForm({
-            author: {last_name: 'Placeholder author'},
+            author: author,
             collapse: true
         })
 
@@ -161,12 +150,13 @@ el('search-button').addEventListener('click', async event => {
         title: query,
         limit: 20,
         page: 1,
-        /*fields: [
-            'key', 'title', 'author_name', 'first_publish_year', 'subject',
-             'author_key',
-             'cover_edition_key',
+        fields: [
+            'key', 'title', 'author_name', 'first_publish_year',
+            'subject',
+            'isbn',
+            'author_key',
+            'cover_edition_key',
         ]
-        */
         // possibly take cover_edition_key by preference?
         // lots of isbns available, suggest taking one from the particular
         // edition preferred, not just the first one in the isbn arary
@@ -180,7 +170,7 @@ el('search-button').addEventListener('click', async event => {
         // such as isbn_10 or isbn_13, which may be populated, or not
     })
 
-    let queryUrl = new URL(openLibraryAddress)
+    let queryUrl = new URL(lib.openLibraryAddress)
     queryUrl.search = searchParams
 
     const searchButton = el('search-button')
@@ -191,8 +181,8 @@ el('search-button').addEventListener('click', async event => {
     searchSpinner.classList.remove('visually-hidden')
     magnifyingGlass.classList.add('d-none')
 
-    const response = await fetch(queryUrl)
-    const json = await response.json()
+    const json = await fetch(queryUrl)
+                        .then(response => response.json())
 
     log(json)
 
