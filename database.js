@@ -47,8 +47,8 @@ async function snipTimes (source) {
 }
 
 // General model for tables
-// Note: Constructor values are an injection risk and should not
-// be based on user input.
+// Note: Constructor values are an injection risk
+// and should not be based on user input.
 class Model {
     constructor (properties) {
         Object.assign(this, {

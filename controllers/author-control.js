@@ -5,12 +5,14 @@ const { authors, books, snipTimes } = require('../database.js')
 const authorNameValidator =
     body('last_name')
         .custom(async (lname, { req }) => {
-            if (await authors.find({
-                    first_name: req.body.first_name, last_name: lname
-                }))
-                throw new Error(`Author already created`)
+            const priorEntry = await authors.find({
+                first_name: req.body.first_name, last_name: lname
+            })
+            if (priorEntry) {
+                throw new Error(`Author already recorded: #`
+                    + priorEntry[0].author_id)
+            }
         })
-        .withMessage('Author already in catalog.')
 
 const preventNameCollision =
     body('last_name')
@@ -160,7 +162,7 @@ exports.author_json_post = [
             throw e
         }
 
-        res.status(200).send(result)
+        res.status(201).send(result[0])
     }
 ]
 exports.author_update_choose = async (req, res) => {

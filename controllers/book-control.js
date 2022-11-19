@@ -5,11 +5,14 @@ const { books, justBooks, authors, genres, bookInstances, genresByBook,
         = require('../database.js')
 
 const preventTitleCollision =
-    body('title', 'Title already in catalog')
+    body('title')
         .trim()
         .custom(async value => {
-            if (await books.find({ title: value }))
-                throw new Error('Title already in catalog.')
+            const priorEntry = await books.find({ title: value })
+            if (priorEntry) {
+                throw new Error(`Book already recorded: #`
+                    + priorEntry[0].book_id)
+            }
         })
 
 const onlySelfTitleCollision =
@@ -36,9 +39,8 @@ const bookValidators = [
             if ( !(await authors.find({ author_id: value })) )
                 throw new Error('Invalid author.')
         }),
-    body('isbn', 'ISBN required')
-        .trim()
-        .isLength({ min: 1 }),
+    body('isbn')
+        .trim(),
     body('summary')
         .optional({ checkFalsy: true }),
     body()
@@ -65,7 +67,7 @@ const bookIdValidator =
     param('id', 'Invalid book ID.')
         .trim()
         .custom(async value => {
-            if ( ! await books.find({ book_id: value }))
+            if (!await books.find({ book_id: value }))
                 throw new Error(`Book ID not found.`)
         })
 
@@ -133,7 +135,7 @@ exports.book_create_post = [
 
         const item = {
             title: req.body.title,
-            isbn: req.body.isbn,
+            isbn: req.body.isbn || null,
             author_id: req.body.author_id,
             summary: req.body.summary || null
         }
@@ -212,7 +214,7 @@ exports.book_update_post = [
 
         const item = {
             title: req.body.title,
-            isbn: req.body.isbn,
+            isbn: req.body.isbn || null,
             author_id: req.body.author_id,
             summary: req.body.summary || null
         }
@@ -272,7 +274,7 @@ exports.book_delete_get = [
     bookIdValidator,
     async (req, res) => {
         const trouble = validationResult(req)
-        if ( ! trouble.isEmpty() ) {
+        if (!trouble.isEmpty() ) {
             log('got trouble>>', yellow)
             log(trouble.array())
             return res.redirect(`/catalog/book/delete`)
@@ -295,8 +297,31 @@ exports.book_delete_post = [
     }
 ]
 exports.book_json_post = [
+    preventTitleCollision,
+    ...bookValidators,
     async (req, res) => {
-        res.send({ placeholder: 'book post' })
+
+        const trouble = validationResult(req)
+        if (!trouble.isEmpty()) {
+            return res.status(400).send({ trouble: trouble.array() })
+        }
+
+        const item = {
+            title: req.body.title,
+            isbn: req.body.isbn || null,
+            author_id: req.body.author_id,
+            summary: req.body.summary || null
+        }
+
+        // Having passed validation, create the new book.
+        const result = await justBooks.insert(item)
+
+        res.status(201).send(result[0])
+
+        // Also need to repeatedly insert on genre/book junction table
+        log('acted on request:')
+        log(req.body)
+        log('DEBUG >> placeholder: need to insert genre/book associations')
     }
 ]
 exports.book_import_get = (req, res) => {

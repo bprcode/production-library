@@ -1,4 +1,4 @@
-<form class="mb-4 bg-warning" id="book-form" action="{{form_action}}" method="POST">
+<form class="mb-4" id="book-form" action="{{form_action}}" method="POST">
 
     <div class="row mb-3">
         <label for="title-id" class="col-form-label col-sm-3 required-star">Title</label>
@@ -10,7 +10,7 @@
 
     {{#unless omit_author}}
     <div class="row mb-3">
-        <label for="select-author-id" class="col-form-label col-sm-3">Author</label>
+        <label for="select-author-id" class="col-form-label col-sm-3 required-star">Author</label>
         <div class="col input-group-has-validation">
             <select name="author_id" id="select-author-id" class="form-select {{#if (error-check trouble 'author_id')}}is-invalid{{/if}}">
                 <option>Select author...</option>

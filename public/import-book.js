@@ -70,11 +70,14 @@ async function revealModal (event) {
         ])
 
         // Remove already-known genres from the suggestion list:
-        work.subjects =
-        work.subjects.filter(s => !genres.find(g => 
+        if (work.subjects) {
+            work.subjects = work.subjects.filter(
+                s => !genres.find(g => 
                 g.name.localeCompare(s, undefined, { sensitivity: 'base' })
-                    === 0
-        ))
+                    === 0))
+        } else {
+            work.subjects = []
+        }
 
         let parsedName =
             lib.parseName(authorJson.personal_name || authorJson.name)
@@ -86,6 +89,11 @@ async function revealModal (event) {
             dod: lib.parseDate(authorJson.death_date)
         }
 
+        // Store retrieved values in case they are needed for re-rendering:
+        revealModal.lastGenres = genres
+        revealModal.lastSuggestions =
+            work.subjects.map((s,i) => ({ suggestion_id: i, name: s }))
+
         modalBook.innerHTML = revealModal.renderBookForm({
             populate: {
                 title: work.title,
@@ -94,10 +102,8 @@ async function revealModal (event) {
                 isbn: coverEd.isbn_10 || coverEd.isbn_13
                         || dataset.firstIsbn || ''
             },
-            genres: genres,
-            suggestions: work.subjects.map((s,i) => {return {
-                                        suggestion_id: i,
-                                        name: s}}),
+            genres: revealModal.lastGenres,
+            suggestions: revealModal.lastSuggestions,
             omit_author: true,
             condense: true
         })
@@ -114,6 +120,100 @@ async function revealModal (event) {
 
 // Modal import click handler: Attempt to import data
 el('import-button-id').addEventListener('click', async event => {
+    const authorInput = Object.fromEntries(
+                    new FormData(el('author-form')).entries())
+
+    const bookInput = Object.fromEntries(
+                    new FormData(el('book-form')).entries())
+
+    el('import-button-id').setAttribute('disabled', 'true')
+    el('import-spinner').classList.remove('visually-hidden')
+
+    // Begin import process:
+    // Create author -> create book -> create genres -> create associations
+    let authorResult
+    let bookResult
+    let genreResult
+
+    try {
+        // Attempt to create author
+        authorResult = await fetch('../author/json', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(authorInput)
+        }).then(response => response.json())
+
+        // If creation failed because the author is already recorded,
+        // use the existing author_id and proceed:
+        if (authorResult.trouble
+            && authorResult.trouble[0].msg.startsWith(
+                'Author already recorded')) {
+
+            const previousID = authorResult.trouble[0].msg.split('#')[1]
+            authorResult = { author_id: previousID }
+            log('Proceeding with artificial result.')
+
+        // If creation failed for another reason,
+        // abort and re-render the form.
+        } else if (authorResult.trouble) {
+            throw new Error('Error recording author')
+        }
+
+        log(authorResult)
+
+        if (authorResult.author_id) {
+            log('Proceeding with author_id: ', authorResult.author_id)
+        }
+
+        // Attempt to create book
+        bookInput.author_id = authorResult.author_id
+        bookResult = await fetch('./json', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(bookInput)
+        }).then(response => response.json())
+
+        if (bookResult.trouble) {
+            throw new Error('Error recording book')
+        }
+
+        log('No trouble encountered. Database accepted request with result:')
+        log(bookResult)
+
+        log('DEBUG placeholder -- handle genres')
+        location.href = bookResult.book_url
+
+    } catch (e) {
+        log(e)
+        log('Error encountered. Rendering bounceback.')
+        log('Author trouble is:')
+        log(authorResult?.trouble)
+        log('Book trouble is:')
+        log(bookResult?.trouble)
+
+        el('modal-body-book').innerHTML = revealModal.renderBookForm({
+            populate: bookInput,
+            genres: revealModal.lastGenres,
+            suggestions: revealModal.lastSuggestions,
+            omit_author: true,
+            condense: true,
+            trouble: bookResult?.trouble
+        })
+        el('modal-body-author').innerHTML = revealModal.renderAuthorForm({
+            author: authorInput,
+            collapse: true,
+            trouble: authorResult?.trouble
+        })
+
+    } finally {
+        el('import-button-id').removeAttribute('disabled')
+        el('import-spinner').classList.add('visually-hidden')
+    }
+
     log('Todo: await create author, if successful, use rv to proceed.')
     log('Todo: await create book, if successful, use rv to proceed.')
     log('Todo: await create genres, if successful, use rvs to proceed.')
