@@ -67,7 +67,7 @@ el('import-button-id').addEventListener('click', async event => {
         el('import-button-id').setAttribute('disabled', 'true')
         el('import-spinner').classList.remove('visually-hidden')
 
-        const json = await fetch('./json', {
+        const result = await fetch('./json', {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -78,14 +78,14 @@ el('import-button-id').addEventListener('click', async event => {
         el('import-button-id').removeAttribute('disabled')
         el('import-spinner').classList.add('visually-hidden')
 
-        if (json.trouble)
+        if (result.trouble)
             return el('modal-body-id').innerHTML =
                 revealModal.renderTemplate({
                     author: input,
-                    trouble: json.trouble
+                    trouble: result.trouble
                 })
 
-        location.href = json[0].author_url // Redirect to new author page.
+        location.href = result.author_url // Redirect to new author page.
 
     } catch (e) {
         return log('Unable to connect to endpoint.')
