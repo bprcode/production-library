@@ -71,10 +71,17 @@ export function parseName (fullName) {
 
     const split = fullName.split(' ')
     
-    return {
+    let parsed = {
         first: split.slice(0, -1).join(' '),
         last: split.slice(-1)[0]
     }
+
+    if (!parsed.first) {
+        parsed.first = parsed.last
+        parsed.last = null
+    }
+
+    return parsed
 }
 
 export async function retrieveBio (url) {

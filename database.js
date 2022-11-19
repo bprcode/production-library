@@ -247,7 +247,7 @@ class Model {
 
 // Instantiate table models
 const authors = new Model({
-    schema: 'lib', table: 'authors', order: 'last_name' })
+    schema: 'lib', table: 'authors', order: 'last_name, first_name' })
 // Create books as a junction table (lib.books + lib.authors)
 const books = new Model({
     schema: 'lib', table: 'books', order: 'title' })

@@ -129,11 +129,21 @@ el('import-button-id').addEventListener('click', async event => {
     el('import-button-id').setAttribute('disabled', 'true')
     el('import-spinner').classList.remove('visually-hidden')
 
+    log('DEBUG: acting on bookInput >>')
+    log(bookInput)
+
     // Begin import process:
     // Create author -> create book -> create genres -> create associations
     let authorResult
     let bookResult
-    let genreResult
+    let genreChecks =
+        Object.keys(bookInput)
+            .filter(k => k.startsWith('genre'))
+            .map(k => ({ genre_id: parseInt(k.split('-')[1]) }) )
+    let suggestionChecks =
+        Object.keys(bookInput)
+            .filter(k => k.startsWith('suggestion'))
+            .map(k => ({ suggestion_id: parseInt(k.split('-')[1]) }) )
 
     try {
         // Attempt to create author
@@ -153,18 +163,11 @@ el('import-button-id').addEventListener('click', async event => {
 
             const previousID = authorResult.trouble[0].msg.split('#')[1]
             authorResult = { author_id: previousID }
-            log('Proceeding with artificial result.')
 
         // If creation failed for another reason,
         // abort and re-render the form.
         } else if (authorResult.trouble) {
             throw new Error('Error recording author')
-        }
-
-        log(authorResult)
-
-        if (authorResult.author_id) {
-            log('Proceeding with author_id: ', authorResult.author_id)
         }
 
         // Attempt to create book
@@ -181,24 +184,43 @@ el('import-button-id').addEventListener('click', async event => {
             throw new Error('Error recording book')
         }
 
-        log('No trouble encountered. Database accepted request with result:')
-        log(bookResult)
+        const selectedSuggestions =
+            Object.entries(bookInput)
+                .filter(([k,v]) => k.startsWith('suggestion'))
+                .map(([k,v]) => v)
 
-        log('DEBUG placeholder -- handle genres')
+        // Attempt to create suggested genres
+        const createdSuggestions = await Promise.all([
+            ...selectedSuggestions.map(s => fetch('../genre/json', {
+                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST',
+                    body: JSON.stringify({ name: s })
+                }).then(response => response.json()))
+        ])
+
+        // Attempt to associate genres
+        const associatedGenres = genreChecks.concat(createdSuggestions)
+        const what = await Promise.all(associatedGenres.map(g =>
+            fetch('../genre/associate/json', {
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                body: JSON.stringify({
+                    book_id: bookResult.book_id,
+                    genre_id: g.genre_id
+                })
+            }).then(response => response.json())))
+
         location.href = bookResult.book_url
 
     } catch (e) {
         log(e)
-        log('Error encountered. Rendering bounceback.')
-        log('Author trouble is:')
-        log(authorResult?.trouble)
-        log('Book trouble is:')
-        log(bookResult?.trouble)
 
         el('modal-body-book').innerHTML = revealModal.renderBookForm({
             populate: bookInput,
             genres: revealModal.lastGenres,
+            genreChecks: genreChecks,
             suggestions: revealModal.lastSuggestions,
+            suggestionChecks: suggestionChecks,
             omit_author: true,
             condense: true,
             trouble: bookResult?.trouble
@@ -213,11 +235,6 @@ el('import-button-id').addEventListener('click', async event => {
         el('import-button-id').removeAttribute('disabled')
         el('import-spinner').classList.add('visually-hidden')
     }
-
-    log('Todo: await create author, if successful, use rv to proceed.')
-    log('Todo: await create book, if successful, use rv to proceed.')
-    log('Todo: await create genres, if successful, use rvs to proceed.')
-    log('Todo: create book/genre associations. No failover needed.')
 })
 
 el('input-modal').addEventListener('show.bs.modal', revealModal)

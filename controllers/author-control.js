@@ -3,11 +3,11 @@ const { body, param, validationResult } = require('express-validator')
 const { authors, books, snipTimes } = require('../database.js')
 
 const authorNameValidator =
-    body('last_name')
-        .custom(async (lname, { req }) => {
-            const priorEntry = await authors.find({
-                first_name: req.body.first_name, last_name: lname
-            })
+    body('first_name')
+        .custom(async (fname, { req }) => {
+            const search = { first_name: fname,
+                    last_name: req.body.last_name || null }
+            const priorEntry = await authors.find(search)
             if (priorEntry) {
                 throw new Error(`Author already recorded: #`
                     + priorEntry[0].author_id)
@@ -15,11 +15,11 @@ const authorNameValidator =
         })
 
 const preventNameCollision =
-    body('last_name')
-        .custom(async (lname, { req }) => {
-            const result = await authors.find({
-                first_name: req.body.first_name, last_name: lname
-            })
+    body('first_name')
+        .custom(async (fname, { req }) => {
+            const search = { first_name: fname,
+                last_name: req.body.last_name || null }
+            const result = await authors.find(search)
 
             if (result &&
                 String(result[0].author_id) !== String(req.params.id)) {
@@ -34,9 +34,7 @@ const authorValidators = [
         .isLength({ min: 1 })
         .withMessage('First name required'),
     body('last_name')
-        .trim()
-        .isLength({ min: 1})
-        .withMessage('Last name required'),
+        .trim(),
     body('dob', 'Invalid date')
         .optional({ checkFalsy: true })
         .trim(),
@@ -110,7 +108,7 @@ exports.author_create_post = [
         const trouble = validationResult(req)
         const item = {
             first_name: req.body.first_name,
-            last_name: req.body.last_name,
+            last_name: req.body.last_name || null,
             dob: req.body.dob || null,
             dod: req.body.dod || null,
             bio: req.body.bio || null
@@ -152,7 +150,7 @@ exports.author_json_post = [
         try {
             result = await authors.insert({
                 first_name: req.body.first_name,
-                last_name: req.body.last_name,
+                last_name: req.body.last_name || null,
                 dob: req.body.dob || null,
                 dod: req.body.dod || null,
                 bio: req.body.bio || null
@@ -226,7 +224,7 @@ exports.author_update_post = [
     async (req, res) => {
         const author = {
             first_name: req.body.first_name,
-            last_name: req.body.last_name,
+            last_name: req.body.last_name || null,
             dob: req.body.dob || null,
             dod: req.body.dod || null,
             bio: req.body.bio || null

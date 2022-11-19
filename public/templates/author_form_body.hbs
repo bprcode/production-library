@@ -1,6 +1,6 @@
 <form class="mb-4" id="author-form" action="{{form_action}}" method="POST">
     <div class="row mb-3">
-        <label for="first-id" class="col-form-label col-sm-4">First name</label>
+        <label for="first-id" class="required-star col-form-label col-sm-4">First name</label>
         <div class="col input-group-has-validation">
             <input class="form-control {{#if (error-check trouble 'first_name')}}is-invalid{{/if}}" id="first-id" name="first_name" type="text" value="{{author.first_name}}">
             <div class="invalid-feedback">{{error-check trouble 'first_name'}}</div>
@@ -8,9 +8,9 @@
     </div>
 
     <div class="row mb-3">
-        <label for="last-id" class="required-star col-form-label col-sm-4">Last name</label>
+        <label for="last-id" class="col-form-label col-sm-4">Last name</label>
         <div class="col input-group-has-validation">
-            <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text" value="{{author.last_name}}" required>
+            <input class="form-control {{#if (error-check trouble 'last_name')}}is-invalid{{/if}}" id="last-id" name="last_name" type="text" value="{{author.last_name}}">
             <div class="invalid-feedback">{{error-check trouble 'last_name'}}</div>
         </div>
     </div>

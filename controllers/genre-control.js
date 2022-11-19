@@ -1,6 +1,8 @@
 require('express-async-errors')
-const { genres, booksByGenre, books } = require('../database.js')
-const { body, param, validationResult } = require('express-validator')
+const { genres, booksByGenre, justBooks, bookGenres }
+    = require('../database.js')
+const { body, param, validationResult }
+    = require('express-validator')
 
 async function alreadyHaveGenre (name) {
     if (await genres.find({ name: name }))
@@ -10,7 +12,7 @@ async function alreadyHaveGenre (name) {
 const genreIdValidator =
     param('id')
         .custom(async id => {
-            if ( ! await genres.find({ genre_id: id }) )
+            if (!await genres.find({ genre_id: id }) )
                 throw new Error(`Invalid genre ID.`)
         })
         .withMessage('Genre ID not found.')
@@ -180,8 +182,55 @@ exports.genre_delete_post = [
     }
 ]
 exports.genre_json_post = [
+    ...genreCreateValidators,
     async (req, res) => {
-        res.send({ placeholder: 'genre post' })
+        const trouble = validationResult(req)
+
+        if (!trouble.isEmpty()) {
+            return res.status(400).send({ trouble: trouble.array() })
+        }
+        try {
+            const result = await genres.insert({ name: req.body.name })
+            res.status(201).send(result[0])
+
+        } catch (e) {
+            log.err(e.message)
+            throw e
+        }
+    }
+]
+exports.associate_json_post = [
+    body('genre_id')
+        .custom(async id => {
+            if (!await genres.find({ genre_id: id }) )
+                throw new Error(`Invalid genre ID.`)
+        })
+        .withMessage('Genre ID not found.'),
+    body('book_id')
+        .custom(async id => {
+            if (!await justBooks.find({ book_id: id }) )
+                throw new Error(`Invalid book ID.`)
+        })
+        .withMessage('Book ID not found.'),
+    async (req, res) => {
+        const trouble = validationResult(req)
+
+        if (!trouble.isEmpty()) {
+            return res.status(400).send({ trouble: trouble.array() })
+        }
+        try {
+            const result = await bookGenres.insert({
+                book_id: req.body.book_id,
+                genre_id: req.body.genre_id
+            })
+            if (result)
+                res.status(201).send(result[0])
+
+        } catch (e) {
+            log.err(e.message)
+            throw e
+        }
+
     }
 ]
 exports.genre_json_get = async (req, res) => {

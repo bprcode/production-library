@@ -40,7 +40,7 @@
     </div>
 
 
-    {{#if condense}}<details><summary class="text-muted"><small>Categories</small></summary>{{/if}}
+    {{#if condense}}<details><summary><small>Categories</small></summary>{{/if}}
     <div class="row mb-3">
         <label for="genre-checkboxes" class="col-form-label col-sm-3">Genres</label>
         <div class="col d-flex flex-wrap justify-content-between">
@@ -59,7 +59,7 @@
         <div class="col d-flex flex-wrap justify-content-between">
             {{#each suggestions}}
             <div class="form-check min-tiny w-100">
-                <input type="checkbox" class="form-check-input" name="suggestion-{{suggestion_id}}" id="scb-{{suggestion_id}}">
+                <input type="checkbox" class="form-check-input" name="suggestion-{{suggestion_id}}" id="scb-{{suggestion_id}}" value="{{name}}" {{#if (find-in ../suggestionChecks 'suggestion_id' suggestion_id)}}checked{{/if}}>
                 <label for="scb-{{suggestion_id}}">{{name}}</label>
             </div>
             {{/each}}

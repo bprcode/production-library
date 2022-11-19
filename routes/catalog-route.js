@@ -34,6 +34,7 @@ router
     .get('/author/:id', authorController.author_detail)
     .get('/authors', authorController.author_list)
 
+    .post('/genre/associate/json', genreController.associate_json_post)
     .get('/genre/json', genreController.genre_json_get)
     .post('/genre/json', genreController.genre_json_post)
     .get('/genre/create', genreController.genre_create_get)
