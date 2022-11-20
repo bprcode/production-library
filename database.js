@@ -2,6 +2,13 @@ const { Pool } = require('pg')
 const pool = new Pool()
 const format = require('pg-format')
 require('@bprcode/handy')
+let dbLog = log
+if (process.env.NODE_ENV === 'production') {
+    dbLog('Database driver operating in production mode.', blue)
+    dbLog = x => {} // Silence database logging in production.
+} else {
+    dbLog('Database driver operating in development mode.', yellow)
+}
 
 // Expose general query method
 function query (...etc)  {
@@ -79,7 +86,7 @@ class WhereClause {
 
     get values () {
         this._values.length
-            && log(' values: ', pink, this._values.join(', '), green)
+            && dbLog(' values: ', pink, this._values.join(', '), green)
         return this._values
     }
 
@@ -110,7 +117,7 @@ class Model {
         const sql = `SELECT count(*) FROM ${this.relation}`
         const where = WhereClause.from(conditions)
 
-        log(sql, green)
+        dbLog(sql, green)
         return (await queryResult(sql + where, where.values))[0].count
     }
 
@@ -122,7 +129,7 @@ class Model {
         const sql = `DELETE FROM ${this.relation} ${where}`
                         + ` RETURNING *`
         
-        log(sql, pink)
+        dbLog(sql, pink)
         return queryResult(sql, where.values)
     }
 
@@ -138,10 +145,10 @@ class Model {
                         .join(', ')
                     + `) RETURNING *`
 
-        log(dirty, yellow)
+        dbLog(dirty, yellow)
         clean = format(dirty,
                         ...Object.keys(item))
-        log(clean, blue)
+        dbLog(clean, blue)
 
         return queryResult(clean, Object.values(item))
     }
@@ -171,8 +178,8 @@ class Model {
 
         clean = format(dirty, ...Object.keys(replace))
 
-        log(dirty, yellow)
-        log(clean, blue)
+        dbLog(dirty, yellow)
+        dbLog(clean, blue)
 
         return queryResult(clean,
             [...whereClause.values, ...Object.values(replace)])
@@ -190,7 +197,7 @@ class Model {
 
         if (etc.length === 0) {
             dirty += this.orderClause
-            log(dirty, yellow)
+            dbLog(dirty, yellow)
             return queryResult(dirty) // Nothing to sanitize
         }
         // Otherwise...
@@ -214,7 +221,7 @@ class Model {
                         ...etc, // column names
                         this.order)
                         
-        log(clean, blue)
+        dbLog(clean, blue)
 
         return queryResult(clean, where?.values)
     }
@@ -283,13 +290,8 @@ async function bookStatusList () {
                     .map(e => e.unnest)
 }
 
-// Check the active database connections (exposes query text)
-function getStatus () {
-    return query('SELECT * FROM get_status()')
-}
-
 module.exports = {
-    query, queryResult, getStatus, snipTimes,
+    query, queryResult, snipTimes,
     books, justBooks, authors, genres,
     bookInstances, inventory, booksByGenre, genresByBook, bookGenres,
     bookStatusList

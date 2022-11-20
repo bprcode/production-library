@@ -46,9 +46,6 @@ hbs.registerHelper('error-check', (trouble, name) => {
 })
 
 // Load routers
-const layoutExampleRouter = require('./routes/layout-examples.js')
-const dbRouter = require('./routes/db-route.js')
-const libRouter = require('./routes/library-route.js')
 const catalogRouter = require('./routes/catalog-route.js')
 
 app
@@ -57,11 +54,8 @@ app
     .use(express.urlencoded({ extended: true }))
     .use(express.json())
 
-    .use('/', layoutExampleRouter)
     .get('/', (req, res) => { res.redirect('/catalog') })
     .use('/catalog', catalogRouter)
-    .use('/db', dbRouter)
-    .use('/lib', libRouter)
 
     .use(express.static(path.join(__dirname, 'public')))
 
