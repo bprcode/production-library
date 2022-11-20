@@ -1,6 +1,7 @@
 const { Pool } = require('pg')
 const pool = new Pool()
 const format = require('pg-format')
+require('@bprcode/handy')
 
 // Expose general query method
 function query (...etc)  {
@@ -46,6 +47,47 @@ async function snipTimes (source) {
     return result
 }
 
+// A class which parses an object into a SQL WHERE statement,
+// accounting for nulls (IS NULL) and treating other properties as
+// case-insensitive ILIKE comparisons.
+class WhereClause {
+
+    clause = ''
+    _values = []
+
+    constructor (conditions) {
+        if (!conditions) { return }
+        
+        let index = 1
+        const dirty = ' WHERE '
+                    + Object.keys(conditions)
+                        .map(k =>
+                            conditions[k] === null
+                                ? '%I IS NULL'
+                                : '%I::text ILIKE $' + (index++))
+                        .join(' AND ')
+
+        this.clause = format(dirty, ...Object.keys(conditions))
+        this._values = Object.values(conditions)
+                        .filter(v => v !== null)
+                        .map(v => String(v))
+    }
+
+    toString () {
+        return this.clause
+    }
+
+    get values () {
+        this._values.length
+            && log(' values: ', pink, this._values.join(', '), green)
+        return this._values
+    }
+
+    static from (conditions) {
+        return new WhereClause(conditions)
+    }
+}
+
 // General model for tables
 // Note: Constructor values are an injection risk
 // and should not be based on user input.
@@ -65,50 +107,29 @@ class Model {
     }
 
     async count (conditions) {
-        let clean = ``
-        let dirty = `SELECT count(*) FROM ${this.relation}`
+        const sql = `SELECT count(*) FROM ${this.relation}`
+        const where = WhereClause.from(conditions)
 
-        if (!conditions) {    // Nothing to format
-            log(dirty, green)
-            return (await queryResult(dirty))[0].count
-        }
-        // Otherwise...
-        dirty += ` WHERE `
-                    +Object.keys(conditions)
-                        .map((_, i) => `%I = $` + (i+1))
-                        .join(` AND `)
-
-        clean = format(dirty, ...Object.keys(conditions))
-
-        log(dirty, yellow)
-        log(clean, blue)
-
-        return (await queryResult(clean, Object.values(conditions)))[0].count
+        log(sql, green)
+        return (await queryResult(sql + where, where.values))[0].count
     }
 
-    delete (where) {
-        if ( !where )
-            throw new Error(`No where parameters specified.`)
+    delete (conditions) {
+        if (!conditions)
+            throw new Error(`No WHERE-parameters specified for DELETE.`)
 
-        let clean = ``
-        let dirty = `DELETE FROM ${this.relation} WHERE ` +
-                    Array(Reflect.ownKeys(where).length)
-                        .fill('%I = $')
-                        .map((v,i) => v + (i+1))
-                        .join(' AND ')
+        const where = WhereClause.from(conditions)
+        const sql = `DELETE FROM ${this.relation} ${where}`
                         + ` RETURNING *`
-
-        log(dirty, yellow)
-        clean = format(dirty, ...Reflect.ownKeys(where))
-        log(clean, blue)
-
-        return queryResult(clean, Object.values(where))
+        
+        log(sql, pink)
+        return queryResult(sql, where.values)
     }
 
     insert (item) {
         let clean = ``
         let dirty = `INSERT INTO ${this.relation} (` +
-                    Array(Reflect.ownKeys(item).length)
+                    Array(Object.keys(item).length)
                         .fill('%I')
                         .join(', ')
                     + `) VALUES (`
@@ -135,32 +156,26 @@ class Model {
     update (replace, where) {
         let clean = ``
         let dirty = `UPDATE ${this.relation} SET `
-        let i = 1 // SQL substitution index
+        const whereClause = WhereClause.from(where)
+        // Where-clause indices come first,
+        // followed by replace-value indices:
+        let i = whereClause.values.length + 1
 
         dirty +=
             Object.keys(replace)
                 .map(_ => `%I = $` + (i++))
                 .join(', ')
         
-        if (where) {
-            dirty += ' WHERE '
-            dirty +=
-                Object.keys(where)
-                    .map(_ => `%I::text ILIKE $` + (i++))
-                    .join(' AND ')
-        }
-
+        dirty += whereClause
         dirty += ` RETURNING *`
 
-        clean = format(dirty,
-                    ...Object.keys(replace),
-                    ...Object.keys(where))
+        clean = format(dirty, ...Object.keys(replace))
 
         log(dirty, yellow)
         log(clean, blue)
 
         return queryResult(clean,
-            [...Object.values(replace), ...Object.values(where)])
+            [...whereClause.values, ...Object.values(replace)])
     }
 
     /**
@@ -171,6 +186,7 @@ class Model {
     find (...etc) {
         let clean = ``
         let dirty = `SELECT * FROM ${this.relation}`
+        let where = null
 
         if (etc.length === 0) {
             dirty += this.orderClause
@@ -178,9 +194,8 @@ class Model {
             return queryResult(dirty) // Nothing to sanitize
         }
         // Otherwise...
-        let where = null
         if (typeof etc.at(-1) === 'object') {
-            where = etc.at(-1)
+            where = WhereClause.from(etc.at(-1))
             etc = etc.slice(0, -1)
         }
 
@@ -192,28 +207,16 @@ class Model {
                     + ` FROM ${this.relation}`
         }
 
-        if (where) {
-            dirty += ` WHERE `
-                        +Object.keys(where)
-                            .map((_, i) => `%I::text ILIKE $` + (i+1))
-                            .join(` AND `)
-                        // %I::text ILIKE $1 AND %I::text ILIKE $2...
-        } else {
-            where = {} // Use blank object for easier formatting
-        }
-
+        dirty += where ?? ''
         dirty += this.orderClause
 
-        
         clean = format(dirty,
                         ...etc, // column names
-                        ...Object.keys(where), // where-columns
                         this.order)
                         
-        log(dirty, yellow)                        
         log(clean, blue)
 
-        return queryResult(clean, Object.values(where))
+        return queryResult(clean, where?.values)
     }
 
     join (other, key) {
@@ -280,61 +283,13 @@ async function bookStatusList () {
                     .map(e => e.unnest)
 }
 
-// Data model for cd.members -- not used in library project
-const members = {
-    async find ( memid ) {
-        memid = parseInt(memid)
-        if (isNaN(memid))
-            throw new Error('Invalid format for field: memid')
-
-        const result = await query(
-            'SELECT * FROM cd.members WHERE memid = $1',
-            [memid])
-
-        if (result.rows[0])
-            return result
-        else
-            throw new Error(`Record ${memid} not found.`)
-    }
-}
-
-// General library object -- not used much
-const library = {
-    async allBooks () {
-        const result = await query({
-            text:
-            'select full_name, title, summary, isbn, author_url, book_url, lifespan::text '
-            + ' from lib.books b join lib.authors a'
-            + ' on a.author_id = b.author_id'
-            + ' order by title',
-            rowMode: 'array'
-        })
-        if (!result.rows[0])
-            throw new Error('Unable to retrieve list of books.')
-
-        const summaryIndex =
-            result.fields.findIndex(f => f.name === 'summary')
-
-        for (const r of result.rows) {
-            if (r[summaryIndex]?.length > 50)
-                r[summaryIndex] = r[summaryIndex].slice(0, 50) + '...'
-        }
-
-        return result
-    },
-
-    async createAuthor (...fields) {
-        throw new Error(`Deprecated author creation method -- do not use.`)
-    }
-}
-
 // Check the active database connections (exposes query text)
 function getStatus () {
     return query('SELECT * FROM get_status()')
 }
 
 module.exports = {
-    query, queryResult, members, getStatus, library, snipTimes,
+    query, queryResult, getStatus, snipTimes,
     books, justBooks, authors, genres,
     bookInstances, inventory, booksByGenre, genresByBook, bookGenres,
     bookStatusList

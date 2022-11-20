@@ -129,9 +129,6 @@ el('import-button-id').addEventListener('click', async event => {
     el('import-button-id').setAttribute('disabled', 'true')
     el('import-spinner').classList.remove('visually-hidden')
 
-    log('DEBUG: acting on bookInput >>')
-    log(bookInput)
-
     // Begin import process:
     // Create author -> create book -> create genres -> create associations
     let authorResult
@@ -270,8 +267,6 @@ el('search-button').addEventListener('click', async event => {
 
     const json = await fetch(queryUrl)
                         .then(response => response.json())
-
-    log(json)
 
     for (const e of document.querySelectorAll('.description')) {
         e.removeEventListener('toggle', handleDescriptionToggle)
