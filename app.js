@@ -87,6 +87,6 @@ const server = app.listen(process.env.PORT || 2666, () => {
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
     log('There is a 2px doubled border on book_detail availability. Low-priority but debug.')
     log('Kinda need pagination everywhere.')
-    log('Do not want to include bootstrap css map, but console errors look bad -- maybe serve 0kb file later?')
     log('To fix: failures on import when no genres are recorded in database')
+    log('To fix: better presentation on 0-result queries for imports')
 })
