@@ -8,6 +8,9 @@ require('@bprcode/handy')
 const express = require('express')
 const app = express()
 
+const helmet = require('helmet')
+const compression = require('compression')
+
 // Initialize templating
 const { DateTime } = require('luxon')
 const hbs = require('hbs')
@@ -49,6 +52,8 @@ hbs.registerHelper('error-check', (trouble, name) => {
 const catalogRouter = require('./routes/catalog-route.js')
 
 app
+    .use(compression())
+    .use(helmet({ contentSecurityPolicy: false }))
     .disable('x-powered-by')
 
     .use(express.urlencoded({ extended: true }))
