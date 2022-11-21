@@ -59,6 +59,7 @@ app
     .use(express.urlencoded({ extended: true }))
     .use(express.json())
 
+    .use('/health', (req, res) => { res.status(200).send() })
     .get('/', (req, res) => { res.redirect('/catalog') })
     .use('/catalog', catalogRouter)
 
