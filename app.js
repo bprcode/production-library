@@ -81,7 +81,7 @@ app
         })
     })
 
-const server = app.listen(process.env.PORT || 2666, () => {
+const server = app.listen(process.env.PORT || 2222, () => {
     log(moo() + ' Server active on: ', green, server.address())
     log('Todo: Fix nav bar spacing (slightly different between pages?)')
     log('Would be nice: encapsulate book creation with its genres as a transaction.')

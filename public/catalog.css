@@ -167,6 +167,7 @@ body {
   width: 32px;
   height: 32px;
   border: 1px #aaa solid;
+  margin-left: 5px;
 }
 
 .ui-button:hover {
@@ -189,6 +190,35 @@ body {
   transform: translate(-50%, -50%);
 
   width: 20px;
+}
+
+.ui-button-pair {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  align-content: baseline;
+  padding-left: 0px;
+  padding-right: 0px;
+  width: 38px;
+}
+
+@media (max-width: 330px) {
+  .tiny-padding-2 {
+    padding-right: .5rem !important;
+    padding-left: .5rem !important;
+  }
+}
+
+@media (min-width: 299.98px) {
+  .ui-button-pair {
+    width: 78px;
+    min-width: 78px;
+  }
+}
+@media (max-width: 299.98px) {
+  .ui-button:nth-child(2) {
+    margin-top: 5px;
+  }
 }
 
 .invert {
