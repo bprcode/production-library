@@ -1,8 +1,8 @@
 {{! This template populates catalog-layout.hbs }}
 {{#> catalog_layout title='Books' no_title=1}}{{#*inline 'content'~}}
 <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between">
-        <span>
+    <div class="card-header d-flex justify-content-between tiny-padding-2 px-sm-3">
+        <span class="overflow-hidden">
         <h1 class="serif h2">Browse books</h1>
         </span>
         <span class="">
@@ -14,10 +14,14 @@
     {{#each books}}
     <li class="list-group-item">
     <div class="d-flex justify-content-between align-items-baseline">
-        <a class="serif" href="{{book_url}}"><h2 class="fs-5">{{title}}</h2></a>
-        <a class="fst-italic" href="{{author_url}}">{{full_name}}</a>
+        <span class="overflow-hidden">
+            <a class="serif" href="{{book_url}}"><h2 class="fs-5">{{title}}</h2></a>
+        </span>
+        <span class="overflow-hidden">
+            <a class="fst-italic" href="{{author_url}}">{{full_name}}</a>
+        </span>
     </div>
-    <p>{{summary}}</p>
+    <p class="overflow-hidden">{{summary}}</p>
     </li>
     {{/each}}
     </ul>

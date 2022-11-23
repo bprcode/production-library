@@ -8,8 +8,8 @@
         <h1 class="serif h2">Import Author</h1>
         </span>
     </div>
-    <div class="card-body">
-        <div class="col-6">
+    <div class="card-body px-2 px-sm-3">
+        <div class="col small-max-width">
             <label class="form-label" for="search-text">Name</label>
             <form class="input-group">
                 <input type="text" class="form-control" id="search-text">
@@ -46,22 +46,22 @@
 
 <!-- search result template -->
 <template id="list-template">
-    <div class="card">
-        <div class="card-header" id="list-header">
+    <div class="card px-0">
+        <div class="card-header tiny-padding-2 px-sm-3" id="list-header">
             \{{header}}
         </div>
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush ps-2">
             \{{#each authors}}
             <li class="list-group-item">
                 <div class="row">
                     <!-- snap bio -->
-                    <div class="col-4">
+                    <div class="col-9 col-md-4 px-0 order-0">
                         <div class="fs-5 serif">\{{name}}</div>
                         <div class="text-muted lh-1"><small>\{{birth_date}}\{{#if birth_date}} &ndash; \{{/if}}\{{death_date}}</small></div>
                         <div class="text-muted">\{{#if top_work}}<small>Author of <em>\{{top_work}}</em></small>\{{/if}}</div>
                     </div>
                     <!-- expandables -->
-                    <div class="col">
+                    <div class="col ps-1 order-3 order-md-1 overflow-hidden">
                         \{{#if alternate_names}}
                         <details>
                             <summary class="text-muted"><small>Also known as...</small></summary>
@@ -78,8 +78,8 @@
                         </details>
                     </div>
                     <!-- plus button -->
-                    <div class="col-1 pe-2" align="right">
-                        <div><button class="btn ui-button plus-button" data-bs-toggle="modal" data-bs-target="#input-modal" data-key="\{{key}}"><img src="/plus.svg"></button></div>
+                    <div class="col-3 col-md-1 px-0 order-2 pe-1" style="min-width: 38px;" align="right">
+                        <button class="btn ui-button plus-button" data-bs-toggle="modal" data-bs-target="#input-modal" data-key="\{{key}}"><img src="/plus.svg"></button>
                     </div>
 
                 </div>

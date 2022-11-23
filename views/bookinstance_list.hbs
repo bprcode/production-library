@@ -1,8 +1,8 @@
 {{! This template populates catalog-layout.hbs }}
 {{#> catalog_layout title='Inventory' no_title=1}}{{#*inline 'content'~}}
 <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between">
-        <span>
+    <div class="card-header d-flex justify-content-between tiny-padding-2 px-sm-3">
+        <span class="overflow-hidden">
         <h1 class="serif h2">Browse inventory</h1>
         </span>
         <span class="">
@@ -13,14 +13,17 @@
     <ul class="list-group list-group-flush">
     {{#each items}}
     <li class="list-group-item">
-    <div class="d-flex justify-content-between align-items-baseline">
-        <a class="" href="{{book_instance_url}}">ID #{{instance_id}}
-            {{title}}, {{full_name}}. {{imprint}}</a>
-        <span class="
-            {{~#if (match status 'Available')}}text-success{{/if~}}
-            {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
-            ">{{status}}</span>
-    </div>
+        <div class="row">
+        <!--div class="d-flex justify-content-between align-items-baseline" -->
+            <span class="col-sm">
+                <a class="" href="{{book_instance_url}}">ID #{{instance_id}}
+                    {{title}}, {{full_name}}. {{imprint}}</a>
+            </span>
+            <span class="col-sm-3 status-holder
+                {{#if (match status 'Available')}}text-success{{/if~}}
+                {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
+                ">{{status}}</span>
+        </div>
     {{#if due_back}}
     <div class="fst-italic text-muted">Due back: {{pretty-date due_back}}</div>
     {{/if}}

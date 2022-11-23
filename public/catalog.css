@@ -35,6 +35,10 @@ a:hover {
   max-width: 800px;
 }
 
+.small-max-width {
+  max-width: 400px;
+}
+
 header {
   border-bottom: 5px solid var(--primary);
 }
@@ -218,6 +222,14 @@ body {
 @media (max-width: 299.98px) {
   .ui-button:nth-child(2) {
     margin-top: 5px;
+  }
+}
+
+@media (min-width: 576px) {
+  .status-holder {
+    display:flex;
+    justify-content:end !important;
+    min-width: 7em;
   }
 }
 
