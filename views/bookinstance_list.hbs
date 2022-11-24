@@ -14,12 +14,11 @@
     {{#each items}}
     <li class="list-group-item">
         <div class="row">
-        <!--div class="d-flex justify-content-between align-items-baseline" -->
             <span class="col-sm">
                 <a class="" href="{{book_instance_url}}">ID #{{instance_id}}
                     {{title}}, {{full_name}}. {{imprint}}</a>
             </span>
-            <span class="col-sm-3 status-holder
+            <span class="pt-1 pt-sm-0 col-sm-3 status-holder
                 {{#if (match status 'Available')}}text-success{{/if~}}
                 {{~#if (match status 'Maintenance')}}text-danger{{/if~}}
                 ">{{status}}</span>

@@ -90,7 +90,9 @@ exports.index = async (req, res) => {
     })
 }
 exports.book_list = async (req, res) => {
-    const result = await books.find()
+    const result = await books.find(
+        'book_url', 'title', 'snippet', 'author_url', 'full_name'
+    )
     res.render('book_list.hbs', { books: result })
 }
 exports.book_detail = async (req, res) => {
@@ -317,11 +319,6 @@ exports.book_json_post = [
         const result = await justBooks.insert(item)
 
         res.status(201).send(result[0])
-
-        // Also need to repeatedly insert on genre/book junction table
-        log('acted on request:')
-        log(req.body)
-        log('DEBUG >> placeholder: need to insert genre/book associations')
     }
 ]
 exports.book_import_get = (req, res) => {

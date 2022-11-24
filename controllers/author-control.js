@@ -75,7 +75,9 @@ const authorIdValidator =
         .withMessage('Author ID not found.')
 
 exports.author_list = async (req, res) => {
-    const result = await snipTimes(authors.find())
+    const result = await snipTimes(authors.find(
+        'full_name', 'dob', 'dod', 'author_url', 'blurb'
+    ))
     res.render(`author_list.hbs`, { authors: result })
 }
 exports.author_detail = async (req, res) => {

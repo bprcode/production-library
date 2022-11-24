@@ -12,16 +12,16 @@
 
     <ul class="list-group list-group-flush">
     {{#each books}}
-    <li class="list-group-item">
-    <div class="d-flex justify-content-between align-items-baseline">
+    <li class="list-group-item overflow-hidden">
+    <div class="d-flex justify-content-between align-items-baseline flex-column flex-sm-row">
         <span class="overflow-hidden">
-            <a class="serif" href="{{book_url}}"><h2 class="fs-5">{{title}}</h2></a>
+            <a class="serif" href="{{book_url}}"><h2 class="fs-5 mb-1">{{title}}</h2></a>
         </span>
-        <span class="overflow-hidden">
+        <span class="overflow-hidden mb-1 text-start text-sm-end">
             <a class="fst-italic" href="{{author_url}}">{{full_name}}</a>
         </span>
     </div>
-    <p class="overflow-hidden">{{summary}}</p>
+    <p class="overflow-hidden">{{snippet}}</p>
     </li>
     {{/each}}
     </ul>
