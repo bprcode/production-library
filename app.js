@@ -84,6 +84,7 @@ app
 const server = app.listen(process.env.PORT || 2222, () => {
     log(moo() + ' Server active on: ', green, server.address())
     log('Todo: Fix nav bar spacing (slightly different between pages?)')
+    log('Todo: Fix genre list checkboxes for long genre names')
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
     log('Kinda need pagination everywhere.')
     log('To fix: failures on import when no genres are recorded in database')

@@ -22,9 +22,16 @@
 </div>
 
 <div class="card">
-    <div class="card-header">
-        Availability:
+    <div class="card-header d-flex justify-content-between tiny-padding-2 px-sm-3">
+        <span class="overflow-hidden">
+            Availability:
+        </span>
+        <span class="">
+            <a class="btn ui-button" href="/catalog/inventory/create/{{book_info.book_id}}"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
+        </span>
     </div>
+
+    {{#if instances}}
     <ul class="list-group list-group-flush">
     {{#each instances}}
         <li class="list-group-item">
@@ -41,6 +48,7 @@
 
         </li>
     {{/each}}
+    {{/if}}
     </ul>
     {{#unless instances}}
     <p class="card-body text-muted pt-2 pb-3 pb-0 mb-0">

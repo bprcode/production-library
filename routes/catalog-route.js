@@ -48,6 +48,8 @@ router
     .get('/genre/:id', genreController.genre_detail)
     .get('/genres', genreController.genre_list)
 
+    .get(['/bookinstance/create/:id', '/inventory/create/:id'],
+        bookinstanceController.bookinstance_create_get)
     .get(['/bookinstance/create', '/inventory/create'],
         bookinstanceController.bookinstance_create_get)
     .post(['/bookinstance/create', '/inventory/create'],

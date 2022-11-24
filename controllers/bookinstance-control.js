@@ -19,7 +19,7 @@ const instanceValidators = [
         .isLength({ min: 1})
         .custom(async value => {
             const validStatusList = await bookStatusList()
-            if ( ! validStatusList.includes(value) )
+            if (!validStatusList.includes(value) )
                 throw new Error(`Status not recognized.`)
         })
         .withMessage('Invalid status.'),
@@ -32,7 +32,7 @@ const instanceIdValidator =
     param('id', 'Invalid item ID.')
         .trim()
         .custom(async id => {
-            if ( !await bookInstances.find({ instance_id: id }) )
+            if (!await bookInstances.find({ instance_id: id }) )
                 throw new Error(`Item ID not found.`)
         })
 
@@ -61,7 +61,8 @@ exports.bookinstance_create_get = async (req, res) => {
         statusList,
         title: 'Add inventory item',
         form_action: '/catalog/inventory/create',
-        submit: 'Create'
+        submit: 'Create',
+        populate: { book_id: req.params.id || null }
     })
 }
 exports.bookinstance_create_post = [
