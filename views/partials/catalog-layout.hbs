@@ -19,104 +19,113 @@
 </head>
 
 <body class="body-bg d-flex flex-column min-vh-100">
-  
+
   <!-- Top banner -->
   <header class="shelf container-fluid text-bg-dark mb-3">
     <div class="container mb-1 pt-2 pb-2 d-flex align-items-center">
       <a class="serif fs-4 fw-bold me-auto nav-link" href="/catalog/">
-        <img class="me-2" width=25 src="/book-open-reader-solid.svg" style="filter:invert();">
+        <img class="me-2 invert" width="25" src="/book-open-reader-solid.svg">
         Local Library
       </a>
       <ul class="nav nav-pills">
+        <!-- placeholder
         <li class="nav-item"><a href="#" class="nav-link">Login</a></li>
         <li class="nav-item"><a href="#" class="nav-link">Register</a></li>
+        -->
+        <li class="nav-item">
+          <button class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-id" aria-controls="offcanvasExample">
+            <img class="invert d-sm-none me-2" width="32" src="/list.svg" alt="Expand button for navigation menu">
+          </button>
+        </li>
       </ul>
     </div>
+    <!--/nav-->
   </header>
 
-  <!-- Navigation would be better as an offcanvas, but this works for now -->
-  <div class="d-flex flex-column flex-sm-row">
-    <nav class="flex-shrink-0 ps-3 pt-0 pt-sm-5" style="width: 200px;">
+  <!-- Body content container -->
+  <div class="d-flex overflow-hidden">
+      <!-- Sidebar - Responsive offcanvas behavior -->
+      <div id="offcanvas-id" class="side-links ps-2 offcanvas-sm offcanvas-end">
+        <button type="button" class="d-sm-none mt-3 ms-auto pe-5 btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-id" aria-label="Close"></button>
 
-      <!-- Reference sidebar - doesn't have close-others behavior -->
-      <div id="nav-group">
-      <ul class="list-unstyled ps-0">
-        <li class="mb-1">
-          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#books-collapse" aria-expanded="false">
-            Books
-          </button>
-          <div class="collapse" id="books-collapse" data-bs-parent="#nav-group">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="/catalog/books" class="link-dark rounded">Browse</a></li>
-              <li><a href="/catalog/book/create" class="link-dark rounded">Create</a></li>
-              <li><a href="/catalog/book/update" class="link-dark rounded">Edit</a></li>
-              <li><a href="/catalog/book/delete" class="link-dark rounded">Delete</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="mb-1">
-          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#authors-collapse" aria-expanded="false">
-            Authors
-          </button>
-          <div class="collapse" id="authors-collapse" data-bs-parent="#nav-group">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="/catalog/authors" class="link-dark rounded">Browse</a></li>
-              <li><a href="/catalog/author/create" class="link-dark rounded">Create</a></li>
-              <li><a href="/catalog/author/update" class="link-dark rounded">Edit</a></li>
-              <li><a href="/catalog/author/delete" class="link-dark rounded">Delete</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="mb-1">
-          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#genres-collapse" aria-expanded="false">
-            Genres
-          </button>
-          <div class="collapse" id="genres-collapse" data-bs-parent="#nav-group">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="/catalog/genres" class="link-dark rounded">Browse</a></li>
-              <li><a href="/catalog/genre/create" class="link-dark rounded">Create</a></li>
-              <li><a href="/catalog/genre/update" class="link-dark rounded">Edit</a></li>
-              <li><a href="/catalog/genre/delete" class="link-dark rounded">Delete</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="mb-1">
-          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#inventory-collapse" aria-expanded="false">
-            Inventory
-          </button>
-          <div class="collapse" id="inventory-collapse" data-bs-parent="#nav-group">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="/catalog/inventory" class="link-dark rounded">Browse</a></li>
-              <li><a href="/catalog/inventory/create" class="link-dark rounded">Create</a></li>
-              <li><a href="/catalog/inventory/update" class="link-dark rounded">Edit</a></li>
-              <li><a href="/catalog/inventory/delete" class="link-dark rounded">Delete</a></li>
-            </ul>
-          </div>
-        </li>
+        <div id="nav-group" class="pt-4">
+          <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+              <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#books-collapse" aria-expanded="false">
+                Books
+              </button>
+              <div class="collapse" id="books-collapse" data-bs-parent="#nav-group">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="/catalog/books" class="link-dark rounded">Browse</a></li>
+                  <li><a href="/catalog/book/create" class="link-dark rounded">Create</a></li>
+                  <li><a href="/catalog/book/update" class="link-dark rounded">Edit</a></li>
+                  <li><a href="/catalog/book/delete" class="link-dark rounded">Delete</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mb-1">
+              <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#authors-collapse" aria-expanded="false">
+                Authors
+              </button>
+              <div class="collapse" id="authors-collapse" data-bs-parent="#nav-group">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="/catalog/authors" class="link-dark rounded">Browse</a></li>
+                  <li><a href="/catalog/author/create" class="link-dark rounded">Create</a></li>
+                  <li><a href="/catalog/author/update" class="link-dark rounded">Edit</a></li>
+                  <li><a href="/catalog/author/delete" class="link-dark rounded">Delete</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mb-1">
+              <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#genres-collapse" aria-expanded="false">
+                Genres
+              </button>
+              <div class="collapse" id="genres-collapse" data-bs-parent="#nav-group">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="/catalog/genres" class="link-dark rounded">Browse</a></li>
+                  <li><a href="/catalog/genre/create" class="link-dark rounded">Create</a></li>
+                  <li><a href="/catalog/genre/update" class="link-dark rounded">Edit</a></li>
+                  <li><a href="/catalog/genre/delete" class="link-dark rounded">Delete</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mb-1">
+              <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#inventory-collapse" aria-expanded="false">
+                Inventory
+              </button>
+              <div class="collapse" id="inventory-collapse" data-bs-parent="#nav-group">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="/catalog/inventory" class="link-dark rounded">Browse</a></li>
+                  <li><a href="/catalog/inventory/create" class="link-dark rounded">Create</a></li>
+                  <li><a href="/catalog/inventory/update" class="link-dark rounded">Edit</a></li>
+                  <li><a href="/catalog/inventory/delete" class="link-dark rounded">Delete</a></li>
+                </ul>
+              </div>
+            </li>
 
-        <li class="mb-1">
-          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#import-collapse" aria-expanded="false">
-            Import
-          </button>
-          <div class="collapse" id="import-collapse" data-bs-parent="#nav-group">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="/catalog/book/import" class="link-dark rounded">Book</a></li>
-              <li><a href="/catalog/author/import" class="link-dark rounded">Author</a></li>
-            </ul>
-          </div>
-        </li>
-      </ul>
+            <li class="mb-1">
+              <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#import-collapse" aria-expanded="false">
+                Import
+              </button>
+              <div class="collapse" id="import-collapse" data-bs-parent="#nav-group">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="/catalog/book/import" class="link-dark rounded">Book</a></li>
+                  <li><a href="/catalog/author/import" class="link-dark rounded">Author</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
       </div>
-
-    </nav>
-
     <!-- Central content -->
-    <div class="container ms-0 me-sm-5 mb-5 reasonable-width">
-      {{#unless no_title}}<h1 class="mb-3">{{title}}</h1>{{/unless}}
-      {{#>content}}{{/content}}
-      {{#unless no_back}}<div class="mt-4"><a id="back-link">&laquo; back</a></div>{{/unless}}
+    <div class="ms-lg-5" style="flex-grow: 1; flex-shrink: 1; width: 0px;">
+      <div class="container ms-3 me-0 ps-0 pe-almost-5 mb-5 reasonable-width">
+        {{#unless no_title}}<h1 class="mb-3">{{title}}</h1>{{/unless}}
+        {{#>content}}{{/content}}
+        {{#unless no_back}}<div class="mt-4"><a id="back-link">&laquo; back</a></div>{{/unless}}
+      </div>
     </div>
-
   </div>
 
   <footer class="container-fluid pt-2 pb-1 mt-auto bg-opacity-25 bg-dark text-center">

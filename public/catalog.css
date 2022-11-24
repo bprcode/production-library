@@ -32,7 +32,7 @@ a:hover {
 }
 
 .reasonable-width {
-  max-width: 800px;
+  max-width: 730px;
 }
 
 .small-max-width {
@@ -228,11 +228,31 @@ body {
 @media (min-width: 576px) {
   .status-holder {
     display:flex;
-    justify-content:end !important;
+    justify-content: end !important;
     min-width: 7em;
   }
 }
 
 .invert {
   filter: invert();
+}
+
+.pe-almost-5 {
+  padding-right: 2.5rem;
+}
+
+.flex-adaptive {
+  flex-grow: 1;
+  flex-shrink: 1;
+  width: 1px;
+}
+
+.side-links {
+  width: 145px !important;
+}
+
+@media (max-width: 576px) {
+  .side-links {
+    background-color: var(--light) !important;
+  }
 }
