@@ -1,12 +1,22 @@
 {{#if allResults}}{{else if noResults}}{{else}}
-<div class="card-footer text-end">
-    <small class="text-muted">page</small>&nbsp;
-    <span class="upsize">
-    {{#if firstPage}}<a href="?page={{firstPage}}&limit={{limit}}">{{firstPage}}</a>&nbsp;{{/if}}
-    {{#if previousPage}}{{#if moreBefore}}...{{/if}} &nbsp;<a href="?page={{previousPage}}&limit={{limit}}">{{previousPage}}</a>&nbsp; {{/if}}
-    {{currentPage~}}&nbsp;
-    {{#if nextPage}} <a href="?page={{nextPage}}&limit={{limit}}">{{nextPage}}</a>&nbsp; {{#if moreAfter}}...{{/if}}{{/if}}
-    {{#if lastPage}}&nbsp;<a href="?page={{lastPage}}&limit={{limit}}">{{lastPage}}</a>{{/if}}
+<div class="card-footer text-end pb-1 pt-1 px-0">
+    <small class="text-muted">page&nbsp;</small>
+    <span class="pagination-control">
+    {{~#if firstPage~}}
+        <a href="?page={{firstPage}}&limit={{limit}}">&nbsp;{{firstPage}}&nbsp;</a>
+    {{~/if}}
+    {{~#if previousPage~}}
+        {{~#if moreBefore}}<span class="page-ellipsis text-muted">&hellip;</span>{{/if~}}
+        <a href="?page={{previousPage}}&limit={{limit}}">&nbsp;{{previousPage}}&nbsp;</a>
+    {{~/if~}}
+    <span class="current-page">&nbsp;{{currentPage}}&nbsp;</span>
+    {{~#if nextPage~}}
+        <a href="?page={{nextPage}}&limit={{limit}}">&nbsp;{{nextPage}}&nbsp;</a>
+        {{~#if moreAfter}}<span class="page-ellipsis text-muted">&hellip;</span>{{/if~}}
+    {{~/if}}
+    {{~#if lastPage~}}
+        <a href="?page={{lastPage}}&limit={{limit}}">&nbsp;{{lastPage}}&nbsp;</a>
+    {{~/if~}}
     </span>
 </div>
 {{/if}}

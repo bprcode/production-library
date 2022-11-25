@@ -3,6 +3,7 @@ const { genres, booksByGenre, justBooks, bookGenres }
     = require('../database.js')
 const { body, param, validationResult }
     = require('express-validator')
+const { paginate, sanitizePagination } = require('./paginator.js')
 
 async function alreadyHaveGenre (name) {
     if (await genres.find({ name: name }))
@@ -41,10 +42,30 @@ const genreUpdateValidators = [
         .withMessage('Genre name already in use.')
 ]
 
-exports.genre_list = async (req, res) => {
-    const result = await genres.find()
-    res.render(`genre_list.hbs`, { genres: result })
-}
+exports.genre_list = [
+    ...sanitizePagination,
+    async (req, res) => {
+        const limit = req.query.limit || 10
+        const [genreList, total] = await Promise.all([
+
+            genres.find({
+                _page: req.query.page,
+                _limit: limit
+            }),
+
+            genres.count()
+
+        ])
+
+        const position = paginate(req.query.page, limit, total)
+
+        res.render(`genre_list.hbs`, {
+            genres: genreList,
+            noResults: !genreList,
+            ...position
+        })
+    }
+]
 exports.genre_detail = async (req, res) => {
     const [resultGenre, resultBooks, genreCount] = await Promise.all([
         genres.find({ genre_id: req.params.id }),

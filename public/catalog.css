@@ -252,8 +252,42 @@ body {
   width: 145px !important;
 }
 
-.upsize {
-  font-size: 1.15em;
+.pagination-control {
+  font-size: 1.05em;
+  margin-right: 0.3em;
+}
+
+.pagination-control > * {
+  display: inline-block;
+  text-align: center;
+  min-width: 1.7em;
+  height: 1.9em;
+  padding-top: 0.25em;
+  margin-left: 0em;
+  margin-right: 0em;
+}
+
+.pagination-control > a:hover {
+  text-decoration: none;
+  color: white;
+  background-color: var(--primary-light);
+  border-radius: 3px;
+}
+
+.pagination-control > a:active {
+  text-decoration: underline;
+  color: var(--primary);
+  background-color: white;
+}
+
+.page-ellipsis {
+  min-width: 0px;
+  font-size: 0.9em;
+}
+
+.current-page {
+  background-color: gainsboro;
+  border-radius: 3px;
 }
 
 @media (max-width: 576px) {

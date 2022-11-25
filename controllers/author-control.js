@@ -1,6 +1,7 @@
 require('express-async-errors')
 const { body, param, validationResult } = require('express-validator')
 const { authors, books, snipTimes } = require('../database.js')
+const { paginate, sanitizePagination } = require('./paginator.js')
 
 const authorNameValidator =
     body('first_name')
@@ -74,12 +75,29 @@ const authorIdValidator =
         })
         .withMessage('Author ID not found.')
 
-exports.author_list = async (req, res) => {
-    const result = await snipTimes(authors.find(
-        'full_name', 'dob', 'dod', 'author_url', 'blurb'
-    ))
-    res.render(`author_list.hbs`, { authors: result })
-}
+exports.author_list = [
+    ...sanitizePagination,
+    async (req, res) => {
+        const limit = req.query.limit || 10
+        const [authorList, total] = await Promise.all([
+            snipTimes(authors.find(
+            'full_name', 'dob', 'dod', 'author_url', 'blurb', {
+                _page: req.query.page,
+                _limit: limit
+            })),
+
+            authors.count()
+        ])
+
+        const position = paginate(req.query.page, limit, total)
+
+        res.render(`author_list.hbs`, {
+            authors: authorList,
+            noResults: !authorList,
+            ...position
+        })
+    }
+]
 exports.author_detail = async (req, res) => {
     const [resultAuthors, resultBooks] = await Promise.all([
         snipTimes(authors.find({ author_id: req.params.id })),

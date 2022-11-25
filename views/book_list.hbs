@@ -11,15 +11,8 @@
             </span>
         </div>
 
-        <div class="tiny-padding-2 text-muted">
-            {{#if allResults}}
-            All {{total}} results:
-            {{else if noResults}}
-            No results found.
-            {{else}}
-            {{countStart}} to {{countEnd}} of {{total}} results:
-            {{/if}}
-        </div>
+        {{> pagination_header}}
+        
     </div>
     
 

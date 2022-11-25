@@ -2,6 +2,7 @@ require('express-async-errors')
 const { body, param, validationResult } = require('express-validator')
 const { inventory, justBooks, bookStatusList, bookInstances, snipTimes }
         = require('../database.js')
+const { paginate, sanitizePagination } = require('./paginator')
 
 const instanceValidators = [
     body('book_id')
@@ -36,10 +37,29 @@ const instanceIdValidator =
                 throw new Error(`Item ID not found.`)
         })
 
-exports.bookinstance_list = async (req, res) => {
-    const result = await inventory.find()
-    res.render('bookinstance_list.hbs', { items: result })
-}
+exports.bookinstance_list = [
+    ...sanitizePagination,
+    async (req, res) => {
+        const limit = req.query.limit || 10
+        const [itemList, total] = await Promise.all([
+
+            inventory.find({
+                _page: req.query.page,
+                _limit: limit
+            }),
+
+            inventory.count()
+        ])
+
+        const position = paginate(req.query.page, limit, total)
+
+        res.render('bookinstance_list.hbs', {
+            items: itemList,
+            noResults: !itemList,
+            ...position
+        })
+    }
+]
 exports.bookinstance_detail = async (req, res) => {
     const result = await inventory.find({ instance_id: req.params.id })
     if ( !result ) {
