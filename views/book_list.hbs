@@ -1,14 +1,27 @@
 {{! This template populates catalog-layout.hbs }}
 {{#> catalog_layout title='Books' no_title=1}}{{#*inline 'content'~}}
 <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between tiny-padding-2 px-sm-3">
-        <span class="overflow-hidden">
-        <h1 class="serif h2">Browse books</h1>
-        </span>
-        <span class="">
-            <a class="btn ui-button" href="/catalog/book/create"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
-        </span>
+    <div class="card-header tiny-padding-2 px-sm-3">
+        <div class="d-flex justify-content-between">
+            <span class="overflow-hidden">
+            <h1 class="serif h2 mb-0">Browse books</h1>
+            </span>
+            <span class="">
+                <a class="btn ui-button" href="/catalog/book/create"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
+            </span>
+        </div>
+
+        <div class="tiny-padding-2 text-muted">
+            {{#if allResults}}
+            All {{total}} results:
+            {{else if noResults}}
+            No results found.
+            {{else}}
+            {{countStart}} to {{countEnd}} of {{total}} results:
+            {{/if}}
+        </div>
     </div>
+    
 
     <ul class="list-group list-group-flush">
     {{#each books}}
@@ -26,5 +39,7 @@
     {{/each}}
     </ul>
 
+    {{> pagination_footer}}
+    
 </div>
 {{~/inline}}{{/catalog_layout}}

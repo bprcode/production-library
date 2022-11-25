@@ -1,0 +1,12 @@
+{{#if allResults}}{{else if noResults}}{{else}}
+<div class="card-footer text-end">
+    <small class="text-muted">page</small>&nbsp;
+    <span class="upsize">
+    {{#if firstPage}}<a href="?page={{firstPage}}&limit={{limit}}">{{firstPage}}</a>&nbsp;{{/if}}
+    {{#if previousPage}}{{#if moreBefore}}...{{/if}} &nbsp;<a href="?page={{previousPage}}&limit={{limit}}">{{previousPage}}</a>&nbsp; {{/if}}
+    {{currentPage~}}&nbsp;
+    {{#if nextPage}} <a href="?page={{nextPage}}&limit={{limit}}">{{nextPage}}</a>&nbsp; {{#if moreAfter}}...{{/if}}{{/if}}
+    {{#if lastPage}}&nbsp;<a href="?page={{lastPage}}&limit={{limit}}">{{lastPage}}</a>{{/if}}
+    </span>
+</div>
+{{/if}}

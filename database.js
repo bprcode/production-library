@@ -54,6 +54,22 @@ async function snipTimes (source) {
     return result
 }
 
+/**
+ * Remove and return the internal _page and _limit properties
+ * from a condition object, along with the calculated offset.
+ * @param {*} conditions - The object to modify.
+ */
+function snipPagination (conditions) {
+    const snipped = {
+        page: conditions._page || 1,
+        limit: conditions._limit // leave undefined if not paginated
+    }
+    snipped.offset = (snipped.page - 1) * snipped.limit || 0
+    delete conditions._page
+    delete conditions._limit
+    return snipped
+}
+
 // A class which parses an object into a SQL WHERE statement,
 // accounting for nulls (IS NULL) and treating other properties as
 // case-insensitive ILIKE comparisons.
@@ -61,11 +77,20 @@ class WhereClause {
 
     clause = ''
     _values = []
+    offset = 0
+    limit = undefined
 
     constructor (conditions) {
         if (!conditions) { return }
         
         let index = 1
+        const pagination = snipPagination(conditions)
+
+        this.offset = pagination.offset
+        this.limit = pagination.limit
+
+        if (Object.keys(conditions).length === 0) { return }
+
         const dirty = ' WHERE '
                     + Object.keys(conditions)
                         .map(k =>
@@ -88,6 +113,10 @@ class WhereClause {
         this._values.length
             && dbLog(' values: ', pink, this._values.join(', '), green)
         return this._values
+    }
+
+    get length () {
+        return this._values.length
     }
 
     static from (conditions) {
@@ -194,6 +223,7 @@ class Model {
         let clean = ``
         let dirty = `SELECT * FROM ${this.relation}`
         let where = null
+        const parameters = []
 
         if (etc.length === 0) {
             dirty += this.orderClause
@@ -217,13 +247,22 @@ class Model {
         dirty += where ?? ''
         dirty += this.orderClause
 
+        if (where) { parameters.push(...where.values) }
+        if (where?.limit) { // Use the DB parser to inject parameters
+            dirty += ' LIMIT $' + (where.length + 1)
+                        + ' OFFSET $' + (where.length + 2)
+
+            parameters.push(where.limit, where.offset)
+        }
+
         clean = format(dirty,
                         ...etc, // column names
                         this.order)
                         
         dbLog(clean, blue)
+        dbLog('parameters: ', dim, parameters)
 
-        return queryResult(clean, where?.values)
+        return queryResult(clean, parameters)
     }
 
     join (other, key) {

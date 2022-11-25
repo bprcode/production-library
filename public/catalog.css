@@ -252,6 +252,10 @@ body {
   width: 145px !important;
 }
 
+.upsize {
+  font-size: 1.15em;
+}
+
 @media (max-width: 576px) {
   .side-links {
     background-color: var(--light) !important;

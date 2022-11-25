@@ -1,8 +1,9 @@
 require('express-async-errors')
-const { body, param, validationResult } = require('express-validator')
+const { body, param, query, validationResult } = require('express-validator')
 const { books, justBooks, authors, genres, bookInstances, genresByBook,
         bookGenres }
         = require('../database.js')
+const { paginate, sanitizePagination } = require('./paginator.js')
 
 const preventTitleCollision =
     body('title')
@@ -89,12 +90,30 @@ exports.index = async (req, res) => {
         total_count: result[3],
     })
 }
-exports.book_list = async (req, res) => {
-    const result = await books.find(
-        'book_url', 'title', 'snippet', 'author_url', 'full_name'
-    )
-    res.render('book_list.hbs', { books: result })
-}
+exports.book_list = [
+    ...sanitizePagination,
+    async (req, res) => {
+        const limit = req.query.limit || 10
+        const [bookList, total] = await Promise.all([
+
+            books.find(
+                'book_url', 'title', 'snippet', 'author_url', 'full_name', {
+                _page: req.query.page,
+                _limit: limit
+            }),
+
+            justBooks.count()
+        ])
+
+        const position = paginate(req.query.page, limit, total)
+
+        res.render('book_list.hbs', {
+            books: bookList,
+            noResults: !bookList,
+            ...position
+        })
+    }
+]
 exports.book_detail = async (req, res) => {
     const [resultBook, resultInstances, resultGenres] = await Promise.all([
         books.find({ book_id: req.params.id }),
