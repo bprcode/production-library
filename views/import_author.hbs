@@ -48,7 +48,8 @@
 <template id="list-template">
     <div class="card px-0">
         <div class="card-header tiny-padding-2 px-sm-3" id="list-header">
-            \{{header}}
+            \{{#client-partial pagination_header}}
+
         </div>
         <ul class="list-group list-group-flush ps-2">
             \{{#each authors}}
@@ -85,7 +86,10 @@
                 </div>
             </li>
             \{{/each}}
+
         </ul>
+
+        \{{#client-partial pagination_footer}}
     </div>
 </template>
 

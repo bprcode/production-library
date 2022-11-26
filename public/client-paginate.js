@@ -1,11 +1,4 @@
-const { query } = require('express-validator')
-
-module.exports.sanitizePagination = [
-    query('page').toInt().customSanitizer(v => v < 1 ? 1 : v),
-    query('limit').toInt().customSanitizer(v => v < 1 ? 1 : v)
-]
-
-module.exports.paginate = function (page, limit, total) {
+export function paginate (page, limit, total) {
     page = parseInt(page)
     limit = parseInt(limit)
     total = parseInt(total)

@@ -3,19 +3,19 @@
     <small class="text-muted">page&nbsp;</small>
     <span class="pagination-control">
     {{~#if firstPage~}}
-        <a href="?page={{firstPage}}&limit={{limit}}">&nbsp;{{firstPage}}&nbsp;</a>
+        <a href="?page={{firstPage}}&limit={{limit}}" data-page="{{firstPage}}" data-limit="{{limit}}">&nbsp;{{firstPage}}&nbsp;</a>
     {{~/if}}
     {{~#if previousPage~}}
         {{~#if moreBefore}}<span class="page-ellipsis text-muted">&hellip;</span>{{/if~}}
-        <a href="?page={{previousPage}}&limit={{limit}}">&nbsp;{{previousPage}}&nbsp;</a>
+        <a href="?page={{previousPage}}&limit={{limit}}" data-page="{{previousPage}}" data-limit="{{limit}}">&nbsp;{{previousPage}}&nbsp;</a>
     {{~/if~}}
     <span class="current-page">&nbsp;{{currentPage}}&nbsp;</span>
     {{~#if nextPage~}}
-        <a href="?page={{nextPage}}&limit={{limit}}">&nbsp;{{nextPage}}&nbsp;</a>
+        <a href="?page={{nextPage}}&limit={{limit}}" data-page="{{nextPage}}" data-limit="{{limit}}">&nbsp;{{nextPage}}&nbsp;</a>
         {{~#if moreAfter}}<span class="page-ellipsis text-muted">&hellip;</span>{{/if~}}
     {{~/if}}
     {{~#if lastPage~}}
-        <a href="?page={{lastPage}}&limit={{limit}}">&nbsp;{{lastPage}}&nbsp;</a>
+        <a href="?page={{lastPage}}&limit={{limit}}" data-page="{{lastPage}}" data-limit="{{limit}}">&nbsp;{{lastPage}}&nbsp;</a>
     {{~/if~}}
     </span>
 </div>
