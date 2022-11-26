@@ -81,7 +81,7 @@ exports.index = async (req, res) => {
         bookInstances.count({ status: 'Available' }),
     ])
 
-    res.render('catalog-home.hbs', {
+    res.render('catalog-active-home.hbs', {
         title: 'Welcome to the catalog',
         book_count: result[0],
         author_count: result[1],

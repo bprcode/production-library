@@ -309,6 +309,18 @@ async function executeQuery (query, page = 1, limit = 20) {
             e.dataset.query = query
         }
 
+        let animationDelay = (page === 1)
+                                ? 30
+                                : 400
+        for(const e of document.querySelectorAll('.shade-initially')) {
+            setTimeout(() =>
+                e.classList.add('background-revert'), animationDelay)
+            animationDelay += (page === 1)
+                                ? 70
+                                : -40
+            if (animationDelay < 0) { animationDelay = 0}
+        }
+
     } catch (e) {
         console.error(e.message)
 

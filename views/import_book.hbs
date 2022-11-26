@@ -9,7 +9,8 @@
         </span>
     </div>
     <div class="card-body px-2 px-sm-3">
-        <div class="col small-max-width">
+        {{> script_required}}
+        <div class="nojs-hidden col small-max-width">
             <label class="form-label" for="search-text">Title</label>
             <form class="input-group">
                 <input type="text" class="form-control" id="search-text">
@@ -58,7 +59,7 @@
         </div>
         <ul class="list-group list-group-flush">
             \{{#each books}}
-            <li class="list-group-item">
+            <li class="list-group-item shade-initially">
                 <div class="row">
                     <!-- Title, author, date column -->
                     <div class="col-9 col-md-5 ps-2 order-0">

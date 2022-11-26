@@ -1,0 +1,19 @@
+<noscript>
+<div class="row">
+    <div class="col-1 offset-1">
+        <img class="mt-2" src="/code-slash.svg" width="30">
+    </div>
+    <div class="col-8 text-danger">
+        <h2 class="fs-3">Scripts Required.</h2>
+        <p class="mb-0">This content requires JavaScript to function.</p>
+        <p>Please enable scripts to proceed.</p>
+    </div>
+</div>
+</noscript>
+<script defer>
+    document.addEventListener('DOMContentLoaded', event => {
+        for(const e of document.querySelectorAll('.nojs-hidden')) {
+            e.classList.remove('nojs-hidden')
+        }
+    })
+</script>

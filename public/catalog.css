@@ -23,6 +23,15 @@ a:hover {
   border: 2px red dashed !important;
 }
 
+.shade-initially {
+  background-color: var(--header-bg-overwrite);
+}
+
+.background-revert {
+  background-color: inherit;
+  transition: background-color 0.18s ease-out;
+}
+
 .nav-link {
   color: var(--primary-light) !important;
 }
@@ -257,6 +266,10 @@ body {
   flex-grow: 1;
   flex-shrink: 1;
   width: 1px;
+}
+
+.nojs-hidden {
+  display: none;
 }
 
 .side-links {

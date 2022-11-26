@@ -1,0 +1,35 @@
+{{! This template populates catalog-layout.hbs }}
+{{#> catalog_layout no_back=1}}{{#*inline 'content'~}}
+Placeholder -- Active home page
+<h2>Content to create</h2>
+<ul>
+    <li>Carousel of central content</li>
+    <li>maybe include noscript option, or consider a pure CSS solution?</li>
+    <li>Sketch this out visually first</li>
+    <li>Want layered content for carousel: "Recently added" atop cycling bg images, dot-nav at bottom</li>
+    <li>pure CSS is probably not worth the dev time for this project</li>
+</ul>
+
+<div class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            {{>recent_slide
+                title='First Slide'
+                copy='Some copy text'
+                bg='#faa'}}
+        </div>
+        <div class="carousel-item">
+            {{>recent_slide
+                title='Second Slide'
+                copy='Copy goes here'
+                bg='#afa'}}
+        </div>
+        <div class="carousel-item">
+            {{>recent_slide
+                title='Last Slide'
+                copy='Et cetera'
+                bg='#aaf'}}
+        </div>
+    </div>
+</div>
+{{~/inline}}{{/catalog_layout}}
