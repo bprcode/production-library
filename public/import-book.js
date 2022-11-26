@@ -1,11 +1,13 @@
 import * as lib from "./import-common.js"
+import * as pager from './client-paginate.js'
 
 // Convenience shorthands
 const log = console.log.bind(console)
 const el = document.getElementById.bind(document)
 
 const listTemplate = el('list-template')
-const renderList = Handlebars.compile(listTemplate.innerHTML.trim())
+const renderList = Handlebars.compile(
+    listTemplate.innerHTML.trim().replaceAll('#client-partial', '>'))
 
 async function handleDescriptionToggle (event) {
     const paragraph = event.target.children[1]
@@ -234,18 +236,15 @@ el('import-button-id').addEventListener('click', async event => {
     }
 })
 
+
 el('input-modal').addEventListener('show.bs.modal', revealModal)
 
-el('search-button').addEventListener('click', async event => {
-    event.preventDefault()
+async function executeQuery (query, page = 1, limit = 20) {
 
-    const query = el('search-text').value
-    if (!query) { return }
-    
     const searchParams = new URLSearchParams({
         title: query,
-        limit: 20,
-        page: 1,
+        limit: limit,
+        page: page,
         fields: [
             'key', 'title', 'author_name', 'first_publish_year',
             'isbn',
@@ -265,25 +264,81 @@ el('search-button').addEventListener('click', async event => {
     searchSpinner.classList.remove('visually-hidden')
     magnifyingGlass.classList.add('d-none')
 
-    const json = await fetch(queryUrl)
-                        .then(response => response.json())
+    try {
+        if (!('pagination_header' in Handlebars.partials)) {
+            const [header, footer] = await Promise.all([
+                fetch('/templates/pagination_header.hbs')
+                    .then(response => response.text()),
+        
+                fetch('/templates/pagination_footer.hbs')
+                    .then(response => response.text())
+            ])
+        
+            Handlebars.registerPartial('pagination_header', header)
+            Handlebars.registerPartial('pagination_footer', footer)
+        }
 
-    for (const e of document.querySelectorAll('.description')) {
-        e.removeEventListener('toggle', handleDescriptionToggle)
+        const json = await fetch(queryUrl)
+                            .then(response => response.json())
+        const position = pager.paginate(page, limit, json.numFound)
+
+        for (const e of document.querySelectorAll('.description')) {
+            e.removeEventListener('toggle', handleDescriptionToggle)
+        }
+
+        for(const e of document.querySelectorAll('.pagination-control a')) {
+            e.removeEventListener('click', handlePageClick)
+        }
+
+        el('search-result-id').innerHTML = renderList({
+            header: `Displaying ${json.start + 1} `
+                    + ` to ${json.start + json.docs.length} `
+                    + `of ${json.numFound} results:`,
+            books: json.docs,
+            noResults: !json.numFound,
+            ...position
+        })
+
+        for (const e of document.querySelectorAll('.description')) {
+            e.addEventListener('toggle', handleDescriptionToggle)
+        }
+
+        for(const e of document.querySelectorAll('.pagination-control a')) {
+            e.addEventListener('click', handlePageClick)
+            e.href = ''
+            e.dataset.query = query
+        }
+
+    } catch (e) {
+        console.error(e.message)
+
+    } finally {
+        magnifyingGlass.classList.remove('d-none')
+        searchButton.removeAttribute('disabled')
+        searchSpinner.classList.add('visually-hidden')
     }
+}
 
-    el('search-result-id').innerHTML = renderList({
-        header: `Displaying ${json.start + 1} `
-                + ` to ${json.start + json.docs.length} `
-                + `of ${json.numFound} results:`,
-        books: json.docs
-    })
+async function handlePageClick (event) {
+    event.preventDefault()
+    
+    executeQuery(
+        event.target.dataset.query,
+        event.target.dataset.page,
+        event.target.dataset.limit
+    )
 
-    for (const e of document.querySelectorAll('.description')) {
-        e.addEventListener('toggle', handleDescriptionToggle)
-    }
+    el('results-header').scrollIntoView()
+}
 
-    magnifyingGlass.classList.remove('d-none')
-    searchButton.removeAttribute('disabled')
-    searchSpinner.classList.add('visually-hidden')
+el('search-button').addEventListener('click', async event => {
+    event.preventDefault()
+
+    const query = el('search-text').value
+    if (!query) { return }
+
+    const page = 1
+    const limit = 10
+
+    executeQuery(query, page, limit)
 })
