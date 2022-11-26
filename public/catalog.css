@@ -24,7 +24,7 @@ a:hover {
 }
 
 .shade-initially {
-  background-color: var(--header-bg-overwrite);
+  background-color: var(--light-shade);
 }
 
 .background-revert {
