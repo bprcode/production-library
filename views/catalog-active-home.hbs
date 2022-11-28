@@ -1,31 +1,32 @@
 {{! This template populates catalog-layout.hbs }}
 {{#> catalog_layout no_back=1 no_title=1 stylesheet='/recent-carousel.css'}}{{#*inline 'content'~}}
-<div class="top-bar pb-4 ps-3"><h1 class="serif">Welcome to the Catalog</h1></div>
-<div class="d-flex">
-    <div class="crop">
-        <div class="recently-added">
-            <div class="backdrop"></div>
-            <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
-            <div class="camera">
-                <!-- book model -->
-                <div class="book-model">
-                    <div class="book-face book-front">
-                        {{#each cover_ids}}
-                        <img src="{{.}}-M.jpg" class="covers" id="cover-{{@index}}">
-                        {{/each}}
+<div class="dark-card">
+    <div class="top-bar pb-4 pt-1 ps-3"><h1 class="serif">Welcome to the Catalog</h1></div>
+    <div class="d-flex recent-outer">
+        <div class="spotlight-pane">
+            <div class="recently-added">
+                <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
+                <div class="camera">
+                    <!-- book model -->
+                    <div class="book-model">
+                        <div class="book-face book-front">
+                            {{#each cover_ids}}
+                            <img src="{{.}}-M.jpg" class="covers" id="cover-{{@index}}">
+                            {{/each}}
+                        </div>
+                        <div class="book-face book-left"></div>
+                        <div class="book-face book-right"></div>
+                        <div class="book-face book-top"></div>
+                        <div class="blob-shadow"></div>
                     </div>
-                    <div class="book-face book-left"></div>
-                    <div class="book-face book-right"></div>
-                    <div class="book-face book-top"></div>
-                    <div class="blob-shadow"></div>
+                    <!-- /book model -->
                 </div>
-                <!-- /book model -->
             </div>
         </div>
-    </div>
-    <div class="book-info ps-3">
-        <h2 class="serif">Sample title</h2>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur, expedita odit at, commodi facilis enim nemo quo magni voluptatem dolores repudiandae, nobis rem quibusdam harum animi? Veritatis aut similique sequi!</p>
+        <div class="book-info ps-4 pe-2">
+            <h2 class="serif">Sample title</h2>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur, expedita odit at, commodi facilis enim nemo quo magni voluptatem dolores repudiandae, nobis rem quibusdam harum animi? Veritatis aut similique sequi!</p>
+        </div>
     </div>
 </div>
 
@@ -37,18 +38,34 @@ const el = document.getElementById.bind(document)
 const loadedImages = []
 let firstLoad = true
     
-for (const e of document.querySelectorAll('.covers')) {
-    e.addEventListener('load', event => {
-        loadedImages.push({
-            element: event.target,
-            aspect: event.target.width / event.target.height
-        })
+function handleImageLoad(element) {
+    loadedImages.push({
+        element: element,
+        aspect: element.width / element.height
+    })
 
-        if (firstLoad) {
-            firstLoad = false
-            updateCover()
-            setInterval(updateCover, 3000)
-        }
+    if (firstLoad) {
+        firstLoad = false
+        updateCover()
+        setInterval(updateCover, 3000)
+    }
+}
+for (const e of document.querySelectorAll('.covers')) {
+    if (e.complete) {
+        log('>> element already loaded:', e)
+        handleImageLoad(e)
+        continue
+    } else {
+        log('>> not yet loaded:', e)
+    }
+
+    e.addEventListener('load', event => {
+        log(`Load completed for element:`, event.target)
+        handleImageLoad(event.target)
+    })
+    e.addEventListener('error', event => {
+        log(`Error loading image element:`)
+        log(event.target)
     })
 }
 
