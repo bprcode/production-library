@@ -1,0 +1,174 @@
+.crop {
+    border: 3px solid orange;
+    overflow: hidden; /* Applying directly to scene div breaks perspective in FireFox */
+}
+
+.recently-added {
+    z-index: 10;
+    position: relative;
+    height: 300px;
+
+    transition: transform 0.5s;
+    border: 1px solid purple;
+
+    --show-time: 1s;
+    --book-height: 300px;
+    --book-aspect: 0.6;
+    --book-width: calc(var(--book-height) * var(--book-aspect));
+    --book-depth: 50px;
+    --book-color-rgb: 255 128 0;
+}
+
+.camera {
+    /* transform: perspective(400px) rotateX(-10deg) translateY(300px); */
+    transform-style: preserve-3d;
+
+    animation: var(--show-time) normal infinite wiggle-camera linear;
+}
+
+@keyframes wiggle-camera {
+    from {
+        transform: perspective(400px) translate3d(0, 400px, -300px)
+                    rotate3d(0.2,1,0.05, 0deg);
+    }
+    to {
+        transform: perspective(400px) translate3d(0, 400px, -300px)
+                    rotate3d(0.2,1,0.05, -25deg);
+    }
+}
+.recent-overlay {
+    position: absolute;
+    left: 0.7em;
+    top: 0.25em;
+    color: #ffa;
+}
+
+.backdrop {
+    z-index: 11;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translateX(-50%) translateY(-50%) translateZ(-600px);
+    width: 200%;
+    height: 200%;
+
+    background: radial-gradient(400px 100px at 60% 90%, var(--light-shade) 85%, #444);
+    transition: transform 0.5s;
+}
+
+.book-model {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: var(--book-height);
+    width: var(--book-width);
+
+    transform-style: preserve-3d;
+    transform: translateY(calc(-0.5 * var(--book-height)));
+
+    animation: var(--show-time) infinite normal presentBook;
+}
+
+@keyframes presentBook {
+    0% {
+        transform: translate3d(calc(-50% + 300px), -50%, 0);
+    }
+    20% {
+        transform: translate3d(calc(-50% + 0px), -50%, 0);
+    }
+    80% {
+        transform: translate3d(calc(-50% + 0px), -50%, 0);
+    }
+    100% {
+        transform: translate3d(calc(-50% - 300px), -50%, 0);
+    }
+}
+
+.book-face {
+    position:absolute;
+    border: 2px solid pink;
+    backface-visibility: hidden;
+}
+
+.book-front {
+    height: var(--book-height);
+    width: var(--book-width);
+    background-color: rgb(var(--book-color-rgb));
+    transform:  translateX(-50%) translateY(-50%)
+                rotateY(0deg)
+                translateZ(calc(var(--book-depth) / 2));
+}
+
+.book-left {
+    height: var(--book-height);
+    width: var(--book-depth);
+    background-color: rgb(255 0 0);
+    transform:  translateX(-50%) translateY(-50%)
+                rotateY(-90deg)
+                translateZ(calc(var(--book-width) / 2));
+}
+
+.book-right {
+    height: var(--book-height);
+    width: var(--book-depth);
+    background-color: rgb(0 170 0);
+    transform:  translateX(-50%) translateY(-50%)
+                rotateY(90deg)
+                translateZ(calc(var(--book-width) / 2));
+}
+
+.book-top {
+    height: var(--book-depth);
+    width: var(--book-width);
+    background-color: rgb(120 140 220);
+    transform:  translateX(-50%) translateY(-50%)
+                rotateX(90deg)
+                translateZ(calc(var(--book-height) / 2));
+}
+
+.blob-shadow {
+    height: var(--book-height);
+    width: var(--book-width);
+    background-color: rgb(0 0 60);
+    transform:  
+        translateX(-50%) translateY(-50%)
+        rotateX(90deg)
+        skewX(-45deg)
+        translate3d(
+            0,
+            calc(var(--book-height) / -2),
+            calc(var(--book-height) / -2)
+        );
+
+    animation: var(--show-time) infinite normal skewShadow;
+}
+
+@keyframes skewShadow {
+    from {
+        transform:  
+        translateX(-50%) translateY(-50%)
+        rotateX(90deg)
+        skewX(-15deg)
+        translate3d(
+            0,
+            calc(var(--book-height) / -2),
+            calc(var(--book-height) / -2)
+        );
+
+    }
+    to {
+        transform:  
+        translateX(-50%) translateY(-50%)
+        rotateX(90deg)
+        skewX(-30deg)
+        scaleY(1.2)
+        translate3d(
+            0,
+            calc(var(--book-height) / -2),
+            calc(var(--book-height) / -2)
+        );
+
+    }
+    
+}

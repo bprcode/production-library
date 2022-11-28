@@ -14,6 +14,7 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/catalog.css">
+  {{#if stylesheet}}<link rel="stylesheet" href="{{stylesheet}}">{{/if}}
 
   <title>{{title}} | Catalog</title>
 </head>
@@ -129,7 +130,7 @@
   </div>
 
   <footer class="container-fluid pt-2 pb-1 mt-auto bg-opacity-25 bg-dark text-center">
-    <small>&copy; 2022 Local Library</small>
+    <small>Site &copy; 2022 Local Library. External data courtesy of <a href="https://openlibrary.org">OpenLibrary.org</a>.</a></small>
   </footer>
 </body>
 </html>
