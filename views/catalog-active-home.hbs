@@ -1,21 +1,92 @@
 {{! This template populates catalog-layout.hbs }}
-{{#> catalog_layout no_back=1 stylesheet='/recent-carousel.css'}}{{#*inline 'content'~}}
-
-<div class="crop">
-    <div class="recently-added">
-        <!--<div class="backdrop"></div>-->
-        <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
-        <div class="camera">
-            <!-- book model -->
-            <div class="book-model">
-                <div class="book-face book-front">Front</div>
-                <div class="book-face book-left">Left</div>
-                <div class="book-face book-right">Right</div>
-                <div class="book-face book-top">Top</div>
-                <div class="blob-shadow"></div>
+{{#> catalog_layout no_back=1 no_title=1 stylesheet='/recent-carousel.css'}}{{#*inline 'content'~}}
+<div class="top-bar pb-4 ps-3"><h1 class="serif">Welcome to the Catalog</h1></div>
+<div class="d-flex">
+    <div class="crop">
+        <div class="recently-added">
+            <div class="backdrop"></div>
+            <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
+            <div class="camera">
+                <!-- book model -->
+                <div class="book-model">
+                    <div class="book-face book-front">Front</div>
+                    <div class="book-face book-left">Left</div>
+                    <div class="book-face book-right">Right</div>
+                    <div class="book-face book-top">Top</div>
+                    <div class="blob-shadow"></div>
+                </div>
+                <!-- /book model -->
             </div>
-            <!-- /book model -->
         </div>
     </div>
+    <div class="book-info ps-3">
+        <h2 class="serif">Sample title</h2>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur, expedita odit at, commodi facilis enim nemo quo magni voluptatem dolores repudiandae, nobis rem quibusdam harum animi? Veritatis aut similique sequi!</p>
+    </div>
 </div>
+
+<script>
+const log = console.log.bind(console)
+const qs = document.querySelector.bind(document)
+
+const mockIds = [295293,10523169,12993656]
+const mockImgs = []
+
+mockIds.map(id => {
+    const src = `${id}-M.jpg`
+    const img = new Image()
+
+    img.onload = () => {
+        const aspect = img.width / img.height
+        log(`${id} loaded with dimensions ${img.width} by ${img.height}`+
+            ` and aspect ratio ${aspect}`)
+
+        mockImgs.push({ element: img, aspect: aspect })
+        if (id === mockIds.at(-1)) {
+            log('last image loaded. Starting animations.')
+            updateCover()
+            setInterval(updateCover, 3000)
+        }
+    }
+    img.onerror = () => {
+        throw new Error(`Error loading image for id ${id}`)
+    }
+
+    img.src = src
+})
+
+function restartAnimations () {
+    qs('.camera').classList.remove('camera-animate')
+    qs('.book-model').classList.remove('book-model-animate')
+    qs('.book-front').classList.remove('book-front-animate')
+    qs('.blob-shadow').classList.remove('blob-shadow-animate')
+
+    setTimeout(() => {
+        qs('.camera').classList.add('camera-animate')
+        qs('.book-model').classList.add('book-model-animate')
+        qs('.book-front').classList.add('book-front-animate')
+        qs('.blob-shadow').classList.add('blob-shadow-animate')
+    }, 0)
+}
+
+let counter = 0
+function updateCover () {
+    const front = document.querySelector('.book-front')
+    const ra = document.querySelector('.recently-added')
+    
+    front.removeChild(front.firstChild)
+    front.append(mockImgs[counter].element)
+    ra.style.setProperty('--book-aspect', mockImgs[counter].aspect)
+
+    counter++
+    counter %= mockImgs.length
+
+    restartAnimations()
+}
+
+document.addEventListener('DOMContentLoaded', event => {
+    log(document.getAnimations().find(
+                e => e.animationName === 'presentBook'))
+})
+</script>
 {{~/inline}}{{/catalog_layout}}

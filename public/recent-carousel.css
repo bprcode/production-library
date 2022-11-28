@@ -1,42 +1,63 @@
+.top-bar {
+    background-color: #222;
+    color: white;
+}
 .crop {
-    border: 3px solid orange;
-    overflow: hidden; /* Applying directly to scene div breaks perspective in FireFox */
+    flex-shrink: 0;
+    /* border: 3px solid orange; */
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    /* Applying directly to scene div breaks perspective in FireFox */
 }
 
 .recently-added {
     z-index: 10;
     position: relative;
-    height: 300px;
+    height: 100%;
+    width: 100%;
 
     transition: transform 0.5s;
-    border: 1px solid purple;
+    /* border: 1px solid purple; */
 
-    --show-time: 1s;
+    --show-time: 3s;
     --book-height: 300px;
     --book-aspect: 0.6;
     --book-width: calc(var(--book-height) * var(--book-aspect));
     --book-depth: 50px;
     --book-color-rgb: 255 128 0;
 }
+.recently-added-header {
+    
+}
+
+.book-info {
+    flex-shrink: 1;
+    color: white;
+    background-color: #222;
+}
 
 .camera {
-    /* transform: perspective(400px) rotateX(-10deg) translateY(300px); */
-    transform-style: preserve-3d;
+    z-index: 1;
+    transform-style: preserve-3d;   
+}
 
+.camera-animate {
     animation: var(--show-time) normal infinite wiggle-camera linear;
 }
 
 @keyframes wiggle-camera {
     from {
-        transform: perspective(400px) translate3d(0, 400px, -300px)
-                    rotate3d(0.2,1,0.05, 0deg);
+        transform: perspective(400px) translate3d(0, 430px, -300px)
+                    rotate3d(0.3,1,0.05, -5deg);
     }
     to {
-        transform: perspective(400px) translate3d(0, 400px, -300px)
-                    rotate3d(0.2,1,0.05, -25deg);
+        transform: perspective(400px) translate3d(0, 430px, -300px)
+                    rotate3d(0.3,1,0.05, -35deg);
     }
 }
 .recent-overlay {
+    z-index: 10;
     position: absolute;
     left: 0.7em;
     top: 0.25em;
@@ -44,17 +65,16 @@
 }
 
 .backdrop {
-    z-index: 11;
+    z-index: -11;
     position: absolute;
     top: 50%;
     left: 50%;
 
-    transform: translateX(-50%) translateY(-50%) translateZ(-600px);
-    width: 200%;
-    height: 200%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 100%;
+    height: 100%;
 
-    background: radial-gradient(400px 100px at 60% 90%, var(--light-shade) 85%, #444);
-    transition: transform 0.5s;
+    background-image: radial-gradient(400px 100px at 60% 90%, var(--light-shade) 90%, #222);
 }
 
 .book-model {
@@ -66,19 +86,21 @@
 
     transform-style: preserve-3d;
     transform: translateY(calc(-0.5 * var(--book-height)));
+}
 
+.book-model-animate {
     animation: var(--show-time) infinite normal presentBook;
 }
 
 @keyframes presentBook {
     0% {
-        transform: translate3d(calc(-50% + 300px), -50%, 0);
+        transform: translate3d(calc(-50% + 200px), -50%, 0);
     }
     20% {
-        transform: translate3d(calc(-50% + 0px), -50%, 0);
+        transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
     80% {
-        transform: translate3d(calc(-50% + 0px), -50%, 0);
+        transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
     100% {
         transform: translate3d(calc(-50% - 300px), -50%, 0);
@@ -99,6 +121,12 @@
                 rotateY(0deg)
                 translateZ(calc(var(--book-depth) / 2));
 }
+.book-front img {
+    height: 100%;
+}
+.book-front-animate {
+    animation: var(--show-time) infinite normal gleamFace;
+}
 
 .book-left {
     height: var(--book-height);
@@ -112,7 +140,7 @@
 .book-right {
     height: var(--book-height);
     width: var(--book-depth);
-    background-color: rgb(0 170 0);
+    background-color: rgb(190, 185, 173);
     transform:  translateX(-50%) translateY(-50%)
                 rotateY(90deg)
                 translateZ(calc(var(--book-width) / 2));
@@ -121,7 +149,7 @@
 .book-top {
     height: var(--book-depth);
     width: var(--book-width);
-    background-color: rgb(120 140 220);
+    background-color: rgb(237, 233, 222);
     transform:  translateX(-50%) translateY(-50%)
                 rotateX(90deg)
                 translateZ(calc(var(--book-height) / 2));
@@ -130,7 +158,7 @@
 .blob-shadow {
     height: var(--book-height);
     width: var(--book-width);
-    background-color: rgb(0 0 60);
+    background-image: linear-gradient(transparent 50%, #222f 100%);
     transform:  
         translateX(-50%) translateY(-50%)
         rotateX(90deg)
@@ -140,8 +168,19 @@
             calc(var(--book-height) / -2),
             calc(var(--book-height) / -2)
         );
+}
 
+.blob-shadow-animate {
     animation: var(--show-time) infinite normal skewShadow;
+}
+
+@keyframes gleamFace {
+    from {
+        filter: brightness(85%);
+    }
+    to {
+        filter: brightness(120%);
+    }
 }
 
 @keyframes skewShadow {
@@ -149,7 +188,8 @@
         transform:  
         translateX(-50%) translateY(-50%)
         rotateX(90deg)
-        skewX(-15deg)
+        skewX(-5deg)
+        scaleY(0.5)
         translate3d(
             0,
             calc(var(--book-height) / -2),
@@ -161,8 +201,8 @@
         transform:  
         translateX(-50%) translateY(-50%)
         rotateX(90deg)
-        skewX(-30deg)
-        scaleY(1.2)
+        skewX(-45deg)
+        scaleY(1.5)
         translate3d(
             0,
             calc(var(--book-height) / -2),
