@@ -9,10 +9,14 @@
             <div class="camera">
                 <!-- book model -->
                 <div class="book-model">
-                    <div class="book-face book-front">Front</div>
-                    <div class="book-face book-left">Left</div>
-                    <div class="book-face book-right">Right</div>
-                    <div class="book-face book-top">Top</div>
+                    <div class="book-face book-front">
+                        {{#each cover_ids}}
+                        <img src="{{.}}-M.jpg" class="covers" id="cover-{{@index}}">
+                        {{/each}}
+                    </div>
+                    <div class="book-face book-left"></div>
+                    <div class="book-face book-right"></div>
+                    <div class="book-face book-top"></div>
                     <div class="blob-shadow"></div>
                 </div>
                 <!-- /book model -->
@@ -28,32 +32,25 @@
 <script>
 const log = console.log.bind(console)
 const qs = document.querySelector.bind(document)
+const el = document.getElementById.bind(document)
 
-const mockIds = [295293,10523169,12993656]
-const mockImgs = []
+const loadedImages = []
+let firstLoad = true
+    
+for (const e of document.querySelectorAll('.covers')) {
+    e.addEventListener('load', event => {
+        loadedImages.push({
+            element: event.target,
+            aspect: event.target.width / event.target.height
+        })
 
-mockIds.map(id => {
-    const src = `${id}-M.jpg`
-    const img = new Image()
-
-    img.onload = () => {
-        const aspect = img.width / img.height
-        log(`${id} loaded with dimensions ${img.width} by ${img.height}`+
-            ` and aspect ratio ${aspect}`)
-
-        mockImgs.push({ element: img, aspect: aspect })
-        if (id === mockIds.at(-1)) {
-            log('last image loaded. Starting animations.')
+        if (firstLoad) {
+            firstLoad = false
             updateCover()
             setInterval(updateCover, 3000)
         }
-    }
-    img.onerror = () => {
-        throw new Error(`Error loading image for id ${id}`)
-    }
-
-    img.src = src
-})
+    })
+}
 
 function restartAnimations () {
     qs('.camera').classList.remove('camera-animate')
@@ -69,24 +66,26 @@ function restartAnimations () {
     }, 0)
 }
 
-let counter = 0
 function updateCover () {
-    const front = document.querySelector('.book-front')
-    const ra = document.querySelector('.recently-added')
-    
-    front.removeChild(front.firstChild)
-    front.append(mockImgs[counter].element)
-    ra.style.setProperty('--book-aspect', mockImgs[counter].aspect)
+    updateCover.counter ??= 0
+    const image = loadedImages[updateCover.counter]
+    if (!image) {
+        log('updateCover fired too soon. Aborting...')
+        return
+    }
 
-    counter++
-    counter %= mockImgs.length
+    document.querySelector('.recently-added').style.setProperty(
+        '--book-aspect', image.aspect)
+    
+    for (const e of document.querySelectorAll('.covers')) {
+        e.classList.add('d-none')
+    }
+    image.element.classList.remove('d-none')
+    updateCover.counter++
+    updateCover.counter %= loadedImages.length
 
     restartAnimations()
 }
 
-document.addEventListener('DOMContentLoaded', event => {
-    log(document.getAnimations().find(
-                e => e.animationName === 'presentBook'))
-})
 </script>
 {{~/inline}}{{/catalog_layout}}

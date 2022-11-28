@@ -88,6 +88,8 @@ exports.index = async (req, res) => {
         genre_count: result[2],
         available_count: result[4],
         total_count: result[3],
+        // DEBUG -- temporarily using local mock data
+        cover_ids: [295293,10523169,12993656]
     })
 }
 exports.book_list = [
