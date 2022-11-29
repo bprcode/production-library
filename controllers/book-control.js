@@ -73,13 +73,21 @@ const bookIdValidator =
         })
 
 exports.index = async (req, res) => {
+    // DEBUG -- using mock data to populate recent list
     const result = await Promise.all([
         books.count(),
         authors.count(),
         genres.count(),
         bookInstances.count(),
         bookInstances.count({ status: 'Available' }),
+        books.find('title', 'snippet', { title: 'middlemarch%' }),
+        books.find('title', 'snippet', { title: '%return%' }),
+        books.find('title', 'snippet', { title: 'fahrenheit%' }),
     ])
+
+    result[5][0].cover_id = 295293
+    result[6][0].cover_id = 10523169
+    result[7][0].cover_id = 12993656
 
     res.render('catalog-active-home.hbs', {
         title: 'Welcome to the catalog',
@@ -89,7 +97,8 @@ exports.index = async (req, res) => {
         available_count: result[4],
         total_count: result[3],
         // DEBUG -- temporarily using local mock data
-        cover_ids: [295293,10523169,12993656]
+        cover_ids: [295293,10523169,12993656],
+        recent_books: [result[5][0], result[6][0], result[7][0]]
     })
 }
 exports.book_list = [

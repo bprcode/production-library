@@ -6,9 +6,19 @@
 
 .recent-outer {
     overflow: hidden;
+    width: 100%;
+    border-bottom-right-radius: 8px;
     
     background-image: radial-gradient(250px 100px at 25% 90%,
         var(--light-shade) 90%, var(--charcoal));
+}
+
+.book-info {
+    z-index: 12;
+    flex-shrink: 1;
+    width: 100%;
+    color: white;
+    background-image: linear-gradient(-90deg, var(--charcoal) 30%, transparent 60%);
 }
 
 .top-bar {
@@ -33,13 +43,6 @@
     --book-width: calc(var(--book-height) * var(--book-aspect));
     --book-depth: 50px;
     --book-color-rgb: 255 128 0;
-}
-
-.book-info {
-    z-index: 12;
-    flex-shrink: 1;
-    color: white;
-    background-image: linear-gradient(-90deg, var(--charcoal) 30%, transparent 60%);
 }
 
 .camera {
@@ -95,7 +98,7 @@
         transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
     100% {
-        transform: translate3d(calc(-50% - 500px), -50%, 0);
+        transform: translate3d(calc(-50% - 400px), -50%, -400px);
     }
 }
 
@@ -121,10 +124,24 @@
     animation: var(--show-time) infinite normal gleamFace;
 }
 
+.ambient-front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(0deg, #0004 2%, transparent 12%);
+}
+
+.ambient-right {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(0deg, #0003, transparent 12%);
+}
+
 .book-left {
     height: var(--book-height);
     width: var(--book-depth);
-    background-color: rgb(255 0 0);
+    background-color: var(--primary);
     transform:  translateX(-50%) translateY(-50%)
                 rotateY(-90deg)
                 translateZ(calc(var(--book-width) / 2));
@@ -148,10 +165,52 @@
                 translateZ(calc(var(--book-height) / 2));
 }
 
+.ambient-before {
+    position: absolute;
+    height: calc(var(--book-height));
+    width: var(--book-width);
+    background-image: radial-gradient(calc(0.8 * var(--book-width)) 30% at 50% 0%, #2228 30%, transparent);
+    transform:
+        translateX(-50%)
+        rotateX(90deg)
+        translateY(50%)
+        ;
+}
+
+.fake-depth-fog {
+    z-index: 9;
+    position: absolute;
+    width: 100%;
+    height: 56%;
+}
+
+.fake-depth-fog-animate {
+    animation: var(--show-time) fogFadeOut infinite;
+}
+
+@keyframes fogFadeOut {
+    0% {
+        background-color: var(--charcoal);
+    }
+    5% {
+        background-color: var(--charcoal);
+    }
+    15% {
+        background-color: transparent;
+    }
+    90% {
+        background-color: transparent;
+    }
+    100% {
+        background-color: var(--charcoal);
+    }
+}
+
 .blob-shadow {
+    position: absolute;
     height: var(--book-height);
     width: var(--book-width);
-    background-image: linear-gradient(transparent 50%, var(--charcoal) 100%);
+    background-image: radial-gradient(100px 70% at 50% 100%, #2226 50%, transparent);
 }
 
 .blob-shadow-animate {
@@ -174,7 +233,7 @@
         rotateX(90deg)
         translateY(calc(var(--book-depth) / 2))
         skewX(-5deg)
-        scaleY(1.1)
+        scaleY(0.7)
         translate3d(
             0,
             calc(var(--book-height) / -2),
@@ -187,7 +246,7 @@
         rotateX(90deg)
         translateY(calc(var(--book-depth) / 2))
         skewX(-45deg)
-        scaleY(1.9)
+        scaleY(2.3)
         translate3d(
             0,
             calc(var(--book-height) / -2),

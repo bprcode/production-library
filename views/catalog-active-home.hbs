@@ -6,17 +6,22 @@
         <div class="spotlight-pane">
             <div class="recently-added">
                 <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
+                <div class="fake-depth-fog"></div>
                 <div class="camera">
                     <!-- book model -->
                     <div class="book-model">
                         <div class="book-face book-front">
+                            <div class="ambient-front"></div>
                             {{#each cover_ids}}
                             <img crossorigin src="/{{.}}-M.jpg" class="covers" id="cover-{{@index}}">
                             {{/each}}
                         </div>
                         <div class="book-face book-left"></div>
-                        <div class="book-face book-right"></div>
+                        <div class="book-face book-right">
+                            <div class="ambient-right"></div>
+                        </div>
                         <div class="book-face book-top"></div>
+                        <div class="ambient-before"></div>
                         <div class="blob-shadow"></div>
                     </div>
                     <!-- /book model -->
@@ -24,8 +29,8 @@
             </div>
         </div>
         <div class="book-info ps-4 pe-2">
-            <h2 class="serif">Sample title</h2>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur, expedita odit at, commodi facilis enim nemo quo magni voluptatem dolores repudiandae, nobis rem quibusdam harum animi? Veritatis aut similique sequi!</p>
+            <h2 class="serif" id="spot-title"></h2>
+            <p id="spot-copy"></p>
         </div>
     </div>
 </div>
@@ -36,12 +41,43 @@ const qs = document.querySelector.bind(document)
 const el = document.getElementById.bind(document)
 
 const loadedImages = []
+const spotlightData = [
+    {{#each recent_books}}
+    {
+        title: `{{title}}`,
+        snippet: abbreviateSnippet(`{{snippet}}`),
+        cover_id: `{{cover_id}}`
+    },
+    {{/each}}
+]
+
 let firstLoad = true
-    
+
+function abbreviateSnippet (snippet) {
+    const maxLength = 160
+    const minLength = 80
+
+    if (snippet.length <= maxLength) { return snippet }
+
+    const maxedSlice = snippet.slice(0, maxLength)
+    const coherentSlice = maxedSlice.match(/^.*\s/)[0] // Break on last space
+    const firstSentence = snippet.match('^[^.]*\.')[0] // Break on last period
+
+    if (firstSentence.length < maxLength
+            && firstSentence.length > minLength ) {
+        return firstSentence
+    }
+
+    // Otherwise...
+    return coherentSlice + '...'
+}
+
 function handleImageLoad(element) {
+
     loadedImages.push({
         element: element,
-        aspect: element.width / element.height
+        aspect: element.width / element.height,
+        info: spotlightData.find(e => element.src.match(e.cover_id))
     })
 
     if (firstLoad) {
@@ -50,6 +86,7 @@ function handleImageLoad(element) {
         setInterval(updateCover, 3000)
     }
 }
+
 for (const e of document.querySelectorAll('.covers')) {
     if (e.complete) {
         log('>> element already loaded:', e)
@@ -70,26 +107,33 @@ for (const e of document.querySelectorAll('.covers')) {
 }
 
 function restartAnimations () {
+
     qs('.camera').classList.remove('camera-animate')
     qs('.book-model').classList.remove('book-model-animate')
     qs('.book-front').classList.remove('book-front-animate')
     qs('.blob-shadow').classList.remove('blob-shadow-animate')
+    qs('.fake-depth-fog').classList.remove('fake-depth-fog-animate')
 
     setTimeout(() => {
         qs('.camera').classList.add('camera-animate')
         qs('.book-model').classList.add('book-model-animate')
         qs('.book-front').classList.add('book-front-animate')
         qs('.blob-shadow').classList.add('blob-shadow-animate')
+        qs('.fake-depth-fog').classList.add('fake-depth-fog-animate')
     }, 0)
 }
 
 function updateCover () {
+
     updateCover.counter ??= 0
     const image = loadedImages[updateCover.counter]
     if (!image) {
         log('updateCover fired too soon. Aborting...')
         return
     }
+
+    el('spot-title').textContent = image.info.title
+    el('spot-copy').innerHTML = image.info.snippet
 
     document.querySelector('.recently-added').style.setProperty(
         '--book-aspect', image.aspect)
