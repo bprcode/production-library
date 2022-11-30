@@ -1,9 +1,10 @@
 require('express-async-errors')
 const { body, param, validationResult } = require('express-validator')
 const { books, justBooks, authors, genres, bookInstances, genresByBook,
-        bookGenres }
+        bookGenres, spotlightWorks, suggestions }
         = require('../database.js')
 const { paginate, sanitizePagination } = require('./paginator.js')
+const axios = require('axios')
 
 const preventTitleCollision =
     body('title')
@@ -73,21 +74,17 @@ const bookIdValidator =
         })
 
 exports.index = async (req, res) => {
-    // DEBUG -- using mock data to populate recent list
     const result = await Promise.all([
         books.count(),
         authors.count(),
         genres.count(),
         bookInstances.count(),
         bookInstances.count({ status: 'Available' }),
-        books.find('title', 'snippet', { title: 'middlemarch%' }),
-        books.find('title', 'snippet', { title: '%return%' }),
-        books.find('title', 'snippet', { title: 'fahrenheit%' }),
+        suggestions.find('cover_id', 'title', 'snippet', 'book_url')
     ])
 
-    result[5][0].cover_id = 295293
-    result[6][0].cover_id = 10523169
-    result[7][0].cover_id = 12993656
+    log('DEBUG: Database contained these suggestions: ', blue)
+    log(result[5])
 
     res.render('catalog-active-home.hbs', {
         title: 'Welcome to the catalog',
@@ -96,9 +93,7 @@ exports.index = async (req, res) => {
         genre_count: result[2],
         available_count: result[4],
         total_count: result[3],
-        // DEBUG -- temporarily using local mock data
-        cover_ids: [295293,10523169,12993656],
-        recent_books: [result[5][0], result[6][0], result[7][0]]
+        recent_books: result[5]
     })
 }
 exports.book_list = [
@@ -348,9 +343,56 @@ exports.book_json_post = [
         // Having passed validation, create the new book.
         const result = await justBooks.insert(item)
 
+        // Consider including the book in the recently-added list:
+        suggestRecent(req.body.work_key, result[0].book_id)
+
         res.status(201).send(result[0])
     }
 ]
 exports.book_import_get = (req, res) => {
     res.render(`import_book.hbs`, { title: 'Import book' })
+}
+
+async function suggestRecent (workKey, book_id) {
+    const minDescriptionLength = 200
+    if (typeof workKey !== 'string') { return }
+
+    try {
+        log('Considering ', 'https://openlibrary.org' + workKey + '.json')
+
+        const response = await axios({
+            method: 'get',
+            url: 'https://openlibrary.org' + workKey + '.json',
+            headers: {
+                // Refuse compression to avoid decompression bug in Axios 1.2.0
+                'Accept-Encoding': 'identity'
+            }
+        })
+
+        if (!Array.isArray(response.data.covers)) {
+            log(`Rejecting suggestion `
+                    + `(no covers available for ${workKey})`, pink)
+            return
+        }
+
+        const firstCover = response.data.covers[0]
+        const parsed = parseDescription(response.data.description)
+
+        if (firstCover && parsed.length > minDescriptionLength) {
+            log(`Looks good:`, pink)
+            log({ cover_id: firstCover, description: parsed })
+            spotlightWorks.insert({ cover_id: firstCover, book_id: book_id })
+        } else {
+            log('This record doesn\'t look like a good candidate.', yellow)
+        }
+
+    } catch(e) {
+        log.err(e.message)
+    }
+
+    function parseDescription (description) {
+        if (!description) { return 'No description available.' }
+        if (typeof description === 'string') { return description }
+        return description.value || 'Unrecognized format.'
+    }
 }

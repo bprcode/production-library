@@ -1,4 +1,7 @@
 <form class="mb-4" id="book-form" action="{{form_action}}" method="POST">
+    {{#if work_key}}
+    <input class="d-none" name="work_key" type="text" value="{{work_key}}" id="work-test">
+    {{/if}}
 
     <div class="row mb-3">
         <label for="title-id" class="col-form-label col-sm-3 required-star">Title</label>

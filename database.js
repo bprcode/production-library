@@ -313,11 +313,18 @@ const booksByGenre = new Model({
     .join(bookGenres, 'book_id')
 
 const genresByBook = bookGenres
-    .join(genres, 'genre_id')
+                    .join(genres, 'genre_id')
 
 const bookInstances = new Model({
     schema: 'lib', table: 'book_instance', order: 'instance_id' })
+
 const inventory = books.join(bookInstances, 'book_id')
+
+const spotlightWorks = new Model({
+    schema: 'lib', table: 'spotlight_works', order: 'serial'})
+
+const suggestions = spotlightWorks
+                    .join(justBooks, 'book_id')
 
 /**
  * Retrieve an array of book status strings.
@@ -331,7 +338,7 @@ async function bookStatusList () {
 
 module.exports = {
     query, queryResult, snipTimes,
-    books, justBooks, authors, genres,
-    bookInstances, inventory, booksByGenre, genresByBook, bookGenres,
+    books, justBooks, authors, genres, bookInstances, inventory, booksByGenre,
+    genresByBook, bookGenres, spotlightWorks, suggestions,
     bookStatusList
 }

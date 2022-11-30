@@ -94,11 +94,11 @@
     40% {
         transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
-    80% {
+    70% {
         transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
     100% {
-        transform: translate3d(calc(-50% - 400px), -50%, -400px);
+        transform: translate3d(calc(-50% - 500px), -50%, 0px);
     }
 }
 

@@ -12,9 +12,9 @@
                     <div class="book-model">
                         <div class="book-face book-front">
                             <div class="ambient-front"></div>
-                            {{#each cover_ids}}
-                            <img crossorigin src="/{{.}}-M.jpg" class="covers" id="cover-{{@index}}">
-                            {{/each}}
+                            {{#each recent_books~}}
+                            <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
+                            {{~/each}}
                         </div>
                         <div class="book-face book-left"></div>
                         <div class="book-face book-right">
@@ -46,7 +46,8 @@ const spotlightData = [
     {
         title: `{{title}}`,
         snippet: abbreviateSnippet(`{{snippet}}`),
-        cover_id: `{{cover_id}}`
+        cover_id: `{{cover_id}}`,
+        book_url: `{{book_url}}`
     },
     {{/each}}
 ]
@@ -74,10 +75,12 @@ function abbreviateSnippet (snippet) {
 
 function handleImageLoad(element) {
 
+    log(`handling load with width=${element.width}, height=${element.height}`)
+
     loadedImages.push({
         element: element,
-        aspect: element.width / element.height,
-        info: spotlightData.find(e => element.src.match(e.cover_id))
+        aspect: element.width / element.height || 0.6,
+        info: spotlightData[element.dataset.index]
     })
 
     if (firstLoad) {
@@ -96,13 +99,22 @@ for (const e of document.querySelectorAll('.covers')) {
         log('>> not yet loaded:', e)
     }
 
-    e.addEventListener('load', event => {
+    const reactToLoad = event => {
         log(`Load completed for element:`, event.target)
         handleImageLoad(event.target)
-    })
+    }
+
+    e.addEventListener('load', reactToLoad)
     e.addEventListener('error', event => {
         log(`Error loading image element:`)
         log(event.target)
+
+        // Failover approach 1
+        event.target.removeEventListener('load', reactToLoad)
+        event.target.src = '/book-open-reader-solid.svg'
+        event.target.width = 180
+        event.target.height = 300
+        handleImageLoad(event.target)
     })
 }
 
@@ -132,7 +144,7 @@ function updateCover () {
         return
     }
 
-    el('spot-title').textContent = image.info.title
+    el('spot-title').innerHTML = image.info.title
     el('spot-copy').innerHTML = image.info.snippet
 
     document.querySelector('.recently-added').style.setProperty(

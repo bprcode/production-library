@@ -59,6 +59,13 @@ app
     .use(express.urlencoded({ extended: true }))
     .use(express.json())
 
+    .use((req, res, next) => {
+        if(process.env.NODE_ENV !== 'production') {
+            log(req.method + '> ' + req.originalUrl, dim)
+        }
+        next()
+    })
+
     .use('/health', (req, res) => { res.status(200).send() })
     .get('/', (req, res) => { res.redirect('/catalog') })
     .use('/catalog', catalogRouter)
@@ -86,4 +93,5 @@ const server = app.listen(process.env.PORT || 2222, () => {
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
     log('To fix: failures on import when no genres are recorded in database')
     log('Back link not working in mobile browser?')
+    log('Todo: Better failover in case of errors on image load for splash')
 })

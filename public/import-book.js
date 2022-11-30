@@ -104,6 +104,7 @@ async function revealModal (event) {
                 isbn: coverEd.isbn_10 || coverEd.isbn_13
                         || dataset.firstIsbn || ''
             },
+            work_key: dataset.key,
             genres: revealModal.lastGenres,
             suggestions: revealModal.lastSuggestions,
             omit_author: true,
