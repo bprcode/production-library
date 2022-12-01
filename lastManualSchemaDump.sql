@@ -313,7 +313,7 @@ ALTER TABLE ONLY lib.spotlight_works
 -- Name: spotlight_works limit_spotlight; Type: TRIGGER; Schema: lib; Owner: postgres
 --
 
-CREATE TRIGGER limit_spotlight AFTER INSERT ON lib.spotlight_works FOR EACH STATEMENT EXECUTE FUNCTION lib.delete_oldest_spotlight();
+CREATE TRIGGER limit_spotlight AFTER INSERT ON lib.spotlight_works FOR EACH ROW EXECUTE FUNCTION lib.delete_oldest_spotlight();
 
 
 --
@@ -356,11 +356,11 @@ ALTER TABLE ONLY lib.books
 
 
 --
--- Name: spotlight_works spotlight_works_book_id_fkey; Type: FK CONSTRAINT; Schema: lib; Owner: postgres
+-- Name: spotlight_works fk_spotlight_works_book_id; Type: FK CONSTRAINT; Schema: lib; Owner: postgres
 --
 
 ALTER TABLE ONLY lib.spotlight_works
-    ADD CONSTRAINT spotlight_works_book_id_fkey FOREIGN KEY (book_id) REFERENCES lib.books(book_id);
+    ADD CONSTRAINT fk_spotlight_works_book_id FOREIGN KEY (book_id) REFERENCES lib.books(book_id) ON DELETE CASCADE;
 
 
 --

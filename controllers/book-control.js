@@ -83,9 +83,6 @@ exports.index = async (req, res) => {
         suggestions.find('cover_id', 'title', 'snippet', 'book_url')
     ])
 
-    log('DEBUG: Database contained these suggestions: ', blue)
-    log(result[5])
-
     res.render('catalog-active-home.hbs', {
         title: 'Welcome to the catalog',
         book_count: result[0],
@@ -184,6 +181,13 @@ exports.book_create_post = [
 
         // Having passed validation, create the new book.
         const result = await justBooks.insert(item)
+
+        // Start a lookup on OpenLibrary,
+        // add this book to the recent works spotlight if it looks good.
+        suggestBook(result[0].title,
+                    (await authors.find('full_name',
+                        { author_id: result[0].author_id }))[0].full_name,
+                    result[0].book_id)
 
         // Also need to repeatedly insert on genre/book junction table
         const bookID = result[0].book_id
@@ -353,6 +357,45 @@ exports.book_import_get = (req, res) => {
     res.render(`import_book.hbs`, { title: 'Import book' })
 }
 
+async function suggestBook (title, author, book_id) {
+    log(`Attempting book lookup for "${title}" by ${author}`
+        +` with book_id ${book_id}`)
+
+    try {
+        const result = await axios({
+            method: 'get',
+            url: 'https://openlibrary.org/search.json?'
+                    + 'title=' + title
+                    + '&author=' + author
+                    + '&fields=key'
+                    + '&limit=1',
+            headers: {
+                // Refuse compression to avoid decompression bug in Axios 1.2.0
+                'Accept-Encoding': 'identity'
+            }
+        })
+        const workKey = result.data.docs[0].key
+
+        const work = await axios ({
+            method: 'get',
+            url: 'https://openlibrary.org' + workKey + '.json',
+            headers: {
+                // Refuse compression to avoid decompression bug in Axios 1.2.0
+                'Accept-Encoding': 'identity'
+            }
+        })
+
+        const firstCover = work.data.covers[0]
+
+        if (work.data.covers[0] > 0) {
+            log('Work accepted. Adding to spotlight queue...', green)
+            spotlightWorks.insert({ cover_id: firstCover, book_id: book_id })
+        }
+    } catch(e) {
+        log.err(e.message)
+    }
+}
+
 async function suggestRecent (workKey, book_id) {
     const minDescriptionLength = 200
     if (typeof workKey !== 'string') { return }
@@ -378,12 +421,11 @@ async function suggestRecent (workKey, book_id) {
         const firstCover = response.data.covers[0]
         const parsed = parseDescription(response.data.description)
 
-        if (firstCover && parsed.length > minDescriptionLength) {
-            log(`Looks good:`, pink)
-            log({ cover_id: firstCover, description: parsed })
+        if (firstCover > 0 && parsed.length > minDescriptionLength) {
+            log(`Suggested work looks good.`, pink)
             spotlightWorks.insert({ cover_id: firstCover, book_id: book_id })
         } else {
-            log('This record doesn\'t look like a good candidate.', yellow)
+            log('This text doesn\'t look like a good candidate.', yellow)
         }
 
     } catch(e) {

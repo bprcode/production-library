@@ -47,12 +47,13 @@ const spotlightData = [
         title: `{{title}}`,
         snippet: abbreviateSnippet(`{{snippet}}`),
         cover_id: `{{cover_id}}`,
-        book_url: `{{book_url}}`
+        book_url: `{{book_url}}`,
+        index: `{{@index}}`
     },
     {{/each}}
 ]
 
-let firstLoad = true
+let loadsWaiting = spotlightData.length
 
 function abbreviateSnippet (snippet) {
     const maxLength = 160
@@ -83,8 +84,12 @@ function handleImageLoad(element) {
         info: spotlightData[element.dataset.index]
     })
 
-    if (firstLoad) {
-        firstLoad = false
+    // Sort descending based on template index
+    // (which is itself based on serial index -- hence, newest first.)
+    loadedImages.sort((a,b) => b.info.index - a.info.index)
+
+    --loadsWaiting
+    if (loadsWaiting < 1) {
         updateCover()
         setInterval(updateCover, 3000)
     }
