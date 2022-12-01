@@ -6,7 +6,13 @@
             <span class="overflow-hidden">
             <h1 class="serif h2 mb-0">Browse books</h1>
             </span>
-            <span class="">
+            <span class="d-flex">
+                <form class="me-3" action="?q=">
+                    <span class="input-group">
+                        <input class="form-control" style="height: 32px;" aria-label="Search title text" name="q" type="text">
+                        <button class="btn btn-outline-primary" style="height: 32px;" type="submit" aria-label="Search button"><img src="/search.svg"></button>
+                    </span>
+                </form>
                 <a class="btn ui-button" href="/catalog/book/create"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
             </span>
         </div>

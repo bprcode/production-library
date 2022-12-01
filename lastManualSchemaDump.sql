@@ -171,6 +171,11 @@ CREATE TABLE lib.books (
 CASE
     WHEN (character_length(summary) > 250) THEN (SUBSTRING(summary FROM 1 FOR 250) || '...'::text)
     ELSE summary
+END) STORED,
+    index_title text GENERATED ALWAYS AS (
+CASE
+    WHEN ("left"(title, 4) ~~* 'the '::text) THEN ("substring"(title, 5) || ', The'::text)
+    ELSE title
 END) STORED
 );
 

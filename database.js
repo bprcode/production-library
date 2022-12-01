@@ -299,17 +299,18 @@ const authors = new Model({
     schema: 'lib', table: 'authors', order: 'last_name, first_name' })
 // Create books as a junction table (lib.books + lib.authors)
 const books = new Model({
-    schema: 'lib', table: 'books', order: 'title' })
+    schema: 'lib', table: 'books', order: 'index_title' })
     .join(authors, 'author_id')
 
 // Sometimes you need books without the joined information:
-const justBooks = new Model({ schema: 'lib', table: 'books', order: 'title' })
+const justBooks = new Model(
+    { schema: 'lib', table: 'books', order: 'index_title' })
 
 const genres = new Model({ schema: 'lib', table: 'genres', order: 'name' })
 const bookGenres = new Model({ schema: 'lib', table: 'book_genres' })
 
 const booksByGenre = new Model({
-    schema: 'lib', table: 'books', order: 'title'})
+    schema: 'lib', table: 'books', order: 'index_title'})
     .join(bookGenres, 'book_id')
 
 const genresByBook = bookGenres

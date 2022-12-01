@@ -5,6 +5,7 @@ const { books, justBooks, authors, genres, bookInstances, genresByBook,
         = require('../database.js')
 const { paginate, sanitizePagination } = require('./paginator.js')
 const axios = require('axios')
+const Fuse = require('fuse.js')
 
 const preventTitleCollision =
     body('title')
@@ -97,6 +98,27 @@ exports.book_list = [
     ...sanitizePagination,
     async (req, res) => {
         const limit = req.query.limit || 10
+        const query = req.query.q || null
+
+        if (query) {
+            const allBooks = await books.find(
+                'book_url', 'title', 'snippet', 'author_url', 'full_name')
+            const fuse = new Fuse(allBooks, {
+                keys: ['title'],
+                threshold: 0.3,
+                ignoreLocation: true,
+                minMatchCharLength: 2,
+                includeScore: true
+            })
+            const matches = fuse.search(req.query.q)
+            return res.render('book_list.hbs', {
+                books: matches.map(e => e.item),
+                noResults: !Boolean(matches.length),
+                total: matches.length,
+                allResults: true
+            })
+        }
+
         const [bookList, total] = await Promise.all([
 
             books.find(
