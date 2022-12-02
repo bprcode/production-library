@@ -29,8 +29,11 @@
             </div>
         </div>
         <div class="book-info ps-4 pe-2">
-            <h2 class="serif" id="spot-title"></h2>
-            <p id="spot-copy"></p>
+            <div class="wipe-1"></div>
+            <div class="book-info-content-1">
+                <h2 class="serif" id="spot-title"></h2>
+                <p id="spot-copy"></p>
+            </div>
         </div>
     </div>
 </div>
@@ -130,6 +133,7 @@ function restartAnimations () {
     qs('.book-front').classList.remove('book-front-animate')
     qs('.blob-shadow').classList.remove('blob-shadow-animate')
     qs('.fake-depth-fog').classList.remove('fake-depth-fog-animate')
+    qs('.book-info-content-1').classList.remove('animate-wipe-out-1')
 
     setTimeout(() => {
         qs('.camera').classList.add('camera-animate')
@@ -137,6 +141,7 @@ function restartAnimations () {
         qs('.book-front').classList.add('book-front-animate')
         qs('.blob-shadow').classList.add('blob-shadow-animate')
         qs('.fake-depth-fog').classList.add('fake-depth-fog-animate')
+        qs('.book-info-content-1').classList.add('animate-wipe-out-1')
     }, 0)
 }
 

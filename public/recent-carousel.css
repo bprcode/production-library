@@ -5,6 +5,14 @@
 }
 
 .recent-outer {
+    --show-time: 3s;
+    --book-height: 300px;
+    --book-aspect: 0.6;
+    --book-width: calc(var(--book-height) * var(--book-aspect));
+    --book-depth: 50px;
+    --book-color-rgb: 255 128 0;
+    --info-color: #fff;
+
     overflow: hidden;
     width: 100%;
     border-bottom-right-radius: 8px;
@@ -14,11 +22,48 @@
 }
 
 .book-info {
+    position: relative;
     z-index: 12;
     flex-shrink: 1;
     width: 100%;
     color: white;
     background-image: linear-gradient(-90deg, var(--charcoal) 30%, transparent 60%);
+}
+
+.book-info-content-1 {
+    background-size: 500%;
+    background-image: linear-gradient(90deg, transparent 20%, var(--info-color) 40%, var(--info-color) 60%, transparent 80%);
+    background-position-x: 0%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+.animate-wipe-out-1 {
+    animation: wipeOut1 var(--show-time) ease-in-out infinite;
+}
+
+@keyframes wipeOut1 {
+    0% {
+        background-position-x: 0%;
+    }
+    2% {
+        background-position-x: 0%;
+    }
+    15% {
+        background-position-x: 50%;
+    }
+    75% {
+        background-position-x: 50%;
+    }
+    90% {
+        background-position-x: 100%;
+    }
+    100% {
+        background-position-x: 100%;
+    }
 }
 
 .top-bar {
@@ -36,13 +81,6 @@
     position: relative;
     height: 100%;
     width: 100%;
-
-    --show-time: 3s;
-    --book-height: 300px;
-    --book-aspect: 0.6;
-    --book-width: calc(var(--book-height) * var(--book-aspect));
-    --book-depth: 50px;
-    --book-color-rgb: 255 128 0;
 }
 
 .camera {

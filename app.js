@@ -94,5 +94,4 @@ const server = app.listen(process.env.PORT || 2222, () => {
     log('Would be nice: encapsulate book creation with its genres as a transaction.')
     log('To fix: failures on import when no genres are recorded in database')
     log('Back link not working in mobile browser?')
-    log('Todo: fix styling on book search')
 })
