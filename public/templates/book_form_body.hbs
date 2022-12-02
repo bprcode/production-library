@@ -50,7 +50,7 @@
             {{#each genres}}
             <div class="form-check min-tiny">
                 <input type="checkbox" class="form-check-input" name="genre-{{genre_id}}" id="cb-{{genre_id}}" {{#if (find-in ../genreChecks 'genre_id' genre_id)}}checked{{/if}}>
-                <label for="cb-{{genre_id}}">{{name}}</label>
+                <label class="text-break" for="cb-{{genre_id}}">{{name}}</label>
             </div>
             {{/each}}
         </div>
@@ -63,7 +63,7 @@
             {{#each suggestions}}
             <div class="form-check min-tiny w-100">
                 <input type="checkbox" class="form-check-input" name="suggestion-{{suggestion_id}}" id="scb-{{suggestion_id}}" value="{{name}}" {{#if (find-in ../suggestionChecks 'suggestion_id' suggestion_id)}}checked{{/if}}>
-                <label for="scb-{{suggestion_id}}">{{name}}</label>
+                <label class="text-break" for="scb-{{suggestion_id}}">{{name}}</label>
             </div>
             {{/each}}
         </div>

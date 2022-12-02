@@ -115,7 +115,8 @@ exports.book_list = [
                 books: matches.map(e => e.item),
                 noResults: !Boolean(matches.length),
                 total: matches.length,
-                allResults: true
+                allResults: true,
+                populate: { search: req.query.q }
             })
         }
 

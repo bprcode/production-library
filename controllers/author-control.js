@@ -2,6 +2,7 @@ require('express-async-errors')
 const { body, param, validationResult } = require('express-validator')
 const { authors, books, snipTimes } = require('../database.js')
 const { paginate, sanitizePagination } = require('./paginator.js')
+const Fuse = require('fuse.js')
 
 const authorNameValidator =
     body('first_name')
@@ -79,6 +80,28 @@ exports.author_list = [
     ...sanitizePagination,
     async (req, res) => {
         const limit = req.query.limit || 10
+        const query = req.query.q || null
+
+        if (query) {
+            const allAuthors = await authors.find(
+                'full_name', 'dob', 'dod', 'author_url', 'blurb')
+            const fuse = new Fuse(allAuthors, {
+                keys: ['full_name'],
+                threshold: 0.3,
+                ignoreLocation: true,
+                minMatchCharLength: 2,
+                includeScore: true
+            })
+            const matches = fuse.search(req.query.q)
+            return res.render('author_list.hbs', {
+                authors: matches.map(e => e.item),
+                noResults: !Boolean(matches.length),
+                total: matches.length,
+                allResults: true,
+                populate: { search: req.query.q }
+            })
+        }
+
         const [authorList, total] = await Promise.all([
             snipTimes(authors.find(
             'full_name', 'dob', 'dod', 'author_url', 'blurb', {

@@ -2,11 +2,17 @@
 {{#> catalog_layout title='Authors' no_title=1}}{{#*inline 'content'~}}
 <div class="card mb-4">
     <div class="card-header tiny-padding-2 px-sm-3">
-        <div class="d-flex justify-content-between">
-            <span class="overflow-hidden">
+        <div class="d-flex flex-column flex-sm-row justify-content-between">
+            <span class="overflow-hidden pe-0" style="min-width: 13.2em;">
             <h1 class="serif h2 mb-0">Browse authors</h1>
             </span>
-            <span class="">
+            <span class="d-flex mt-2 mb-1 mt-sm-1">
+                <form class="flex-grow-1 mt-0 me-1" action="?q=">
+                    <span class="input-group d-flex">
+                        <input style="flex-grow: 1;" class="form-control header-search-field" aria-label="Search title text" name="q" type="text" value="{{populate.search}}">
+                        <button class="btn btn-outline-secondary" style="width: 38px;" type="submit" aria-label="Search button"><img class="search-icon" src="/search.svg" alt="Search icon"></button>
+                    </span>
+                </form>    
                 <a class="btn ui-button" href="/catalog/author/create"><img src="/file-earmark-plus.svg" alt="New entry icon click to create"></a>
             </span>
         </div>

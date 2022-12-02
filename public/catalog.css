@@ -1,12 +1,14 @@
 :root {
-  --light: hsl(0, 6%, 94%);
-  --light-shade: hsl(35, 10%, 89%);
-  --header-bg-overwrite: hsl(35, 10%, 96%);
+  --light-shade: hsl(35, 10%, 88%);
+  --header-bg-overwrite: hsl(35, 10%, 94%);
+  --lighter-header-bg: hsl(35, 10%, 98%);
 
   --primary: hsl(4, 85%, 52%);
   --primary-light: hsl(5, 100%, 68%);
   --primary-transparent: rgba(235, 37, 11, 0.25);
   --primary-dark: rgb(200, 39, 18);
+
+  --ui-button-size: 32px;
 }
 
 a {
@@ -96,7 +98,7 @@ body {
 
 .btn:disabled {
   --bs-btn-disabled-color: var(--primary);
-  --bs-btn-disabled-bg: var(--light);
+  --bs-btn-disabled-bg: var(--light-shade);
   --bs-btn-disabled-border-color: var(--primary);
 }
 
@@ -189,8 +191,8 @@ body {
 
 .ui-button {
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: var(--ui-button-size);
+  height: var(--ui-button-size);
   border: 1px #aaa solid;
   margin-left: 5px;
 }
@@ -204,7 +206,7 @@ body {
 }
 
 .ui-button:active {
-  background-color: var(--light) !important;
+  background-color: var(--light-shade) !important;
   border: 1px var(--primary-light) solid !important;
 }
 
@@ -217,6 +219,14 @@ body {
   width: 20px;
 }
 
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+}
+
 .ui-button-pair {
   display: flex;
   flex-wrap: wrap;
@@ -227,10 +237,9 @@ body {
   width: 38px;
 }
 
-@media (max-width: 330px) {
-  .tiny-padding-2 {
-    padding-right: .5rem !important;
-    padding-left: .5rem !important;
+@media (max-width: 299.98px) {
+  .ui-button-pair a:nth-child(2) {
+    margin-top: 5px;
   }
 }
 
@@ -240,9 +249,11 @@ body {
     min-width: 78px;
   }
 }
-@media (max-width: 299.98px) {
-  .ui-button:nth-child(2) {
-    margin-top: 5px;
+
+@media (max-width: 330px) {
+  .tiny-padding-2 {
+    padding-right: .5rem !important;
+    padding-left: .5rem !important;
   }
 }
 
@@ -252,6 +263,15 @@ body {
     justify-content: end !important;
     min-width: 7em;
   }
+}
+
+.header-search-field {
+  height: var(--ui-button-size);
+  background-color: var(--lighter-header-bg);
+}
+
+.header-search-field:focus {
+  background-color: white;
 }
 
 .invert {
@@ -316,6 +336,6 @@ body {
 
 @media (max-width: 576px) {
   .side-links {
-    background-color: var(--light) !important;
+    background-color: var(--light-shade) !important;
   }
 }

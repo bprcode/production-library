@@ -24,6 +24,8 @@ Handlebars.registerHelper('delimit-array', (arr, delimiter) => {
     return arr?.join(delimiter)
 })
 
+Handlebars.registerHelper('plural-s', count => count > 1 ? 's' : '')
+
 export function parseDescription (description) {
     if (!description) { return 'No description available.' }
     if (typeof description === 'string') { return description }

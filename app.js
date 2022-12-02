@@ -32,6 +32,7 @@ hbs.registerHelper('pretty-date', date => {
     }
     return DateTime.fromISO(date).toLocaleString(DateTime.DATE_MED)
 })
+hbs.registerHelper('plural-s', count => count > 1 ? 's' : '')
 
 // Helper to use position in iterable to insert a comma, or not:
 hbs.registerHelper('comma-list', (...stuff) => {

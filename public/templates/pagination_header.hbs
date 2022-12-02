@@ -3,7 +3,7 @@
 No results found.
 {{~else}}
     {{~#if allResults~}}
-    All {{total}} results:
+    {{#if (plural-s total)}}All{{/if}} {{total}} result{{plural-s total}}:
     {{~else~}}
     {{countStart}} to {{countEnd}} of {{total}} results:
     {{~/if~}}
