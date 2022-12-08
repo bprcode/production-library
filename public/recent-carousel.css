@@ -1,17 +1,20 @@
-.dark-card {
-    --charcoal: #222;
-    background-color: var(--charcoal);
-    border-radius: 8px;
-}
-
-.recent-outer {
+:root {
     --show-time: 3s;
     --book-height: 300px;
     --book-aspect: 0.6;
     --book-width: calc(var(--book-height) * var(--book-aspect));
     --book-depth: 50px;
-    --book-color-rgb: 255 128 0;
+    --book-color-rgb: 240 90 60;
     --info-color: #fff;
+    --charcoal: #222;
+}
+
+.dark-card {
+    background-color: var(--charcoal);
+    border-radius: 8px;
+}
+
+.recent-outer {
 
     overflow: hidden;
     width: 100%;
@@ -19,6 +22,56 @@
     
     background-image: radial-gradient(250px 100px at 25% 90%,
         var(--light-shade) 90%, var(--charcoal));
+}
+
+.cycle-container {
+    position: relative;
+    width: 50%;
+    height: 2em;
+    border: 2px solid blue;
+}
+
+.cycle-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #0001;
+}
+
+.cycle-forward-animate {
+    animation: 1s normal 1 cycle-forward ease-in-out;
+}
+
+.cycle-text div {
+    position: absolute;
+    min-width: 100%;
+    max-width: 100%;
+    height: 100%;
+    filter: opacity(20%);
+}
+
+.previous-pane {
+    left: 0%;
+}
+
+.current-pane {
+    left: 100%;
+}
+
+.next-pane {
+    left: 200%;
+}
+
+@keyframes cycle-forward {
+    0% {
+        left: -100%;
+    }
+    10% {
+        left: -100%;
+    }
+    80% {
+        left: -200%;
+    }
 }
 
 .book-info {
@@ -31,18 +84,27 @@
 }
 
 .book-info-content-1 {
+    position: absolute;
     background-size: 500%;
     background-image: linear-gradient(90deg, transparent 20%, var(--info-color) 40%, var(--info-color) 60%, transparent 80%);
     background-position-x: 0%;
-    background-clip: text;
+    /* background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
+    -moz-text-fill-color: transparent; */
+}
+
+.test-alternative-wipe {
+    z-index: 30;
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    /* background-image: linear-gradient(45deg, red, transparent); */
 }
 
 .animate-wipe-out-1 {
-    animation: wipeOut1 var(--show-time) ease-in-out infinite;
+    /* animation: wipeOut1 var(--show-time) ease-in-out infinite; */
 }
 
 @keyframes wipeOut1 {
@@ -166,7 +228,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(0deg, #0004 2%, transparent 12%);
+    background-image: linear-gradient(0deg, #0005 2%, transparent 12%);
 }
 
 .ambient-right {

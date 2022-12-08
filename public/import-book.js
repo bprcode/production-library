@@ -292,9 +292,6 @@ async function executeQuery (query, page = 1, limit = 20) {
         }
 
         el('search-result-id').innerHTML = renderList({
-            header: `Displaying ${json.start + 1} `
-                    + ` to ${json.start + json.docs.length} `
-                    + `of ${json.numFound} results:`,
             books: json.docs,
             noResults: !json.numFound,
             ...position

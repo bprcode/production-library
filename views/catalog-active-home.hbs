@@ -13,7 +13,8 @@
                         <div class="book-face book-front">
                             <div class="ambient-front"></div>
                             {{#each recent_books~}}
-                            <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
+                            <!-- DEBUG disabled for restyling <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}"> -->
+                            <img crossorigin src="/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
                             {{~/each}}
                         </div>
                         <div class="book-face book-left"></div>
@@ -28,16 +29,26 @@
                 </div>
             </div>
         </div>
+
         <div class="book-info ps-4 pe-2">
-            <div class="wipe-1"></div>
+            {{!-- <div class="wipe-1"></div> --}}
             <div class="book-info-content-1">
                 <h2 class="serif" id="spot-title"></h2>
                 <p id="spot-copy"></p>
             </div>
+            <div class="test-alternative-wipe"></div>
         </div>
+
     </div>
 </div>
 
+<div class="cycle-container d">
+    <div class="d-flex cycle-text" id="cycle-id">
+        <div class="bg-info previous-pane">First</div>
+        <div class="bg-warning current-pane">Second</div>
+        <div class="bg-success next-pane">Third</div>
+    </div>
+</div>
 <script>
 const log = console.log.bind(console)
 const qs = document.querySelector.bind(document)
@@ -79,8 +90,6 @@ function abbreviateSnippet (snippet) {
 
 function handleImageLoad(element) {
 
-    log(`handling load with width=${element.width}, height=${element.height}`)
-
     loadedImages.push({
         element: element,
         aspect: element.width / element.height || 0.6,
@@ -93,36 +102,65 @@ function handleImageLoad(element) {
 
     --loadsWaiting
     if (loadsWaiting < 1) {
+        log('⚡ All data loaded. Starting animations.')
         updateCover()
         setInterval(updateCover, 3000)
     }
 }
 
 for (const e of document.querySelectorAll('.covers')) {
+
     if (e.complete) {
-        log('>> element already loaded:', e)
-        handleImageLoad(e)
+        log(`🔹 >> Already complete: ${e.id} from ${e.src}`)
+
+        if (e.naturalHeight === 0) {
+            log('🔺 Complete, but invalid. naturalHeight is 0.')
+            handleImageLoad(failover(e))
+
+        } else {
+            handleImageLoad(e)
+        }
+
         continue
-    } else {
-        log('>> not yet loaded:', e)
     }
 
-    const reactToLoad = event => {
-        log(`Load completed for element:`, event.target)
+    log(`>> not yet loaded: ${e.id} from ${e.src}`)
+
+    // Create a replacement element with similar properties,
+    // add it to the DOM, remove the previous element.
+    function failover (element) {
+        element.removeEventListener('load', reactToLoad)
+
+        let div = document.createElement('div')
+        div.textContent = spotlightData[element.dataset.index].title
+        div.classList.add('covers', 'serif', 'fw-semibold', 'fs-5',
+                            'bg-light',
+                            'text-dark', 'text-break', 'overflow-hidden',
+                            'mt-5', 'px-3', 'py-1', 'text-center')
+        div.width = 180
+        div.height = 300
+        div.style = 'max-height: 300px; --bs-bg-opacity: .6;'
+                    + 'border-top: 8px solid #0008; border-bottom: 8px solid #0008;'
+        div.dataset.index = element.dataset.index
+
+        element.after(div)
+        element.parentElement.removeChild(element)
+
+        return div
+    }
+
+    function reactToLoad (event) {
+        log(`📗 Load completed for ${e.id} from ${e.src}`)
         handleImageLoad(event.target)
     }
 
     e.addEventListener('load', reactToLoad)
     e.addEventListener('error', event => {
-        log(`Error loading image element:`)
-        log(event.target)
+        log(`🟨 Error loading image element: ${e.id} from ${e.src}`)
 
         // Failover approach 1
-        event.target.removeEventListener('load', reactToLoad)
-        event.target.src = '/book-open-reader-solid.svg'
-        event.target.width = 180
-        event.target.height = 300
-        handleImageLoad(event.target)
+        const replacement = failover(event.target)
+        handleImageLoad(replacement)
     })
 }
 
@@ -134,6 +172,7 @@ function restartAnimations () {
     qs('.blob-shadow').classList.remove('blob-shadow-animate')
     qs('.fake-depth-fog').classList.remove('fake-depth-fog-animate')
     qs('.book-info-content-1').classList.remove('animate-wipe-out-1')
+    el('cycle-id').classList.remove('cycle-forward-animate')
 
     setTimeout(() => {
         qs('.camera').classList.add('camera-animate')
@@ -142,12 +181,14 @@ function restartAnimations () {
         qs('.blob-shadow').classList.add('blob-shadow-animate')
         qs('.fake-depth-fog').classList.add('fake-depth-fog-animate')
         qs('.book-info-content-1').classList.add('animate-wipe-out-1')
+        el('cycle-id').classList.add('cycle-forward-animate')
     }, 0)
 }
 
 function updateCover () {
 
     updateCover.counter ??= 0
+    log(`Using cover index ${updateCover.counter} of 0 to ${loadedImages.length - 1}`)
     const image = loadedImages[updateCover.counter]
     if (!image) {
         log('updateCover fired too soon. Aborting...')

@@ -20,7 +20,6 @@ Handlebars.registerHelper('find-in', (arr, key, value) => {
 })
 
 Handlebars.registerHelper('delimit-array', (arr, delimiter) => {
-    console.log(arr?.join(delimiter))
     return arr?.join(delimiter)
 })
 
