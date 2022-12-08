@@ -203,6 +203,8 @@
 }
 
 .book-face {
+    filter: blur(3px); /* Workaround for lack of antialiasing in FireFox */
+                        /* Overridden in front-face filter */
     position:absolute;
     backface-visibility: hidden;
 }
