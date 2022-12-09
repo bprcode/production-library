@@ -31,12 +31,10 @@
         </div>
 
         <div class="book-info ps-4 pe-2">
-            {{!-- <div class="wipe-1"></div> --}}
             <div class="book-info-content-1">
                 <h2 class="serif" id="spot-title"></h2>
                 <p id="spot-copy"></p>
             </div>
-            <div class="test-alternative-wipe"></div>
         </div>
 
     </div>
@@ -44,9 +42,14 @@
 
 <div class="cycle-container d">
     <div class="d-flex cycle-text" id="cycle-id">
-        <div class="bg-info previous-pane">First</div>
-        <div class="bg-warning current-pane">Second</div>
-        <div class="bg-success next-pane">Third</div>
+        <div class="bg-warning current-pane" id="current-pane-id">
+            <h2 class="serif" id="current-title"></h2>
+            <p id="current-copy"></p>
+        </div>
+        <div class="bg-success next-pane" id="next-pane-id">
+            <h2 class="serif" id="next-title"></h2>
+            <p id="next-copy"></p>
+        </div>
     </div>
 </div>
 <script>
@@ -67,6 +70,9 @@ const spotlightData = [
     {{/each}}
 ]
 
+const showTime = 6; // seconds for each animation cycle
+document.documentElement.style.setProperty('--show-time', showTime + 's')
+
 let loadsWaiting = spotlightData.length
 
 function abbreviateSnippet (snippet) {
@@ -80,7 +86,7 @@ function abbreviateSnippet (snippet) {
     const firstSentence = snippet.match('^[^.]*\.')[0] // Break on last period
 
     if (firstSentence.length < maxLength
-            && firstSentence.length > minLength ) {
+            && firstSentence.length > minLength) {
         return firstSentence
     }
 
@@ -104,7 +110,7 @@ function handleImageLoad(element) {
     if (loadsWaiting < 1) {
         log('⚡ All data loaded. Starting animations.')
         updateCover()
-        setInterval(updateCover, 3000)
+        setInterval(updateCover, showTime * 1000)
     }
 }
 
@@ -134,14 +140,15 @@ for (const e of document.querySelectorAll('.covers')) {
         let div = document.createElement('div')
         div.textContent = spotlightData[element.dataset.index].title
         div.classList.add('covers', 'serif', 'fw-semibold', 'fs-5',
-                            'bg-light',
-                            'text-dark', 'text-break', 'overflow-hidden',
-                            'mt-5', 'px-3', 'py-1', 'text-center')
+                            'bg-light', 'text-dark', 'text-break',
+                            'overflow-hidden', 'mt-5', 'px-3', 'py-1',
+                            'text-center')
         div.width = 180
         div.height = 300
-        div.style = 'max-height: 300px; --bs-bg-opacity: .6;'
-                    + 'border-top: 8px solid #0008; border-bottom: 8px solid #0008;'
         div.dataset.index = element.dataset.index
+        div.style = 'max-height: 300px; --bs-bg-opacity: .6;'
+                    + 'border-top: 8px solid #0008;'
+                    + 'border-bottom: 8px solid #0008;'
 
         element.after(div)
         element.parentElement.removeChild(element)
@@ -173,30 +180,42 @@ function restartAnimations () {
     qs('.fake-depth-fog').classList.remove('fake-depth-fog-animate')
     qs('.book-info-content-1').classList.remove('animate-wipe-out-1')
     el('cycle-id').classList.remove('cycle-forward-animate')
+    void el('cycle-id').offsetWidth // Force reflow for animation restart
 
-    setTimeout(() => {
-        qs('.camera').classList.add('camera-animate')
-        qs('.book-model').classList.add('book-model-animate')
-        qs('.book-front').classList.add('book-front-animate')
-        qs('.blob-shadow').classList.add('blob-shadow-animate')
-        qs('.fake-depth-fog').classList.add('fake-depth-fog-animate')
-        qs('.book-info-content-1').classList.add('animate-wipe-out-1')
-        el('cycle-id').classList.add('cycle-forward-animate')
-    }, 0)
+    qs('.camera').classList.add('camera-animate')
+    qs('.book-model').classList.add('book-model-animate')
+    qs('.book-front').classList.add('book-front-animate')
+    qs('.blob-shadow').classList.add('blob-shadow-animate')
+    qs('.fake-depth-fog').classList.add('fake-depth-fog-animate')
+    qs('.book-info-content-1').classList.add('animate-wipe-out-1')
+    el('cycle-id').classList.add('cycle-forward-animate')
 }
 
 function updateCover () {
 
     updateCover.counter ??= 0
-    log(`Using cover index ${updateCover.counter} of 0 to ${loadedImages.length - 1}`)
     const image = loadedImages[updateCover.counter]
+    const upcoming = loadedImages[(updateCover.counter + 1)
+                                    % loadedImages.length]
     if (!image) {
         log('updateCover fired too soon. Aborting...')
         return
     }
 
+    // debug -- remove old pane cycle when new version is complete
     el('spot-title').innerHTML = image.info.title
     el('spot-copy').innerHTML = image.info.snippet
+
+    el('current-title').innerHTML = image.info.title
+    el('current-copy').innerHTML = image.info.snippet
+    el('next-title').innerHTML = upcoming.info.title
+    el('next-copy').innerHTML = upcoming.info.snippet
+
+    // Prepare to swap slides:
+    setTimeout(() => {
+        el('current-title').innerHTML = upcoming.info.title
+        el('current-copy').innerHTML = upcoming.info.snippet
+    }, showTime * 0.9 * 1000)
 
     document.querySelector('.recently-added').style.setProperty(
         '--book-aspect', image.aspect)
