@@ -93,5 +93,5 @@ const server = app.listen(process.env.PORT || 2222, () => {
     log(moo() + ' Server active on: ', green, server.address())
     log('To fix: failures on import when no genres are recorded in database')
     log('Back link not working in mobile browser?')
-    log('Delayed loading can break book cover animation synchronization.')
+    log('Todo: add responsive padding to LHS on widescreen')
 })

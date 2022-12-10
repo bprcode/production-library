@@ -15,7 +15,6 @@
 }
 
 .recent-outer {
-
     overflow: hidden;
     width: 100%;
     border-bottom-right-radius: 8px;
@@ -24,18 +23,26 @@
         var(--light-shade) 90%, var(--charcoal));
 }
 
+.curtain-right {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(90deg, transparent 25%, var(--charcoal) 75%)
+}
+
 .cycle-container {
+    z-index: 12;
     position: relative;
-    width: 50%;
-    height: 2em;
-    border: 2px solid blue !important;
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
 }
 
 .cycle-text {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: #0001;
+    color: white;
 }
 
 .cycle-forward-animate {
@@ -47,7 +54,6 @@
     min-width: 100%;
     max-width: 100%;
     height: 100%;
-    filter: opacity(20%);
 }
 
 .current-pane {
@@ -62,28 +68,12 @@
     0% {
         left: 0%;
     }
-    70% {
+    85% {
         left: 0%;
     }
-    95% {
+    97% {
         left: -100%;
     }
-}
-
-.book-info {
-    position: relative;
-    z-index: 12;
-    flex-shrink: 1;
-    width: 100%;
-    color: white;
-    background-image: linear-gradient(-90deg, var(--charcoal) 30%, transparent 60%);
-}
-
-.book-info-content-1 {
-    position: absolute;
-    background-size: 500%;
-    background-image: linear-gradient(90deg, transparent 20%, var(--info-color) 40%, var(--info-color) 60%, transparent 80%);
-    background-position-x: 0%;
 }
 
 .top-bar {
@@ -119,7 +109,7 @@
     }
     to {
         transform: perspective(800px) translate3d(0, 430px, -600px)
-                    rotate3d(0.3,1,0.05, -35deg);
+                    rotate3d(0.3,1,0.05, -37deg);
     }
 }
 .recent-overlay {
@@ -147,12 +137,12 @@
 
 @keyframes presentBook {
     0% {
-        transform: translate3d(calc(-50% + 800px), -50%, 0);
+        transform: translate3d(calc(-50% + 700px), -50%, 0);
     }
-    40% {
+    15% {
         transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
-    70% {
+    85% {
         transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
     100% {
@@ -237,35 +227,6 @@
         ;
 }
 
-.fake-depth-fog {
-    z-index: 9;
-    position: absolute;
-    width: 100%;
-    height: 56%;
-}
-
-.fake-depth-fog-animate {
-    animation: var(--show-time) fogFadeOut infinite;
-}
-
-@keyframes fogFadeOut {
-    0% {
-        background-color: var(--charcoal);
-    }
-    5% {
-        background-color: var(--charcoal);
-    }
-    15% {
-        background-color: transparent;
-    }
-    90% {
-        background-color: transparent;
-    }
-    100% {
-        background-color: var(--charcoal);
-    }
-}
-
 .blob-shadow {
     position: absolute;
     height: var(--book-height);
@@ -279,18 +240,15 @@
 
 @keyframes gleamFace {
     0% {
-        filter: brightness(45%);
+        filter: brightness(35%);
     }
     15% {
-        filter: brightness(85%);
-    }
-    40% {
-        filter: brightness(120%);
-    }
-    70% {
-        filter: brightness(140%);
+        filter: brightness(100%);
     }
     85% {
+        filter: brightness(140%);
+    }
+    93% {
         filter: brightness(65%);
     }
 }
@@ -321,6 +279,5 @@
             calc(var(--book-height) / -2),
             calc(var(--book-height) / -2)
         );
-    }
-    
+    }   
 }

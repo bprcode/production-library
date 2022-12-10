@@ -6,14 +6,13 @@
         <div class="spotlight-pane">
             <div class="recently-added">
                 <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
-                <div class="fake-depth-fog"></div>
                 <div class="camera">
                     <!-- book model -->
                     <div class="book-model">
                         <div class="book-face book-front">
                             <div class="ambient-front"></div>
                             {{#each recent_books~}}
-                            <!-- DEBUG disabled for restyling <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}"> -->
+                            <!-- img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}" -->
                             <img crossorigin src="/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
                             {{~/each}}
                         </div>
@@ -30,28 +29,25 @@
             </div>
         </div>
 
-        <div class="book-info ps-4 pe-2">
-            <div class="book-info-content-1">
-                <h2 class="serif" id="spot-title"></h2>
-                <p id="spot-copy"></p>
+        <!-- Cycling presentation text -->
+        <div class="cycle-container">
+            <div class="curtain-right"></div>
+            <div class="d-flex cycle-text" id="cycle-id">
+                <div class="current-pane pe-3" id="current-pane-id">
+                    <h2 class="serif" id="current-title"></h2>
+                    <p id="current-copy"></p>
+                </div>
+                <div class="next-pane pe-3" id="next-pane-id">
+                    <h2 class="serif" id="next-title"></h2>
+                    <p id="next-copy"></p>
+                </div>
             </div>
         </div>
+        <!-- /cycling presentation text -->
 
     </div>
 </div>
 
-<div class="cycle-container d">
-    <div class="d-flex cycle-text" id="cycle-id">
-        <div class="bg-warning current-pane" id="current-pane-id">
-            <h2 class="serif" id="current-title"></h2>
-            <p id="current-copy"></p>
-        </div>
-        <div class="bg-success next-pane" id="next-pane-id">
-            <h2 class="serif" id="next-title"></h2>
-            <p id="next-copy"></p>
-        </div>
-    </div>
-</div>
 <script>
 const log = console.log.bind(console)
 const qs = document.querySelector.bind(document)
@@ -70,7 +66,7 @@ const spotlightData = [
     {{/each}}
 ]
 
-const showTime = 6; // seconds for each animation cycle
+const showTime = 8; // seconds for each animation cycle
 document.documentElement.style.setProperty('--show-time', showTime + 's')
 
 let loadsWaiting = spotlightData.length
@@ -177,8 +173,6 @@ function restartAnimations () {
     qs('.book-model').classList.remove('book-model-animate')
     qs('.book-front').classList.remove('book-front-animate')
     qs('.blob-shadow').classList.remove('blob-shadow-animate')
-    qs('.fake-depth-fog').classList.remove('fake-depth-fog-animate')
-    qs('.book-info-content-1').classList.remove('animate-wipe-out-1')
     el('cycle-id').classList.remove('cycle-forward-animate')
     void el('cycle-id').offsetWidth // Force reflow for animation restart
 
@@ -186,8 +180,6 @@ function restartAnimations () {
     qs('.book-model').classList.add('book-model-animate')
     qs('.book-front').classList.add('book-front-animate')
     qs('.blob-shadow').classList.add('blob-shadow-animate')
-    qs('.fake-depth-fog').classList.add('fake-depth-fog-animate')
-    qs('.book-info-content-1').classList.add('animate-wipe-out-1')
     el('cycle-id').classList.add('cycle-forward-animate')
 }
 
@@ -202,10 +194,6 @@ function updateCover () {
         return
     }
 
-    // debug -- remove old pane cycle when new version is complete
-    el('spot-title').innerHTML = image.info.title
-    el('spot-copy').innerHTML = image.info.snippet
-
     el('current-title').innerHTML = image.info.title
     el('current-copy').innerHTML = image.info.snippet
     el('next-title').innerHTML = upcoming.info.title
@@ -215,7 +203,7 @@ function updateCover () {
     setTimeout(() => {
         el('current-title').innerHTML = upcoming.info.title
         el('current-copy').innerHTML = upcoming.info.snippet
-    }, showTime * 0.9 * 1000)
+    }, showTime * 0.95 * 1000)
 
     document.querySelector('.recently-added').style.setProperty(
         '--book-aspect', image.aspect)
