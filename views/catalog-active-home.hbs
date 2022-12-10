@@ -2,7 +2,7 @@
 {{#> catalog_layout no_back=1 no_title=1 stylesheet='/recent-carousel.css'}}{{#*inline 'content'~}}
 <div class="dark-card">
     <div class="top-bar pb-4 pt-1 ps-3"><h1 class="serif">Welcome to the Catalog</h1></div>
-    <div class="d-flex recent-outer">
+    <div class="d-flex recent-outer" id="recent-outer-id">
         <div class="spotlight-pane">
             <div class="recently-added">
                 <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
@@ -12,8 +12,8 @@
                         <div class="book-face book-front">
                             <div class="ambient-front"></div>
                             {{#each recent_books~}}
-                            <!-- img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}" -->
-                            <img crossorigin src="/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
+                            <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
+                            <!-- img crossorigin src="/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}" -->
                             {{~/each}}
                         </div>
                         <div class="book-face book-left"></div>
@@ -67,9 +67,18 @@ const spotlightData = [
 ]
 
 const showTime = 8; // seconds for each animation cycle
+const cycleDelay = 0.75; // seconds to offset the text animation
+
 document.documentElement.style.setProperty('--show-time', showTime + 's')
 
 let loadsWaiting = spotlightData.length
+
+// Populate initial cycling text
+const highestIndex = Math.max(...spotlightData.map(d => d.index))
+const initialRecord = spotlightData.find(
+                        d => parseInt(d.index) === highestIndex)
+el('current-title').innerHTML = initialRecord.title
+el('current-copy').innerHTML = initialRecord.snippet
 
 function abbreviateSnippet (snippet) {
     const maxLength = 160
@@ -173,14 +182,22 @@ function restartAnimations () {
     qs('.book-model').classList.remove('book-model-animate')
     qs('.book-front').classList.remove('book-front-animate')
     qs('.blob-shadow').classList.remove('blob-shadow-animate')
-    el('cycle-id').classList.remove('cycle-forward-animate')
-    void el('cycle-id').offsetWidth // Force reflow for animation restart
+    void el('recent-outer-id').offsetWidth // Force reflow
+    
+    setTimeout(() => {
+        qs('.camera').classList.add('camera-animate')
+        qs('.book-model').classList.add('book-model-animate')
+        qs('.book-front').classList.add('book-front-animate')
+        qs('.blob-shadow').classList.add('blob-shadow-animate')
+    }, 30)
+    
 
-    qs('.camera').classList.add('camera-animate')
-    qs('.book-model').classList.add('book-model-animate')
-    qs('.book-front').classList.add('book-front-animate')
-    qs('.blob-shadow').classList.add('blob-shadow-animate')
-    el('cycle-id').classList.add('cycle-forward-animate')
+    // Apply a slight delay to the text cycle:
+    setTimeout(() => {
+        el('cycle-id').classList.remove('cycle-forward-animate')
+        void el('cycle-id').offsetWidth // Force reflow for animation restart
+        el('cycle-id').classList.add('cycle-forward-animate')
+    }, cycleDelay * 1000)
 }
 
 function updateCover () {
@@ -194,18 +211,20 @@ function updateCover () {
         return
     }
 
-    el('current-title').innerHTML = image.info.title
-    el('current-copy').innerHTML = image.info.snippet
-    el('next-title').innerHTML = upcoming.info.title
-    el('next-copy').innerHTML = upcoming.info.snippet
+    setTimeout(() => {
+        el('current-title').innerHTML = image.info.title
+        el('current-copy').innerHTML = image.info.snippet
+        el('next-title').innerHTML = upcoming.info.title
+        el('next-copy').innerHTML = upcoming.info.snippet
+    }, cycleDelay * 1000)
 
     // Prepare to swap slides:
     setTimeout(() => {
         el('current-title').innerHTML = upcoming.info.title
         el('current-copy').innerHTML = upcoming.info.snippet
-    }, showTime * 0.95 * 1000)
+    }, showTime * 0.97 * 1000 + cycleDelay * 1000)
 
-    document.querySelector('.recently-added').style.setProperty(
+    document.documentElement.style.setProperty(
         '--book-aspect', image.aspect)
     
     for (const e of document.querySelectorAll('.covers')) {

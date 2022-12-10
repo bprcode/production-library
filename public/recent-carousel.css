@@ -137,9 +137,9 @@
 
 @keyframes presentBook {
     0% {
-        transform: translate3d(calc(-50% + 700px), -50%, 0);
+        transform: translate3d(calc(-50% + 900px), -50%, 0);
     }
-    15% {
+    20% {
         transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
     85% {
@@ -246,7 +246,7 @@
         filter: brightness(100%);
     }
     85% {
-        filter: brightness(140%);
+        filter: brightness(130%);
     }
     93% {
         filter: brightness(65%);
