@@ -9,6 +9,10 @@
     --charcoal: #222;
 }
 
+.slightly-wider {
+    max-width: 820px;
+}
+
 .dark-card {
     background-color: var(--charcoal);
     border-radius: 8px;
@@ -120,6 +124,16 @@
     color: #ffa;
 }
 
+.carousel-link {
+    text-decoration: none;
+    color: #ffa;
+}
+
+    .carousel-link:hover {
+        text-decoration: none;
+        color: #ffe;
+    }
+
 .book-model {
     position: absolute;
     top: 50%;
@@ -139,7 +153,7 @@
     0% {
         transform: translate3d(calc(-50% + 900px), -50%, 0);
     }
-    20% {
+    18% {
         transform: translate3d(calc(-50% + 120px), -50%, 0);
     }
     85% {

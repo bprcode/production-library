@@ -1,6 +1,6 @@
 {{! This template populates catalog-layout.hbs }}
 {{#> catalog_layout no_back=1 no_title=1 stylesheet='/recent-carousel.css'}}{{#*inline 'content'~}}
-<div class="dark-card">
+<div class="dark-card mb-5">
     <div class="top-bar pb-4 pt-1 ps-3"><h1 class="serif">Welcome to the Catalog</h1></div>
     <div class="d-flex recent-outer" id="recent-outer-id">
         <div class="spotlight-pane">
@@ -13,7 +13,7 @@
                             <div class="ambient-front"></div>
                             {{#each recent_books~}}
                             <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
-                            <!-- img crossorigin src="/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}" -->
+                            <!--img crossorigin src="/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}"-->
                             {{~/each}}
                         </div>
                         <div class="book-face book-left"></div>
@@ -33,13 +33,19 @@
         <div class="cycle-container">
             <div class="curtain-right"></div>
             <div class="d-flex cycle-text" id="cycle-id">
-                <div class="current-pane pe-3" id="current-pane-id">
+                <div class="current-pane ps-2 pe-3" id="current-pane-id">
                     <h2 class="serif" id="current-title"></h2>
                     <p id="current-copy"></p>
+                    <div class="d-flex justify-content-end" style="height:auto;">
+                        <a class="fw-semibold carousel-link me-5" id="current-link" href="#">More...</a>
+                    </div>
                 </div>
-                <div class="next-pane pe-3" id="next-pane-id">
+                <div class="next-pane ps-2 pe-3" id="next-pane-id">
                     <h2 class="serif" id="next-title"></h2>
                     <p id="next-copy"></p>
+                    <div class="d-flex justify-content-end" style="height:auto;">
+                        <a class="fw-semibold carousel-link me-5" id="next-link" href="#">More...</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,6 +53,9 @@
 
     </div>
 </div>
+
+<p class="pt-5 ps-3 mb-1"><i class="serif fst-normal">Archivia</i> is a freely editable catalog of literary works.</p>
+<p class="ps-3"><a href="/catalog/books" class="fw-semibold">Browse</a> the catalog or <a href="/catalog/book/import" class="fw-semibold">import</a> a new work today!</p>
 
 <script>
 const log = console.log.bind(console)
@@ -79,6 +88,7 @@ const initialRecord = spotlightData.find(
                         d => parseInt(d.index) === highestIndex)
 el('current-title').innerHTML = initialRecord.title
 el('current-copy').innerHTML = initialRecord.snippet
+el('current-link').href = initialRecord.book_url
 
 function abbreviateSnippet (snippet) {
     const maxLength = 160
@@ -214,14 +224,17 @@ function updateCover () {
     setTimeout(() => {
         el('current-title').innerHTML = image.info.title
         el('current-copy').innerHTML = image.info.snippet
+        el('current-link').href = image.info.book_url
         el('next-title').innerHTML = upcoming.info.title
         el('next-copy').innerHTML = upcoming.info.snippet
+        el('next-link').href = upcoming.info.book_url
     }, cycleDelay * 1000)
 
     // Prepare to swap slides:
     setTimeout(() => {
         el('current-title').innerHTML = upcoming.info.title
         el('current-copy').innerHTML = upcoming.info.snippet
+        el('current-link').href = upcoming.info.book_url
     }, showTime * 0.97 * 1000 + cycleDelay * 1000)
 
     document.documentElement.style.setProperty(
