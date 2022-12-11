@@ -6,6 +6,7 @@
     --book-depth: 50px;
     --book-color-rgb: 240 90 60;
     --info-color: #fff;
+    --clamp-lines: 6;
     --charcoal: #222;
 }
 
@@ -23,8 +24,15 @@
     width: 100%;
     border-bottom-right-radius: 8px;
     
-    background-image: radial-gradient(250px 100px at 25% 90%,
+    background-image: radial-gradient(175px 70px at 22% 90%,
+        red 90%, var(--charcoal));
+}
+
+@media (min-width: 768px) {
+    .recent-outer {
+        background-image: radial-gradient(230px 90px at 20% 90%,
         var(--light-shade) 90%, var(--charcoal));
+    }
 }
 
 .curtain-right {
@@ -42,11 +50,23 @@
     overflow: hidden;
 }
 
+.clamp-text {
+    display: -webkit-box;
+    -webkit-line-clamp: var(--clamp-lines);
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}
+
+.clamp-3 {
+    -webkit-line-clamp: 3;
+}
+
 .cycle-text {
     position: absolute;
     width: 100%;
     height: 100%;
     color: white;
+    text-shadow: 1px 1px 0px var(--charcoal);
 }
 
 .cycle-forward-animate {
@@ -86,8 +106,26 @@
 
 .spotlight-pane {
     flex-shrink: 0;
-    width: 300px;
+    width: 270px;
     height: 300px;
+}
+
+@media (min-width: 576px) and (max-width: 680px) {
+    .spotlight-pane {
+        width: 250px;
+    }
+
+    .recent-outer {
+        background-image: radial-gradient(175px 70px at 22% 90%,
+            green 90%, var(--charcoal));
+    }
+
+}
+
+@media (min-width: 768px) {
+    .spotlight-pane {
+        width: 300px;
+    }
 }
 
 .recently-added {
@@ -116,6 +154,7 @@
                     rotate3d(0.3,1,0.05, -37deg);
     }
 }
+
 .recent-overlay {
     z-index: 10;
     position: absolute;
@@ -154,10 +193,10 @@
         transform: translate3d(calc(-50% + 900px), -50%, 0);
     }
     18% {
-        transform: translate3d(calc(-50% + 120px), -50%, 0);
+        transform: translate3d(calc(-50% + 80px), -50%, 0);
     }
     85% {
-        transform: translate3d(calc(-50% + 120px), -50%, 0);
+        transform: translate3d(calc(-50% + 80px), -50%, 0);
     }
     100% {
         transform: translate3d(calc(-50% - 500px), -50%, 0px);
