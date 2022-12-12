@@ -103,14 +103,12 @@
 /* Drop to columnar layout, light-on-dark text on narrow devices */
 @media (max-width: 470px) {
   .dark-card {
-    /* background-image: linear-gradient(180deg, var(--charcoal) 220px,
-                                            var(--light-shade) 250px); */
     background-image:
       radial-gradient(280px 105px at 55% 285px,
-        var(--light-shade) 90%, var(--charcoal))
-                      ;
+        var(--light-shade) 90%, var(--charcoal));
     background-size: 100% 300px;
     background-repeat: no-repeat;
+    margin-bottom: 0.5rem !important;
   }
 
   .recent-overlay {
@@ -246,14 +244,14 @@
   0% {
     transform: translate3d(calc(-50% + 1200px), -50%, 0);
   }
-  18% {
+  23% {
     transform: translate3d(calc(-50% + 100px), -50%, 0);
   }
   85% {
     transform: translate3d(calc(-50% + 100px), -50%, 0);
   }
   100% {
-    transform: translate3d(calc(-50% - 500px), -50%, 0px);
+    transform: translate3d(calc(-50% - 600px), -50%, 0px);
   }
 }
 
@@ -387,4 +385,63 @@
       calc(var(--book-height) / -2)
     );
   }   
+}
+
+.landing-info {
+  max-width: 650px;
+}
+
+.landing-box {
+  position: relative;
+  flex-grow: 1;
+  margin: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.landing-count {
+  font-size: 2.4rem;
+  font-family: 'Roboto Slab', serif;
+}
+
+.landing-label {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  position: absolute;
+  right: 25%;
+  bottom: -0.5rem;
+  font-size: 0.9rem;
+  background-color: var(--light-shade);
+  line-height: 0.9rem;
+  border-radius: 4px;
+}
+
+.landing-books {
+  background-image:
+    url('/book-fill.svg'),
+    linear-gradient(var(--light-shade), var(--light-shade));
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size:contain;
+  background-blend-mode: soft-light;
+}
+
+.landing-authors {
+  background-image:
+  url('/person-circle.svg'),
+    linear-gradient(var(--light-shade), var(--light-shade));
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size:contain;
+  background-blend-mode: soft-light;
+}
+
+.landing-genres {
+  background-image:
+  url('/lightbulb-fill.svg'),
+    linear-gradient(var(--light-shade), var(--light-shade));
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size:contain;
+  background-blend-mode: soft-light;
 }

@@ -54,11 +54,26 @@
     </div>
 </div>
 
-<!--  -->
-
-<p id="debug-p"></p>
-<p class="ps-3 mb-1"><i class="serif fst-normal">Archivia</i> is a freely editable catalog of literary works.</p>
-<p class="ps-3"><a href="/catalog/books" class="fw-semibold">Browse</a> the catalog or <a href="/catalog/book/import" class="fw-semibold">import</a> a new work today!</p>
+<!-- Catalog description -->
+<p class="ps-3 mb-4 lead"><i class="serif fw-semibold fst-normal">Archivia</i> is a freely editable catalog of literary works, featuring:</p>
+<div class="mb-4 ps-2 pt-2 landing-info d-flex flex-row justify-content-evenly align-items-center">    
+    <div class="landing-box landing-books d-flex justify-content-center">
+        <span class="landing-count">{{book_count}}</span>
+        <span class="landing-label">books</span>
+    </div>
+    <div class="landing-box landing-authors d-flex justify-content-center">
+        <span class="landing-count">{{author_count}}</span>
+        <span class="landing-label">authors</span>
+    </div>
+    <div class="landing-box landing-genres d-flex justify-content-center">
+        <span class="landing-count">{{genre_count}}</span>
+        <span class="landing-label">subjects</span>
+    </div>
+</div>
+<div class="d-flex">
+    <p class="lead ms-3 ps-3 pt-3"><a href="/catalog/books" class="fw-semibold">Browse</a> the catalog or <a href="/catalog/book/import" class="fw-semibold">import</a> a new work today!</p>
+</div>
+<!-- /catalog description -->
 
 <script>
 
@@ -93,10 +108,6 @@ const initialRecord = spotlightData.find(
 el('current-title').innerHTML = initialRecord.title
 el('current-copy').innerHTML = initialRecord.snippet
 el('current-link').href = initialRecord.book_url
-
-window.onresize = () => {
-    el('debug-p').textContent = `${window.innerWidth} x ${window.innerHeight}`
-}
 
 function abbreviateSnippet (snippet) {
     const maxLength = 180

@@ -7,6 +7,7 @@
   --primary-light: hsl(5, 100%, 68%);
   --primary-transparent: rgba(235, 37, 11, 0.25);
   --primary-dark: rgb(200, 39, 18);
+  --dark-link: rgb(205, 25, 1);
 
   --ui-button-size: 32px;
 }
@@ -36,6 +37,10 @@ a:hover {
 
 .nav-link {
   color: var(--primary-light) !important;
+}
+
+.dark-link {
+  color: var(--dark-link);
 }
 
 .card {
