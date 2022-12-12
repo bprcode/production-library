@@ -12,6 +12,13 @@
   --ui-button-size: 32px;
 }
 
+@media (min-width: 992px) {
+  .center-xl {
+    width: 992px;
+    margin: 0px auto;
+  }
+}
+
 a {
   color: var(--primary);
   text-decoration: none;
