@@ -341,5 +341,5 @@ module.exports = {
     query, queryResult, snipTimes,
     books, justBooks, authors, genres, bookInstances, inventory, booksByGenre,
     genresByBook, bookGenres, spotlightWorks, suggestions,
-    bookStatusList
+    bookStatusList,
 }

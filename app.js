@@ -2,7 +2,7 @@
 const path = require('node:path')
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config({
-        path: path.join(__dirname, '../shared/.env') })
+        path: path.join(__dirname, '../.secret/library.env') })
 }
 require('@bprcode/handy')
 const express = require('express')
@@ -91,7 +91,7 @@ app
 
 const server = app.listen(process.env.PORT || 2222, () => {
     log(moo() + ' Server active on: ', green, server.address())
-    log('To fix: failures on import when no genres are recorded in database')
-    log('Back link not working in mobile browser?')
-    log('Todo: add responsive padding to LHS on widescreen')
+    log('DEBUG > To fix: failures on import when no genres are recorded in database')
+    log('DEBUG > Back link not working in mobile browser?')
+    log('DEBUG > Todo: add responsive padding to LHS on widescreen')
 })

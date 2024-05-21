@@ -77,7 +77,7 @@
 <script>
 
 const log = console.log.bind(console)
-const qs = document.querySelector.bind(document)
+const select = document.querySelector.bind(document)
 const el = document.getElementById.bind(document)
 
 const loadedImages = []
@@ -104,6 +104,12 @@ let loadsWaiting = spotlightData.length
 const highestIndex = Math.max(...spotlightData.map(d => d.index))
 const initialRecord = spotlightData.find(
                         d => parseInt(d.index) === highestIndex)
+                        || {
+                            title: '',
+                            snippet: 'No titles yet. Add a book to get '
+                                + 'this catalog started!',
+                            book_url: 'catalog/book/create',
+                        }
 el('current-title').innerHTML = initialRecord.title
 el('current-copy').innerHTML = initialRecord.snippet
 el('current-link').href = initialRecord.book_url
@@ -200,17 +206,17 @@ for (const e of document.querySelectorAll('.covers')) {
 
 function restartAnimations () {
 
-    qs('.camera').classList.remove('camera-animate')
-    qs('.book-model').classList.remove('book-model-animate')
-    qs('.book-front').classList.remove('book-front-animate')
-    qs('.blob-shadow').classList.remove('blob-shadow-animate')
+    select('.camera').classList.remove('camera-animate')
+    select('.book-model').classList.remove('book-model-animate')
+    select('.book-front').classList.remove('book-front-animate')
+    select('.blob-shadow').classList.remove('blob-shadow-animate')
     void el('recent-outer-id').offsetWidth // Force reflow
     
     setTimeout(() => {
-        qs('.camera').classList.add('camera-animate')
-        qs('.book-model').classList.add('book-model-animate')
-        qs('.book-front').classList.add('book-front-animate')
-        qs('.blob-shadow').classList.add('blob-shadow-animate')
+        select('.camera').classList.add('camera-animate')
+        select('.book-model').classList.add('book-model-animate')
+        select('.book-front').classList.add('book-front-animate')
+        select('.blob-shadow').classList.add('blob-shadow-animate')
     }, 30)
     
 

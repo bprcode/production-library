@@ -15,7 +15,7 @@
     "pg-format": "^1.0.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.1.0"
   },
   "name": "laudable-library",
   "version": "1.0.0",
