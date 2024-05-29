@@ -8,6 +8,7 @@
   --primary-transparent: rgba(235, 37, 11, 0.25);
   --primary-dark: rgb(200, 39, 18);
   --dark-link: rgb(205, 25, 1);
+  --logo-crimson: #6C0808;
 
   --ui-button-size: 32px;
 }
@@ -62,10 +63,6 @@ a:hover {
   max-width: 400px;
 }
 
-header {
-  border-bottom: 5px solid var(--primary);
-}
-
 .library-primary-bg {
   background-color: var(--primary);
 }
@@ -79,6 +76,19 @@ h1 {
   background-image: url(/shelf.png);
   background-size: 100% auto;
   background-position-y: 70%;
+  height: 80px;
+}
+
+.shelf::after {
+  z-index: -1;
+  content: '';
+  width: 100%;
+  height: 5px;
+  position: absolute;
+  left: 0;
+  top: 80px;
+  background-image: linear-gradient(to right,
+    rgb(177, 9, 0),var(--primary),rgb(63, 14, 0));
 }
 
 body {
@@ -344,6 +354,14 @@ body {
 .current-page {
   background-color: gainsboro;
   border-radius: 3px;
+}
+
+.logo-container {
+  position: absolute;
+}
+
+.logo-container img {
+  margin-right: 0.5rem;
 }
 
 @media (max-width: 576px) {
