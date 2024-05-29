@@ -256,5 +256,5 @@ exports.associate_json_post = [
 ]
 exports.genre_json_get = async (req, res) => {
     const result = await genres.find()
-    res.send( result )
+    res.send( result || [] )
 }
