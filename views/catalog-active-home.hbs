@@ -88,7 +88,7 @@ const spotlightData = [
         snippet: abbreviateSnippet(`{{snippet}}`),
         cover_id: `{{cover_id}}`,
         book_url: `{{book_url}}`,
-        index: `{{@index}}`
+        index: `{{@index}}`,
     },
     {{/each}}
 ]
@@ -113,6 +113,55 @@ const initialRecord = spotlightData.find(
 el('current-title').innerHTML = initialRecord.title
 el('current-copy').innerHTML = initialRecord.snippet
 el('current-link').href = initialRecord.book_url
+
+for (const e of document.querySelectorAll('.covers')) {
+
+    if (e.complete) {
+        if (e.naturalHeight === 0) {
+            handleImageLoad(failover(e))
+
+        } else {
+            handleImageLoad(e)
+        }
+
+        continue
+    }
+
+    e.addEventListener('load', reactToLoad)
+    e.addEventListener('error', event => {
+        const replacement = failover(event.target)
+        handleImageLoad(replacement)
+    })
+
+    // Create a replacement element with similar properties,
+    // add it to the DOM, remove the previous element.
+    function failover (element) {
+        element.removeEventListener('load', reactToLoad)
+
+        let div = document.createElement('div')
+        div.textContent = spotlightData[element.dataset.index].title
+        div.classList.add('covers', 'serif', 'fw-semibold', 'fs-5',
+                            'bg-light', 'text-dark', 'text-break',
+                            'overflow-hidden', 'mt-5', 'px-3', 'py-1',
+                            'text-center', 'text-break', 'clamp-text',
+                            'clamp-3')
+        div.width = 180
+        div.height = 300
+        div.dataset.index = element.dataset.index
+        div.style = 'max-height: 300px; --bs-bg-opacity: .6;'
+                    + 'border-top: 8px solid #0008;'
+                    + 'border-bottom: 8px solid #0008;'
+
+        element.after(div)
+        element.parentElement.removeChild(element)
+
+        return div
+    }
+
+    function reactToLoad (event) {
+        handleImageLoad(event.target)
+    }
+}
 
 function abbreviateSnippet (snippet) {
     const maxLength = 180
@@ -154,58 +203,7 @@ function handleImageLoad(element) {
     }
 }
 
-for (const e of document.querySelectorAll('.covers')) {
-
-    if (e.complete) {
-
-        if (e.naturalHeight === 0) {
-            handleImageLoad(failover(e))
-
-        } else {
-            handleImageLoad(e)
-        }
-
-        continue
-    }
-
-    // Create a replacement element with similar properties,
-    // add it to the DOM, remove the previous element.
-    function failover (element) {
-        element.removeEventListener('load', reactToLoad)
-
-        let div = document.createElement('div')
-        div.textContent = spotlightData[element.dataset.index].title
-        div.classList.add('covers', 'serif', 'fw-semibold', 'fs-5',
-                            'bg-light', 'text-dark', 'text-break',
-                            'overflow-hidden', 'mt-5', 'px-3', 'py-1',
-                            'text-center', 'text-break', 'clamp-text',
-                            'clamp-3')
-        div.width = 180
-        div.height = 300
-        div.dataset.index = element.dataset.index
-        div.style = 'max-height: 300px; --bs-bg-opacity: .6;'
-                    + 'border-top: 8px solid #0008;'
-                    + 'border-bottom: 8px solid #0008;'
-
-        element.after(div)
-        element.parentElement.removeChild(element)
-
-        return div
-    }
-
-    function reactToLoad (event) {
-        handleImageLoad(event.target)
-    }
-
-    e.addEventListener('load', reactToLoad)
-    e.addEventListener('error', event => {
-        const replacement = failover(event.target)
-        handleImageLoad(replacement)
-    })
-}
-
 function restartAnimations () {
-
     select('.camera').classList.remove('camera-animate')
     select('.book-model').classList.remove('book-model-animate')
     select('.book-front').classList.remove('book-front-animate')
