@@ -12,7 +12,8 @@
                         <div class="book-face book-front">
                             <div class="ambient-front"></div>
                             {{#each recent_books~}}
-                            <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
+                            <img crossorigin src="debug.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}">
+                            {{!-- <img crossorigin src="https://covers.openlibrary.org/b/id/{{cover_id}}-M.jpg" data-index="{{@index}}" class="covers" id="cover-{{@index}}"> --}}
                             {{~/each}}
                         </div>
                         <div class="book-face book-left"></div>
@@ -114,21 +115,20 @@ el('current-title').innerHTML = initialRecord.title
 el('current-copy').innerHTML = initialRecord.snippet
 el('current-link').href = initialRecord.book_url
 
-for (const e of document.querySelectorAll('.covers')) {
-
-    if (e.complete) {
-        if (e.naturalHeight === 0) {
-            handleImageLoad(failover(e))
+for (const cover of document.querySelectorAll('.covers')) {
+    if (cover.complete) {
+        if (cover.naturalHeight === 0) {
+            handleImageLoad(failover(cover))
 
         } else {
-            handleImageLoad(e)
+            handleImageLoad(cover)
         }
 
         continue
     }
 
-    e.addEventListener('load', reactToLoad)
-    e.addEventListener('error', event => {
+    cover.addEventListener('load', reactToLoad)
+    cover.addEventListener('error', event => {
         const replacement = failover(event.target)
         handleImageLoad(replacement)
     })
