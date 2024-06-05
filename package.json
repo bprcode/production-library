@@ -22,7 +22,9 @@
   "description": "Full-stack book catalog with the ability to import external data from OpenLibrary.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "start nodemon app.js",
+    "watch": "browser-sync start --proxy localhost:2222 -f . public/*",
+    "go": "pwsh -command npm run serve; npm run watch",
     "hi": "nodemon app.js"
   },
   "nodemonConfig": {
