@@ -14,7 +14,6 @@
 }
 
 .center-xl {
-  box-shadow: inset 0 0 1rem #fa02; /* debug -- remove later */
   width: 100%;
   max-width: 1200px;
   margin: 0px auto;
@@ -56,7 +55,7 @@ a:hover {
 }
 
 .reasonable-width {
-  max-width: 808px;
+  max-width: 794px; /* Slightly past center to offset visual weight of navlinks */
 }
 
 .small-max-width {

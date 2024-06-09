@@ -22,7 +22,7 @@
 <body class="body-bg d-flex flex-column min-vh-100">
 
   <!-- Top banner -->
-  <header class="shelf container-fluid text-bg-dark mb-4" style="box-shadow: inset 0 0 1rem purple;">
+  <header class="shelf container-fluid text-bg-dark mb-4">
     <div class="center-xl mb-1 pt-2 pb-2 d-flex align-items-center">
       <a class="serif fs-4 fw-bold me-auto nav-link" href="/catalog/">
       <div class="logo-container">
@@ -119,7 +119,7 @@
     </div>
     <!-- Central content -->
     <div class="ms-lg-5" style="flex-grow: 1; flex-shrink: 1; width: 0px;">
-      <div class="container ms-3 me-0 ps-0 pe-almost-5 mb-5 reasonable-width">
+      <div class="container mt-4 ms-3 ms-xl-4 me-0 ps-0 pe-almost-5 mb-5 reasonable-width">
         {{#unless no_title}}<h1 class="mb-3">{{title}}</h1>{{/unless}}
         {{#>content}}{{/content}}
         {{#unless no_back}}<div class="mt-4"><a id="back-link">&laquo; back</a></div>{{/unless}}
