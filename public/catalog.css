@@ -19,6 +19,10 @@
   margin: 0px auto;
 }
 
+.pt-header {
+  padding-top: 10px;
+}
+
 a {
   color: var(--primary);
   text-decoration: none;
@@ -367,6 +371,7 @@ body {
 .logo-container img {
   margin-left: 1rem;
   margin-right: 0.5rem;
+  height: 104px;
 }
 
 @media (max-width: 576px) {
