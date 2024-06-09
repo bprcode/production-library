@@ -13,11 +13,11 @@
   --ui-button-size: 32px;
 }
 
-@media (min-width: 992px) {
-  .center-xl {
-    width: 992px;
-    margin: 0px auto;
-  }
+.center-xl {
+  box-shadow: inset 0 0 1rem #fa02; /* debug -- remove later */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0px auto;
 }
 
 a {
@@ -56,7 +56,7 @@ a:hover {
 }
 
 .reasonable-width {
-  max-width: 730px;
+  max-width: 808px;
 }
 
 .small-max-width {
@@ -365,11 +365,8 @@ body {
   border-radius: 3px;
 }
 
-.logo-container {
-  position: absolute;
-}
-
 .logo-container img {
+  margin-left: 1rem;
   margin-right: 0.5rem;
 }
 
