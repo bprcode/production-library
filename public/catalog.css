@@ -212,6 +212,14 @@ body {
   transform: translateX(-50%);
 }
 
+#nav-group button {
+  --bs-btn-font-size: 1.15rem;
+}
+
+#nav-group a {
+  margin-left: 1.5rem;
+}
+
 .ui-button {
   position: relative;
   width: var(--ui-button-size);
