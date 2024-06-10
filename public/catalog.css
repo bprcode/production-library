@@ -76,9 +76,16 @@ h1 {
 }
 
 .shelf {
-  background-image: url(/shelf.webp);
-  background-size: 100% auto;
+  background-image: url(/shelf-x.webp);
+  --align-x: 0.296; /* fractional source position to align */
+  --dest-offset: 600px; /* position left of viewport center */
+  /* --bg-width: min(2000px, calc(100vw + var(--dest-offset))); */
+  --bg-width: 1600px;
+  --offset-x: calc(var(--align-x) * var(--bg-width));
+  background-size: var(--bg-width) auto;
   background-position-y: 70%;
+  background-position-x: calc(50vw - var(--dest-offset) - var(--offset-x));
+  background-repeat: no-repeat;
   height: 80px;
 }
 
