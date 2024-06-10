@@ -76,8 +76,8 @@ h1 {
 }
 
 .shelf {
-  background-image: url(/shelf-x.webp);
-  --align-x: 0.296; /* fractional source position to align */
+  background-image: url(/shelf-vignette.webp);
+  --align-x: 0.15; /* fractional source position to align */
   --dest-offset: 600px; /* position left of viewport center */
   /* --bg-width: min(2000px, calc(100vw + var(--dest-offset))); */
   --bg-width: 1600px;
@@ -104,6 +104,10 @@ h1 {
 
 body {
   background-color: var(--light-shade);
+}
+
+header {
+  background-color: #020202;
 }
 
 .card-header {
