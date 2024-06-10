@@ -77,6 +77,7 @@ async function revealModal (event) {
                 s => !genres.find(g => 
                 g.name.localeCompare(s, undefined, { sensitivity: 'base' })
                     === 0))
+            work.subjects.sort()
         } else {
             work.subjects = []
         }
