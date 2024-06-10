@@ -137,9 +137,16 @@
 </html>
 
 <script>
-window.addEventListener('pageshow', () => {
-  const closeButton = document.getElementById('offcanvas-id')
-    .querySelector('.btn-close')
+window.addEventListener('pageshow', event => {
+  const offcanvas = document.getElementById('offcanvas-id')
+  if (event.persisted) {
+    offcanvas.classList.add('skip-transition')
+    setTimeout(() => {
+      offcanvas.classList.remove('skip-transition')
+    }, 200)
+  }
+
+  const closeButton = offcanvas.querySelector('.btn-close')
   closeButton.dispatchEvent(new Event('click'))
 })
 

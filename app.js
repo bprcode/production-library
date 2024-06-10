@@ -91,6 +91,4 @@ app
 
 const server = app.listen(process.env.PORT || 2222, () => {
     log(moo() + ' Server active on: ', green, server.address())
-    log('DEBUG > Back link not working in mobile browser?')
-    log('DEBUG > Todo: add responsive padding to LHS on widescreen')
 })
