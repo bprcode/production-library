@@ -5,6 +5,7 @@
 
   --primary: hsl(4, 85%, 52%);
   --primary-light: hsl(5, 100%, 68%);
+  --primary-brighter: hsl(5, 100%, 72%);
   --primary-transparent: rgba(235, 37, 11, 0.25);
   --primary-dark: rgb(200, 39, 18);
   --dark-link: rgb(205, 25, 1);
@@ -33,10 +34,6 @@ a:hover {
   text-decoration: underline;
 }
 
-.d {
-  border: 2px red dashed !important;
-}
-
 .shade-initially {
   background-color: var(--light-shade);
 }
@@ -47,7 +44,7 @@ a:hover {
 }
 
 .nav-link {
-  color: var(--primary-light) !important;
+  color: var(--primary-light);
 }
 
 .dark-link {
@@ -78,17 +75,21 @@ h1 {
 .shelf {
   background-image: url(/shelf-vignette.webp);
   background-position: 50%;
-  background-size: max(800px, min(1500px, 100vw)) auto;
+  background-size: max(800px, min(1200px, 100vw)) auto;
   background-repeat: no-repeat;
   background-position-x: 0px;
   background-position-y: 67%;
   height: 80px;
 }
-  
-  @media (min-width: 1500px) {
-    .shelf {
-      background-position-x: calc(50vw - 830px);
+
+@media (min-width: 1200px) {
+  .shelf {
+    background-position-x: calc(50vw - 508px);
   }
+}
+
+.shelf a:hover {
+  color: var(--primary-brighter);
 }
 
 .shelf::after {
@@ -218,11 +219,16 @@ header {
   }
 
 .navbar-toggler {
-  border: 2px solid #eee;
-  border-radius: 5px;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  padding-top: 10px;
+  padding-right: 16px;
+  z-index: 11;
 }
 
 .navbar-toggler img {
+  box-shadow: 8px 8px 8px #0008;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -343,6 +349,22 @@ header {
   width: 145px !important;
 }
 
+.side-links .btn-close {
+  width: 40px;
+  height: 40px;
+  padding: 10px 16px 0 0;
+  margin: 0 0 0 auto;
+  border-radius: 0px;
+  opacity: 1;
+  background-image: url(/close-box.svg);
+  background-size: 40px;
+  background-position: 0% 100%;
+}
+
+.btn-close:focus {
+  box-shadow: unset;
+}
+
 .pagination-control {
   font-size: 1.05em;
   margin-right: 0.3em;
@@ -382,9 +404,24 @@ header {
 }
 
 .logo-container img {
-  margin-left: 1rem;
   margin-right: 0.5rem;
-  height: 104px;
+  height: 96px;
+}
+
+.logo-container img:hover {
+  filter: brightness(110%);
+}
+  
+@media (min-width: 600px) {
+  .logo-container img {
+    height: 104px;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-container {
+    margin-left: 16px;
+  }
 }
 
 @media (max-width: 576px) {
