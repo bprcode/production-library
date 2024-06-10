@@ -118,7 +118,7 @@
       <div class="container mt-4 ms-3 ms-xl-4 me-0 ps-0 pe-almost-5 mb-5 reasonable-width">
         {{#unless no_title}}<h1 class="mb-3">{{title}}</h1>{{/unless}}
         {{#>content}}{{/content}}
-        {{#unless no_back}}<div class="mt-4"><a id="back-link">&laquo; back</a></div>{{/unless}}
+        {{#unless no_back}}<div class="mt-4"><button id="back-button">&laquo; back</button></div>{{/unless}}
       </div>
     </div>
   </div>
@@ -137,11 +137,16 @@
 </html>
 
 <script>
-if (document.getElementById('back-link')) {
-  document.getElementById('back-link').setAttribute('href', document.referrer)
-  document.getElementById('back-link').onclick = () => {
+window.addEventListener('pageshow', () => {
+  const closeButton = document.getElementById('offcanvas-id')
+    .querySelector('.btn-close')
+  closeButton.dispatchEvent(new Event('click'))
+})
+
+const backButton = document.getElementById('back-button')
+if (backButton) {
+  backButton.addEventListener('click', () => {
     history.back()
-    return 0
-  }
+  })
 }
 </script>

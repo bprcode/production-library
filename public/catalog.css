@@ -242,6 +242,12 @@ header {
   margin-left: 1.5rem;
 }
 
+#back-button {
+  color: var(--primary);
+  border: none;
+  background-color: transparent;
+}
+
 .ui-button {
   position: relative;
   width: var(--ui-button-size);
