@@ -139,7 +139,11 @@ for (const cover of document.querySelectorAll('.covers')) {
         element.removeEventListener('load', reactToLoad)
 
         let div = document.createElement('div')
-        div.textContent = spotlightData[element.dataset.index].title
+        const parsed = new DOMParser().parseFromString(
+            spotlightData[element.dataset.index].title, 'text/html')
+            .documentElement.textContent
+        div.textContent = parsed
+
         div.classList.add('covers', 'serif', 'fw-semibold', 'fs-5',
                             'bg-light', 'text-dark', 'text-break',
                             'overflow-hidden', 'mt-5', 'px-3', 'py-1',
