@@ -152,10 +152,13 @@ exports.book_detail = async (req, res) => {
         return res.render(`no_results.hbs`)
     }
 
+    // Separate paragraphs into array elements:
+    resultBook[0].summary = resultBook[0].summary.split(/\n+/)
+
     res.render(`book_detail.hbs`, {
         book_info: resultBook[0],
         instances: resultInstances,
-        genre_info: resultGenres
+        genre_info: resultGenres,
     })
 }
 exports.book_create_get = async (req, res) => {

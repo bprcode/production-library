@@ -14,7 +14,7 @@
     
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <p class="mb-3">{{book_info.summary}}</p>
+            {{#each book_info.summary}}<p>{{.}}</p>{{/each}}
             <small>{{#each genre_info}}<a href="{{genre_url}}">{{name}}</a>{{comma-list name}}{{/each}}</small>
         </li>
         <li class="list-group-item"><small class="text-muted">ISBN: {{book_info.isbn}}</small></li>
