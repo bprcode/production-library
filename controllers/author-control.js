@@ -130,6 +130,11 @@ exports.author_detail = async (req, res) => {
         return res.render(`no_results.hbs`)
     }
 
+    // Split text for paragraph tags:
+    if (resultAuthors[0].bio) {
+        resultAuthors[0].bio = resultAuthors[0].bio.split(/\n+/)
+    }
+
     res.render(`author_detail.hbs`, {
         author: resultAuthors[0],
         books: resultBooks,

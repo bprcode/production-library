@@ -21,6 +21,12 @@
     var(--light-shade) 90%, var(--charcoal));
 }
 
+@media (min-width: 1200px) {
+  .dark-card {
+    margin-right: 8px;
+  }
+}
+
 .recent-outer {
   overflow: hidden;
   width: 100%;
