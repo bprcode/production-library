@@ -14,6 +14,7 @@
     
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
+            {{#unless book_info.summary}}<p class="text-muted"><em>No summary provided.</em></p>{{/unless}}
             {{#each book_info.summary}}<p>{{.}}</p>{{/each}}
             <small>{{#each genre_info}}<a href="{{genre_url}}">{{name}}</a>{{comma-list name}}{{/each}}</small>
         </li>
