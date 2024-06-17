@@ -1041,6 +1041,336 @@ COPY lib.book_genres (genre_id, book_id) FROM stdin;
 COPY lib.book_instance (book_id, instance_id, imprint, due_back, status) FROM stdin;
 1	1	Darien Publishing	\N	Available
 3	2	ABC Publishing	2024-06-10	Reserved
+50	3	Galapagos	\N	Available
+50	5	Simone & Scrivener	2024-07-24	Loaned
+50	6	Piper-Tollens	2024-07-18	Reserved
+187	7	Folio, Ltd.	2024-06-24	Loaned
+210	8	Morgana Press	2025-05-11	Reserved
+56	9	Folio, Ltd.	\N	Available
+62	10	Troubadour	\N	Available
+62	11	Troubadour	\N	Available
+180	12	Folio, Ltd.	2026-04-19	Maintenance
+127	13	Teller Timber & Pulp	2025-12-12	Reserved
+57	14	Knott	\N	Available
+176	15	Piper-Tollens	\N	Available
+34	16	Picayune Publishing	\N	Available
+207	17	Magellan House	2025-11-09	Loaned
+25	18	Galapagos	2025-07-27	Loaned
+70	19	Magellan House	\N	Available
+200	20	Knott	\N	Available
+62	21	Magellan House	2025-06-29	Loaned
+218	22	Knott	2026-04-11	Reserved
+152	23	Knott	2025-10-24	Reserved
+163	24	SPQR Publications	2025-08-14	Reserved
+181	25	Piper-Tollens	2025-11-28	Loaned
+131	26	Maximillion Manuscripts	2024-12-31	Reserved
+152	27	SPQR Publications	\N	Available
+210	28	Galapagos	2025-07-15	Reserved
+202	29	Piper-Tollens	\N	Available
+105	30	Simone & Scrivener	\N	Available
+59	31	Morgana Press	2025-08-07	Loaned
+56	32	Bay City Press	2026-05-31	Loaned
+215	33	SPQR Publications	2024-07-22	Maintenance
+179	34	Maximillion Manuscripts	\N	Available
+200	35	Hatchet Books	2024-08-09	Reserved
+97	36	Folio, Ltd.	2025-08-25	Reserved
+29	37	Simone & Scrivener	2025-01-03	Reserved
+148	38	Troubadour	\N	Available
+142	39	Simone & Scrivener	2025-01-14	Maintenance
+203	40	Simone & Scrivener	\N	Available
+67	41	Bay City Press	\N	Available
+190	42	Picayune Publishing	\N	Available
+110	43	Hatchet Books	\N	Available
+176	44	Simone & Scrivener	2026-02-03	Maintenance
+36	45	Maximillion Manuscripts	\N	Available
+12	46	Piper-Tollens	\N	Available
+88	47	Knott	2025-04-16	Loaned
+199	48	Galapagos	2024-07-15	Loaned
+120	49	Hatchet Books	\N	Available
+70	50	Magellan House	2026-06-15	Loaned
+52	51	Morgana Press	2026-03-14	Maintenance
+187	52	Bay City Press	2024-10-20	Loaned
+81	53	Folio, Ltd.	\N	Available
+110	54	Morgana Press	2026-06-07	Loaned
+35	55	Teller Timber & Pulp	\N	Available
+176	56	Simone & Scrivener	2024-06-17	Loaned
+214	57	Galapagos	2024-11-29	Maintenance
+201	58	Folio, Ltd.	\N	Available
+206	59	Galapagos	2024-10-25	Loaned
+21	60	Folio, Ltd.	\N	Available
+163	61	Picayune Publishing	2025-05-04	Loaned
+67	62	Folio, Ltd.	\N	Available
+58	63	Troubadour	2024-09-15	Loaned
+179	64	Hatchet Books	2024-07-20	Reserved
+42	65	Galapagos	\N	Available
+30	66	Bay City Press	2024-11-01	Reserved
+110	68	Piper-Tollens	2025-01-28	Reserved
+116	69	Maximillion Manuscripts	2025-03-06	Loaned
+71	70	Magellan House	\N	Available
+182	71	Hatchet Books	2024-12-30	Reserved
+11	72	Maximillion Manuscripts	2025-05-07	Reserved
+149	73	Galapagos	2026-04-05	Reserved
+6	74	Bay City Press	2026-04-14	Reserved
+64	75	Morgana Press	2025-06-07	Loaned
+12	76	Morgana Press	\N	Available
+208	77	Picayune Publishing	2024-09-23	Maintenance
+174	78	Picayune Publishing	2025-05-01	Maintenance
+156	79	Magellan House	2026-05-19	Loaned
+12	82	Knott	2026-04-19	Maintenance
+25	83	Magellan House	2024-11-26	Maintenance
+9	84	Galapagos	2025-07-07	Reserved
+101	85	Magellan House	\N	Available
+90	86	Simone & Scrivener	2026-06-05	Loaned
+111	87	SPQR Publications	\N	Available
+164	88	Picayune Publishing	2026-03-23	Reserved
+84	89	Simone & Scrivener	2025-11-27	Maintenance
+81	91	Troubadour	2024-08-17	Maintenance
+123	92	Knott	2025-08-04	Loaned
+33	93	Magellan House	\N	Available
+33	94	Teller Timber & Pulp	2025-06-15	Loaned
+28	95	Maximillion Manuscripts	2025-07-13	Reserved
+7	96	Galapagos	2024-12-18	Maintenance
+114	97	Morgana Press	\N	Available
+189	98	Piper-Tollens	2026-06-14	Reserved
+28	99	Bay City Press	2024-09-21	Loaned
+219	100	Picayune Publishing	2025-02-05	Maintenance
+183	101	Morgana Press	2025-08-22	Loaned
+218	102	Knott	2026-04-11	Reserved
+161	103	Morgana Press	2025-01-06	Maintenance
+207	104	Teller Timber & Pulp	2026-02-18	Loaned
+153	105	Troubadour	2025-09-25	Loaned
+185	106	Knott	2025-06-29	Reserved
+124	107	Picayune Publishing	2026-03-17	Reserved
+81	108	Troubadour	2025-09-03	Loaned
+56	109	Troubadour	2025-01-03	Loaned
+109	110	Galapagos	2025-07-13	Reserved
+99	111	Bay City Press	2026-04-28	Reserved
+128	112	Hatchet Books	2025-09-24	Loaned
+31	113	Maximillion Manuscripts	\N	Available
+175	114	Maximillion Manuscripts	2026-02-26	Loaned
+45	115	Maximillion Manuscripts	2025-05-24	Reserved
+139	116	Morgana Press	2025-06-09	Reserved
+20	118	Troubadour	2026-03-27	Loaned
+178	119	Picayune Publishing	2025-02-17	Maintenance
+123	120	Simone & Scrivener	2026-01-26	Reserved
+12	121	Hatchet Books	2025-12-30	Maintenance
+203	122	Morgana Press	2026-02-12	Maintenance
+37	123	Hatchet Books	2026-04-15	Reserved
+98	124	Maximillion Manuscripts	2024-12-17	Maintenance
+224	125	Simone & Scrivener	2025-11-21	Reserved
+105	126	Teller Timber & Pulp	2025-10-10	Maintenance
+89	127	Galapagos	2026-05-18	Reserved
+194	128	Troubadour	2024-07-16	Maintenance
+80	129	Galapagos	2025-11-26	Loaned
+48	130	Galapagos	\N	Available
+152	132	Knott	2024-07-20	Maintenance
+149	133	SPQR Publications	2025-10-17	Maintenance
+17	134	Bay City Press	2024-11-04	Reserved
+189	135	Knott	\N	Available
+72	136	Knott	2025-01-27	Reserved
+154	137	Folio, Ltd.	\N	Available
+135	138	Troubadour	2024-06-27	Loaned
+152	139	Maximillion Manuscripts	2024-08-07	Loaned
+171	140	Simone & Scrivener	2026-05-16	Loaned
+61	141	Teller Timber & Pulp	2024-07-16	Maintenance
+110	142	SPQR Publications	2025-12-16	Maintenance
+165	143	Folio, Ltd.	2025-11-21	Loaned
+142	144	Hatchet Books	2026-03-27	Reserved
+140	145	Simone & Scrivener	2025-03-22	Loaned
+148	146	Teller Timber & Pulp	2024-11-13	Reserved
+81	147	Morgana Press	2026-01-18	Maintenance
+85	148	Galapagos	2025-11-13	Reserved
+64	149	SPQR Publications	2025-03-25	Loaned
+90	150	Galapagos	2025-11-16	Reserved
+172	152	Piper-Tollens	2025-09-19	Reserved
+124	153	Morgana Press	2025-05-26	Loaned
+146	154	Picayune Publishing	\N	Available
+200	155	Galapagos	2024-09-02	Maintenance
+36	156	Folio, Ltd.	2026-04-21	Maintenance
+57	157	Bay City Press	\N	Available
+4	158	Bay City Press	2024-10-21	Reserved
+42	159	Piper-Tollens	2024-08-13	Loaned
+13	160	Troubadour	2025-09-22	Loaned
+60	161	Bay City Press	2024-07-23	Maintenance
+210	162	Bay City Press	2024-12-25	Loaned
+182	163	Troubadour	\N	Available
+134	164	Hatchet Books	2026-05-24	Loaned
+82	165	Bay City Press	2026-01-05	Maintenance
+102	166	Maximillion Manuscripts	2026-04-20	Reserved
+119	167	Simone & Scrivener	2025-05-23	Maintenance
+18	168	Troubadour	2026-03-12	Reserved
+66	169	Morgana Press	2024-09-10	Reserved
+83	170	Troubadour	2025-05-21	Maintenance
+68	171	Galapagos	2025-02-18	Loaned
+205	172	Teller Timber & Pulp	\N	Available
+220	173	Knott	2024-08-04	Reserved
+191	174	SPQR Publications	2024-10-12	Reserved
+156	175	Morgana Press	2026-04-28	Maintenance
+14	176	Simone & Scrivener	2024-09-10	Loaned
+180	177	Bay City Press	2025-05-17	Reserved
+147	178	Picayune Publishing	2024-11-25	Loaned
+204	179	Troubadour	\N	Available
+67	180	Picayune Publishing	2025-01-05	Maintenance
+99	181	Teller Timber & Pulp	2025-03-04	Loaned
+16	182	Troubadour	2025-01-03	Loaned
+216	183	Magellan House	\N	Available
+166	184	Hatchet Books	2025-08-06	Reserved
+82	185	Teller Timber & Pulp	2025-04-29	Maintenance
+159	186	Galapagos	2025-10-02	Loaned
+179	187	Knott	2024-09-02	Maintenance
+42	188	Troubadour	2025-06-20	Maintenance
+107	189	Teller Timber & Pulp	2026-05-06	Maintenance
+10	190	Maximillion Manuscripts	2026-04-27	Loaned
+94	191	Folio, Ltd.	2026-01-15	Maintenance
+132	192	Bay City Press	\N	Available
+31	193	Piper-Tollens	\N	Available
+89	194	Hatchet Books	2026-04-13	Loaned
+150	195	Piper-Tollens	2026-06-12	Maintenance
+1	196	Folio, Ltd.	2025-01-20	Reserved
+213	197	Knott	\N	Available
+78	198	Galapagos	2025-10-04	Loaned
+154	199	SPQR Publications	2025-05-14	Reserved
+131	200	Hatchet Books	2025-03-06	Reserved
+11	201	Picayune Publishing	\N	Available
+203	202	Teller Timber & Pulp	2025-02-20	Maintenance
+224	203	Hatchet Books	2025-10-08	Maintenance
+119	204	Maximillion Manuscripts	\N	Available
+64	205	Knott	2025-10-19	Maintenance
+22	206	Folio, Ltd.	\N	Available
+53	207	Galapagos	2024-10-30	Loaned
+96	208	Morgana Press	2024-09-14	Loaned
+60	209	Knott	\N	Available
+216	210	Picayune Publishing	\N	Available
+156	211	Galapagos	2025-12-07	Maintenance
+53	212	Morgana Press	2026-02-21	Loaned
+108	213	Simone & Scrivener	2025-03-05	Loaned
+146	214	Morgana Press	2025-06-13	Maintenance
+11	215	Folio, Ltd.	2025-05-14	Reserved
+208	216	Knott	2025-07-11	Reserved
+109	217	Piper-Tollens	2024-08-05	Loaned
+169	218	Teller Timber & Pulp	\N	Available
+135	219	Troubadour	\N	Available
+55	220	Magellan House	2025-08-08	Reserved
+144	221	Knott	2026-06-01	Loaned
+100	222	Bay City Press	\N	Available
+17	223	Knott	2026-01-10	Reserved
+203	224	Hatchet Books	\N	Available
+149	225	Galapagos	\N	Available
+203	226	Folio, Ltd.	\N	Available
+196	227	Maximillion Manuscripts	2025-10-21	Maintenance
+149	228	Simone & Scrivener	\N	Available
+111	229	Picayune Publishing	\N	Available
+105	230	Maximillion Manuscripts	2024-09-06	Reserved
+206	231	Picayune Publishing	\N	Available
+141	232	Morgana Press	2024-08-02	Loaned
+28	233	Knott	2025-01-17	Maintenance
+100	234	Hatchet Books	2026-03-26	Reserved
+7	235	Knott	2024-10-30	Loaned
+198	236	Hatchet Books	\N	Available
+162	237	Maximillion Manuscripts	\N	Available
+65	238	Maximillion Manuscripts	\N	Available
+161	239	Simone & Scrivener	\N	Available
+219	240	Magellan House	\N	Available
+181	241	Maximillion Manuscripts	\N	Available
+19	242	Teller Timber & Pulp	\N	Available
+61	243	Simone & Scrivener	2025-11-08	Maintenance
+144	244	Morgana Press	2025-11-28	Maintenance
+40	245	Simone & Scrivener	2024-08-25	Maintenance
+107	246	SPQR Publications	2024-09-08	Loaned
+182	247	Morgana Press	2025-04-23	Maintenance
+125	248	Hatchet Books	2025-09-30	Reserved
+110	249	Picayune Publishing	\N	Available
+59	250	Bay City Press	2026-04-16	Maintenance
+179	251	Teller Timber & Pulp	2025-03-23	Loaned
+56	252	Hatchet Books	2025-06-25	Loaned
+45	253	Teller Timber & Pulp	2025-06-09	Maintenance
+79	254	SPQR Publications	2025-02-15	Reserved
+209	255	Magellan House	2025-12-03	Loaned
+87	256	Morgana Press	2024-12-12	Reserved
+54	257	Magellan House	2025-11-23	Loaned
+109	258	Folio, Ltd.	2025-09-04	Reserved
+118	259	Knott	2026-06-13	Loaned
+176	260	Magellan House	2025-03-19	Maintenance
+96	261	Morgana Press	2024-10-15	Reserved
+99	262	Galapagos	2025-08-01	Reserved
+136	263	Knott	2024-11-05	Maintenance
+181	264	SPQR Publications	2025-09-26	Loaned
+149	265	Bay City Press	\N	Available
+112	266	Hatchet Books	2024-12-14	Maintenance
+76	267	Folio, Ltd.	\N	Available
+147	268	Picayune Publishing	\N	Available
+82	269	Picayune Publishing	2024-07-23	Reserved
+201	270	SPQR Publications	2025-10-10	Reserved
+3	271	SPQR Publications	\N	Available
+32	272	Maximillion Manuscripts	2025-06-09	Reserved
+130	273	Galapagos	\N	Available
+116	274	Piper-Tollens	2025-03-10	Reserved
+210	275	Bay City Press	2024-07-29	Reserved
+92	276	Picayune Publishing	2025-01-29	Loaned
+157	277	Magellan House	2025-09-09	Maintenance
+205	278	Hatchet Books	2025-05-14	Maintenance
+104	279	Knott	2025-04-22	Reserved
+179	280	Morgana Press	2024-07-14	Reserved
+110	281	Simone & Scrivener	2025-03-23	Reserved
+67	282	Troubadour	2025-07-12	Loaned
+113	283	Morgana Press	2026-01-22	Loaned
+116	284	Morgana Press	\N	Available
+130	285	Piper-Tollens	2025-01-09	Maintenance
+136	286	Knott	2025-04-28	Reserved
+171	287	SPQR Publications	2025-10-01	Reserved
+184	288	Picayune Publishing	\N	Available
+119	289	Simone & Scrivener	2024-07-04	Reserved
+134	290	Knott	\N	Available
+191	291	Knott	2025-01-20	Reserved
+56	292	Maximillion Manuscripts	2025-06-30	Loaned
+40	293	Morgana Press	2026-01-12	Maintenance
+150	294	Morgana Press	2024-11-04	Loaned
+1	295	Bay City Press	2024-10-21	Maintenance
+194	296	SPQR Publications	2025-02-17	Loaned
+71	297	Folio, Ltd.	2025-08-14	Reserved
+115	299	Galapagos	2025-07-14	Loaned
+118	300	Simone & Scrivener	\N	Available
+50	301	Magellan House	2024-10-31	Maintenance
+113	302	Troubadour	2024-07-18	Maintenance
+181	303	Folio, Ltd.	2025-11-10	Maintenance
+24	304	Troubadour	\N	Available
+34	305	Simone & Scrivener	\N	Available
+195	306	Teller Timber & Pulp	2024-07-22	Loaned
+20	307	Picayune Publishing	2025-08-07	Loaned
+159	308	Troubadour	\N	Available
+139	309	Morgana Press	\N	Available
+195	310	Morgana Press	2024-06-17	Maintenance
+6	312	Bay City Press	2025-08-08	Reserved
+51	313	Galapagos	2024-11-26	Reserved
+176	314	Folio, Ltd.	2024-09-26	Maintenance
+14	315	Folio, Ltd.	2025-05-23	Loaned
+205	316	Bay City Press	2026-05-13	Maintenance
+122	317	Bay City Press	2024-08-07	Loaned
+159	318	Piper-Tollens	2024-11-06	Maintenance
+113	319	Piper-Tollens	2025-10-30	Maintenance
+103	320	Magellan House	2025-05-20	Maintenance
+19	321	Hatchet Books	\N	Available
+44	322	Troubadour	2025-01-27	Maintenance
+74	323	SPQR Publications	2024-11-22	Loaned
+107	324	Galapagos	\N	Available
+166	325	Bay City Press	2026-05-01	Reserved
+131	326	Teller Timber & Pulp	2024-08-17	Reserved
+147	327	Picayune Publishing	2025-11-11	Maintenance
+3	328	Galapagos	2025-02-07	Maintenance
+152	329	Troubadour	2024-09-23	Loaned
+185	330	Morgana Press	2025-10-07	Maintenance
+201	331	Maximillion Manuscripts	\N	Available
+159	332	Teller Timber & Pulp	2026-02-11	Maintenance
+42	333	Troubadour	2025-12-25	Loaned
+174	334	SPQR Publications	2024-10-16	Maintenance
+143	336	Picayune Publishing	2025-11-13	Maintenance
+182	337	Troubadour	2026-01-21	Reserved
+54	338	Knott	\N	Available
+134	340	Piper-Tollens	2025-02-13	Reserved
+103	341	Simone & Scrivener	2024-10-06	Loaned
+37	342	Morgana Press	2024-11-01	Reserved
+91	343	Starscape Publishing	\N	Available
+91	344	Cosmic Press	2024-10-24	Loaned
 \.
 
 
@@ -1333,7 +1663,7 @@ SELECT pg_catalog.setval('lib.authors_author_id_seq', 201, true);
 -- Name: book_instance_instance_id_seq; Type: SEQUENCE SET; Schema: lib; Owner: -
 --
 
-SELECT pg_catalog.setval('lib.book_instance_instance_id_seq', 2, true);
+SELECT pg_catalog.setval('lib.book_instance_instance_id_seq', 344, true);
 
 
 --

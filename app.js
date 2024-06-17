@@ -51,6 +51,7 @@ hbs.registerHelper('error-check', (trouble, name) => {
 
 // Load routers
 const catalogRouter = require('./routes/catalog-route.js')
+const resetRouter = require('./routes/reset-route.js')
 
 app
     .use(compression())
@@ -70,6 +71,7 @@ app
     .use('/health', (req, res) => { res.status(200).send() })
     .get('/', (req, res) => { res.redirect('/catalog') })
     .use('/catalog', catalogRouter)
+    .use('/reset', resetRouter)
 
     .use(express.static(path.join(__dirname, 'public')))
 
