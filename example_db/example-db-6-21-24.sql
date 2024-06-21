@@ -41,24 +41,24 @@ CREATE TYPE lib.book_status AS ENUM (
 
 CREATE FUNCTION lib.delete_oldest_spotlight() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-	IF (SELECT count(*) FROM lib.spotlight_works) > 4 then
-
-		DELETE FROM lib.spotlight_works WHERE serial =
-
-		(SELECT serial FROM lib.spotlight_works ORDER BY serial ASC LIMIT 1);
-
-	END IF;
-
-	RETURN NULL;
-
-END;
-
-
-
+    AS $$
+
+BEGIN
+
+	IF (SELECT count(*) FROM lib.spotlight_works) > 4 then
+
+		DELETE FROM lib.spotlight_works WHERE serial =
+
+		(SELECT serial FROM lib.spotlight_works ORDER BY serial ASC LIMIT 1);
+
+	END IF;
+
+	RETURN NULL;
+
+END;
+
+
+
 $$;
 
 
@@ -68,14 +68,14 @@ $$;
 
 CREATE FUNCTION lib.enforce_null_due() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-begin
-	if new.status::text ilike 'Available' then
-		new.due_back = null;
-	end if;
-return new;
-end;
-
+    AS $$
+begin
+	if new.status::text ilike 'Available' then
+		new.due_back = null;
+	end if;
+return new;
+end;
+
 $$;
 
 
