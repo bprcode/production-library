@@ -8,7 +8,7 @@
                 <div class="recent-overlay serif"><h2 class="fw-semibold">Recently Added</h2></div>
                 <div class="camera">
                     <!-- book model -->
-                    <div class="book-model">
+                    <div class="book-model await-reveal">
                         <div class="book-face book-front">
                             <div class="ambient-front"></div>
                             {{#each recent_books~}}
@@ -160,31 +160,10 @@ for (const cover of document.querySelectorAll('.covers')) {
 
         return div
     }
-
-    function reactToLoad (event) {
-        handleImageLoad(event.target)
-    }
 }
 
-function abbreviateSnippet (snippet) {
-    const maxLength = 180
-    const minLength = 80
-
-    if (snippet.length <= maxLength) { return snippet }
-
-    const maxedSlice = snippet.slice(0, maxLength)
-    const coherentSlice =
-        maxedSlice.match(/^.*\s/)?.[0] || maxedSlice // Break on last space
-    const firstSentence =
-        snippet.match('^[^.]*\.')?.[0] || maxedSlice // Break on last period
-
-    if (firstSentence.length < maxLength
-            && firstSentence.length > minLength) {
-        return firstSentence
-    }
-
-    // Otherwise...
-    return coherentSlice + '...'
+function reactToLoad (event) {
+    handleImageLoad(event.target)
 }
 
 function handleImageLoad(element) {
@@ -201,6 +180,7 @@ function handleImageLoad(element) {
 
     --loadsWaiting
     if (loadsWaiting < 1) {
+        select('.book-model').classList.remove('await-reveal')
         updateCover()
         setInterval(updateCover, showTime * 1000)
     }
@@ -230,7 +210,6 @@ function restartAnimations () {
 }
 
 function updateCover () {
-
     updateCover.counter ??= 0
     const image = loadedImages[updateCover.counter]
     const upcoming = loadedImages[(updateCover.counter + 1)
@@ -266,6 +245,27 @@ function updateCover () {
     updateCover.counter %= loadedImages.length
 
     restartAnimations()
+}
+
+function abbreviateSnippet (snippet) {
+    const maxLength = 180
+    const minLength = 80
+
+    if (snippet.length <= maxLength) { return snippet }
+
+    const maxedSlice = snippet.slice(0, maxLength)
+    const coherentSlice =
+        maxedSlice.match(/^.*\s/)?.[0] || maxedSlice // Break on last space
+    const firstSentence =
+        snippet.match('^[^.]*\.')?.[0] || maxedSlice // Break on last period
+
+    if (firstSentence.length < maxLength
+            && firstSentence.length > minLength) {
+        return firstSentence
+    }
+
+    // Otherwise...
+    return coherentSlice + '...'
 }
 
 </script>

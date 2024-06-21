@@ -18,6 +18,10 @@
   transition: 0s all !important;
 }
 
+.await-reveal {
+  opacity: 0;
+}
+
 .center-xl {
   width: 100%;
   max-width: 1200px;
