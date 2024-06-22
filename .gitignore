@@ -3,6 +3,4 @@ node_modules
 npm-debug.log
 .*.txt
 populatedb.js.txt
-*.png
 .vscode/launch.json
-deleteme*

@@ -25,8 +25,7 @@
     "serve": "start nodemon app.js",
     "watch": "browser-sync start --proxy localhost:2222 -f . public/*",
     "go": "pwsh -command npm run serve; npm run watch",
-    "hi": "nodemon app.js",
-    "start": "node app.js"
+    "deploy": "node --optimize_for_size --max_old_space_size=460 --gc_interval=100 app.js"
   },
   "nodemonConfig": {
     "ext": "js,hbs,html"

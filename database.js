@@ -1,12 +1,11 @@
 const { Pool } = require('pg')
-const pool = new Pool(
-    process.env.NODE_ENV === 'production' ? { ssl: true } : undefined)
+const pool = new Pool()
 const format = require('pg-format')
 require('@bprcode/handy')
 let dbLog = log
 if (process.env.NODE_ENV === 'production') {
     dbLog('Silencing database logs in production.', blue)
-    dbLog = x => {} // Silence database logging in production.
+    dbLog = _ => {}
 }
 
 // Expose general query method
