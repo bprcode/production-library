@@ -74,9 +74,6 @@ app
     .get('/', (req, res) => { res.redirect('/catalog') })
     .use('/catalog', catalogRouter)
     .use('/reset', resetRouter)
-    // DEBUG:
-    .get('/fail', () => { const x = 1; x++; })
-
 
     .use(express.static(path.join(__dirname, 'public')))
 
@@ -86,13 +83,6 @@ app
     })
 
     .use((err, req, res, next) => {
-        // DEBUG:
-        if (req.originalUrl === '/crash') {
-            log('testing crash response')
-            const x = 1;
-            x++;
-        }
-
         res.render('error.hbs', {
             title: 'Error Encountered',
             status_code: res.statusCode,
