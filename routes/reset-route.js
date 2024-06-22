@@ -5,6 +5,7 @@ const router = express.Router()
 const resetDatabase = async function (req, res) {
   result = await query(resetSQL)
   res.send('Reset complete.')
+  console.log('♻️ Reset complete.')
 }
 
 router
