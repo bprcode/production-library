@@ -2,8 +2,10 @@
 const path = require('node:path')
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config({
-        path: path.join(__dirname, '../.secret/library.env') })
+        path: path.join(__dirname, '../.secret/library.env')
+    })
 }
+
 require('@bprcode/handy')
 const express = require('express')
 const app = express()
@@ -92,5 +94,10 @@ app
     })
 
 const server = app.listen(process.env.PORT || 2222, () => {
+    if (process.env.NODE_ENV === 'production')
+        log('App running in production mode.', blue)
+    else
+        log('App running in development mode.', yellow)
+
     log(moo() + ' Server active on: ', green, server.address())
 })

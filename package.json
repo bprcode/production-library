@@ -25,7 +25,8 @@
     "serve": "start nodemon app.js",
     "watch": "browser-sync start --proxy localhost:2222 -f . public/*",
     "go": "pwsh -command npm run serve; npm run watch",
-    "hi": "nodemon app.js"
+    "hi": "nodemon app.js",
+    "deploy": "node app.js"
   },
   "nodemonConfig": {
     "ext": "js,hbs,html"

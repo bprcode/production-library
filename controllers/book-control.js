@@ -84,7 +84,6 @@ exports.index = async (req, res) => {
         suggestions.find('cover_id', 'title', 'snippet', 'book_url')
     ])
 
-    log(result)
     res.render('catalog-active-home.hbs', {
         title: 'Archivia',
         book_count: result[0],
