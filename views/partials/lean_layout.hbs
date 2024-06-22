@@ -35,13 +35,17 @@
     </div>
     <footer>
         {{~#> mod_foot }}
-            <a id="back-link">Back</a>
+            <button id="back-button">Back</button>
         {{/mod_foot~}}
     </footer>
   </div>
 <script>
-document.getElementById('back-link').setAttribute('href', document.referrer)
-document.getElementById('back-link').onclick = () => {history.back(); return 0;}
+const backButton = document.getElementById('back-button')
+if (backButton) {
+  backButton.addEventListener('click', () => {
+    history.back()
+  })
+}
 </script>
 </body>
 </html>
