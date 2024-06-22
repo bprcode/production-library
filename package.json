@@ -26,10 +26,13 @@
     "watch": "browser-sync start --proxy localhost:2222 -f . public/*",
     "go": "pwsh -command npm run serve; npm run watch",
     "hi": "nodemon app.js",
-    "deploy": "node app.js"
+    "start": "node app.js"
   },
   "nodemonConfig": {
     "ext": "js,hbs,html"
+  },
+  "engines": {
+  "node": "20.x"
   },
   "author": "bprcode <bprcode@gmail.com>",
   "license": "MIT"
