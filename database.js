@@ -40,7 +40,7 @@ async function snipTimes (source) {
         }    
     }
 
-    result = await source
+    const result = await source
 
     if (Array.isArray(result)) {
         for (const r of result)
